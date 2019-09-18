@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <title>Mada's Bio</title>
+</head>
+<body>
+    <div id="header">
+        <h1>My Personal Information</h1>
+    </div>
+    <div id="container">
+        <div class="clock">
+            <div class="holder">
+                <p id="hours"></p>
+            </div>
+            <div class="holder">
+                <p id="minutes"></p>
+            </div>
+            <div class="holder">
+            <p id="second"></p>
+            <script>
+                window.setTimeout("waktu()", 1000);
+                function waktu() {
+                var waktu = new Date();
+                setTimeout("waktu()", 1000);
+                document.getElementById("hours").innerHTML = waktu.getHours();
+                document.getElementById("minutes").innerHTML = waktu.getMinutes();
+                document.getElementById("second").innerHTML = waktu.getSeconds();
+                }
+            </script>
+            </div>  
+        <figure>
+            <img src="img/Pas Foto Kuliah.png">    
+            <figcaption>Hello My Name is Achmada Fiqri</figcaption>  
+        </figure>   
+        </div>          
+    </div>        
+    <div id="content">
+        <p>
+            <br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Hello, My name is Achmada, you can call me Mada, I am an Indonesian and now I'm living in Surabaya, Indonesia.
+            <br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp I'm an Informatics Student at Institut Technology Adhi Tama Surabaya. I also join some community in Surabaya such as SurabayaDev, DevITapp, and Flyme Community Indonesia
+            <br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp of that, I like to enjoy my time to create any post for my blog, drink a cup of coffee with friends, watch movies. Also play: Basketball, PUBG and Mobile Legends for fun.</p>
+        </p>
+    </div>
+    <div id="footer">
+        <h1>Find me at</h1><br>
+            <img src="img/gmail.png"alt="achmada1998@gmail.com">
+            <p>achmada1998@gmail.com</p>
+        <a href="https://www.facebook.com/fiqriachmada"> 
+            <img src="img/facebook.png">
+        </a>
+        <a href="https://www.instagram.com/fiqriachmada/">
+            <img src="img/instagram.png" alt="">
+        </a>
+        <a href="https://twitter.com/fiqriachmada">
+            <img src="img/twitter.png" alt="">
+        </a><br>
+        <h5>&copy 2019 - Achmada Fiqri A Rasyad. All Rights Reserved</h5>
+    </div>
+</body>

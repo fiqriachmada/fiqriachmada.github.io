@@ -16,6 +16,7 @@ export default function RootLayout({ children }) {
       {/* <body className={inter.className}>{children}</body> */}
       <body className={jakarta.className}>
         <Header />
+        
 
         {/* {children} */}
       </body>

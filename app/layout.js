@@ -1,3 +1,5 @@
+'use client';
+
 import './globals.css';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import Header from './header';
@@ -14,8 +16,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       {/* <body className={inter.className}>{children}</body> */}
-      <Header></Header>
-      <body className={jakarta.className}>{children}</body>
+      <body className={jakarta.className}>
+        <Header></Header>
+
+        {children}
+      </body>
     </html>
   );
 }

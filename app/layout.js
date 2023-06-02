@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       {/* <body className={inter.className}>{children}</body> */}
-      <body className={`${jakarta.className} bg-white `}>
+      <body className={`${jakarta.className}`}>
         <nav className="bg-gray-800">
           <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <Header />

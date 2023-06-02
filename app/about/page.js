@@ -1,9 +1,35 @@
 import React from 'react';
+import aboutItem from './aboutItems';
+import aboutItems from './aboutItems';
 
 function About() {
   return (
     <div>
-      <div className=""></div>
+      {aboutItems.map((aboutItem) => (
+        <div className="bg-white text-black shadow-xl rounded-md mt-5 mb-5">
+          {/* <div className="bg-white text-black shadow-2xl"> */}
+          <div className="p-6">
+            <div className="flex justify-center pt-5 capitalize">
+              {aboutItem.welcome}
+            </div>
+            <div className="flex justify-center pt-5">
+              <img src="https://svgshare.com/i/tmn.svg" className='hover:bg-slate-300 hover:rounded-2xl'/>
+            </div>
+            {/* <div className="flex justify-center pt-5">Hi, It's Mada</div> */}
+            {/* <div class="grid grid-cols-3 gap-4">
+              <div class="...">01</div>
+              <div class="...">02</div>
+              <div class="...">03</div>
+              <div class="col-span-2 ...">04</div>
+              <div class="...">05</div>
+              <div class="...">06</div>
+              <div class="col-span-2 ...">07</div>
+            </div> */}
+          </div>
+        </div>
+      ))}
+      {/* </div> */}
+      {/* <div className=""></div>
       <div className="relative flex h-16 items-center justify-between"></div>
       <div class="flex font-sans">
         <div class="flex-none w-48 relative">
@@ -118,7 +144,7 @@ function About() {
             Free shipping on all continental US orders.
           </p>
         </form>
-      </div>
+      </div> */}
     </div>
   );
 }

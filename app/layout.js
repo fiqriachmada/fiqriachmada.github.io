@@ -1,6 +1,7 @@
 import './globals.css';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import Header from './header';
+import Footer from './footer';
 
 const inter = Inter({ subsets: ['latin'] });
 const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'] });
@@ -15,7 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       {/* <body className={inter.className}>{children}</body> */}
       <body className={`${jakarta.className}`}>
-        <nav className="bg-gray-800">
+        <nav className="bg-gray-800 mb-16">
           <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <Header />
           </div>
@@ -23,6 +24,11 @@ export default function RootLayout({ children }) {
         <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 ">
           {children}
         </div>
+        <nav className="bg-gray-600 mt-16">
+          <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <Footer />
+          </div>
+        </nav>
       </body>
     </html>
   );

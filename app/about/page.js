@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import aboutItem from './aboutItems';
 import aboutItems from './aboutItems';

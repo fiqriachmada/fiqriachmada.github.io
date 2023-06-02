@@ -1,3 +1,5 @@
+'use client';
+
 const aboutItems = [
   {
     welcome: `Hi, It's Mada`,

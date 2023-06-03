@@ -1,8 +1,11 @@
-'use client'
-
 import React from 'react'
-import aboutItems from '../about/aboutItems'
 import projectItems from './projectItems'
+
+const title = 'project'
+export const metadata = {
+  title: 'fiqriachmada | ' + title,
+  description: 'pernosal site'
+}
 
 function Project () {
   return (

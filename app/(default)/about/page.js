@@ -1,7 +1,11 @@
-'use client'
-
 import React from 'react'
 import aboutItems from './aboutItems'
+
+const title = 'about'
+export const metadata = {
+  title: 'fiqriachmada | ' + title,
+  description: 'pernosal site'
+}
 
 function About () {
   return (

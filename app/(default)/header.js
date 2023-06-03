@@ -1,7 +1,5 @@
 'use client'
 
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-
 import { Transition } from '@headlessui/react'
 import { useState } from 'react'
 import headerItems from '@/data/headerItems'

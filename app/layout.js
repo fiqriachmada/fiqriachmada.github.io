@@ -1,11 +1,8 @@
-
-
 import Footer from './(default)/footer'
 import Header from './(default)/header'
 import './globals.css'
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
 const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'] })
 
 export const metadata = {
@@ -26,7 +23,6 @@ export default function RootLayout ({ children }) {
           {children}
         </div>
 
-        {/* <DefaultLayout children={children} /> */}
         <div className='bg-gray-600 mt-16'>
           <div className=' mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
             <Footer />

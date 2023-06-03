@@ -1,14 +1,16 @@
 const headerItems = [
   {
     title: 'home',
-    link: '/',
-    //
+    link: '/'
   },
   {
     title: 'about',
-    link: '/about',
-    //
+    link: '/about'
   },
-];
+  {
+    title: 'project',
+    link: '/project'
+  }
+]
 
-export default headerItems;
+export default headerItems

@@ -1,3 +1,4 @@
+import DefaultLayout from './(default)/layout'
 import './globals.css'
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 
@@ -19,6 +20,7 @@ export default function RootLayout ({ children }) {
             <Header />
           </div>
         </nav> */}
+        <DefaultLayout />
         <div className=' mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 '>
           {children}
         </div>

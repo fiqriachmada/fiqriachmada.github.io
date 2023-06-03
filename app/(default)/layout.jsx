@@ -1,6 +1,7 @@
 // import "./css/style.css";
 "use client";
 
+// import "global.css";
 import Header from "./header";
 import Footer from "./footer";
 

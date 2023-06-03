@@ -1,6 +1,6 @@
-const aboutItems = [
+const homeItems = [
   {
-    welcome: `Hello, My Name is Achmada Fiqri`,
+    welcome: `Hi, It's Mada`,
     content: {
       1: (
         <p className='p1 margin-left--sm margin-right--sm avatar avatar--vertical'>
@@ -26,8 +26,9 @@ const aboutItems = [
           </a>
         </p>
       )
-    }
+    },
+    link: '/about'
   }
 ]
 
-export default aboutItems
+export default homeItems

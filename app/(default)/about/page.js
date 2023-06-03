@@ -22,8 +22,8 @@ function About () {
                 className='hover:opacity-70'
               />
             </div>
-            <div className='text-center pt-5 '>{aboutItem.content[1]}</div>
-            <div className='text-center pt-5 '>{aboutItem.content[2]}</div>
+            {/* <div className='text-center pt-5 '>{aboutItem.content[1]}</div>
+            <div className='text-center pt-5 '>{aboutItem.content[2]}</div> */}
           </div>
         </div>
       ))}

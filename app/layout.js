@@ -21,9 +21,9 @@ export default function RootLayout ({ children }) {
           </div>
         </nav> */}
         <DefaultLayout />
-        <div className=' mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 '>
+        {/* <div className=' mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 '>
           {children}
-        </div>
+        </div> */}
         {/* <nav className="bg-gray-600 mt-16">
           <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <Footer />

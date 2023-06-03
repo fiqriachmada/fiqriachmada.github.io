@@ -1,4 +1,7 @@
-import DefaultLayout from './(default)/layout'
+
+
+import Footer from './(default)/footer'
+import Header from './(default)/header'
 import './globals.css'
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
 
@@ -13,22 +16,22 @@ export const metadata = {
 export default function RootLayout ({ children }) {
   return (
     <html lang='en'>
-      {/* <body className={inter.className}>{children}</body> */}
       <body className={`${jakarta.className}`}>
-        {/* <nav className="bg-gray-800 mb-16">
-          <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className='bg-gray-800 mb-16'>
+          <div className=' mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
             <Header />
           </div>
-        </nav> */}
-        <DefaultLayout />
-        {/* <div className=' mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 '>
+        </div>
+        <div className=' mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 '>
           {children}
-        </div> */}
-        {/* <nav className="bg-gray-600 mt-16">
-          <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        </div>
+
+        {/* <DefaultLayout children={children} /> */}
+        <div className='bg-gray-600 mt-16'>
+          <div className=' mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
             <Footer />
           </div>
-        </nav> */}
+        </div>
       </body>
     </html>
   )

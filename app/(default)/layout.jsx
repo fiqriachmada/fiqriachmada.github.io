@@ -1,5 +1,9 @@
-"use client";
+'use client';
 
 export default function DefaultLayout({ children }) {
-  return <main>{children}</main>;
+  return (
+    <main>
+      <div>{children}</div>
+    </main>
+  );
 }

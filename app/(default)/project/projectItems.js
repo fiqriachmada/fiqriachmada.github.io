@@ -1,55 +1,29 @@
 const projectItems = [
   {
+    image: '/images/next.svg',
     title: 'Fresh Factory',
-    description: ''
-    //
+    description: '',
   },
   {
+    image: '/images/next.svg',
     title: 'Fresh Factory',
-    description: ''
-    //
+    description: '',
   },
   {
+    image: 'vercel.svg',
     title: 'Fresh Factory',
-    description: ''
-    //
+    description: '',
   },
   {
+    image: 'vercel.svg',
     title: 'Fresh Factory',
-    description: ''
-    //
+    description: '',
   },
   {
+    image: 'icon.svg',
     title: 'Fresh Factory',
-    description: ''
-    //
+    description: '',
   },
-  {
-    title: 'Fresh Factory',
-    description: ''
-    //
-  },
-  {
-    title: 'Fresh Factory',
-    description: ''
-    //
-  },
-  {
-    title: 'Fresh Factory',
-    description: ''
-    //
-  },
-  {
-    title: 'Fresh Factory',
-    description: ''
-    //
-  },
-  {
-    title: 'Fresh Factory',
-    description: ''
-    //
-  }
-  //
-]
+];
 
-export default projectItems
+export default projectItems;

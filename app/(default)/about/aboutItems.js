@@ -3,31 +3,28 @@ const aboutItems = [
     welcome: `Hello, My Name is Achmada Fiqri`,
     content: {
       1: (
-        <p className='p1 margin-left--sm margin-right--sm avatar avatar--vertical'>
-          Junior Software Developer at PT Gudang Segar Indonesia
-          <a className='text-blue-500' href='https://freshfactory.id/'>
-            {' '}
-            (Fresh Factory){' '}
-          </a>
-          and Student at
-          <a className='text-blue-500' href='https://itats.ac.id/'>
-            {' '}
-            ITATS.{' '}
-          </a>
-          Sometimes doing code, Mobile Legends and Basketball with ❤️. Currently
-          based on Jakarta, Indonesia
+        <p className="margin-left--sm margin-right--sm">
+          Hi There, <b>Achmada Fiqri</b> right here, or you can call me{' '}
+          <b>Mada</b> shortly
         </p>
       ),
       2: (
-        <p className='p2 margin-left--sm margin-right--sm avatar avatar--vertical'>
-          Reach me via email at <br />
-          <a className='text-blue-500' href='mailto:achmada1998@gmail.com'>
-            achmada1998@gmail.com
-          </a>
+        <p className="margin-left--sm margin-right--sm">
+          Currently I'm a college student at{' '}
+          <b>
+            <a href="https://itats.ac.id/" className="text-blue-500">
+              Institut Teknologi Adhi Tama Surabaya
+            </a>
+          </b>
         </p>
-      )
-    }
-  }
-]
+      ),
+      3: (
+        <p className="margin-left--sm margin-right--sm">
+          Currently based on Jakarta, Indonesia
+        </p>
+      ),
+    },
+  },
+];
 
-export default aboutItems
+export default aboutItems;

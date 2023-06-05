@@ -13,7 +13,6 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  // console.log('google_verification', google_verification);
   return (
     <html lang="en">
       <head>

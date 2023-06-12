@@ -23,16 +23,16 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${jakarta.className}`}>
         <div className="bg-gray-800 mb-16">
-          <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className=" mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
             <Header />
           </div>
         </div>
-        <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 ">
+        <div className=" mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
           {children}
         </div>
 
         <div className="bg-gray-600 mt-16">
-          <div className=" mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className=" mx-auto max-w-7xl px-4 sm:px-8 lg:px-10">
             <Footer />
           </div>
         </div>

@@ -1,6 +1,7 @@
 const aboutItems = [
   {
     welcome: `Hello, My Name is Achmada Fiqri`,
+    link: '/project',
     content: {
       1: (
         <p className="margin-left--sm margin-right--sm">

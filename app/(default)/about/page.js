@@ -1,5 +1,6 @@
 import React from 'react';
 import aboutItems from './aboutItems';
+import Link from 'next/link';
 
 const title = 'about';
 export const metadata = {
@@ -17,10 +18,12 @@ function About() {
               {aboutItem.welcome}
             </div>
             <div className="flex justify-center pt-5">
-              <img
-                src="https://svgshare.com/i/tmn.svg"
-                className="hover:opacity-70"
-              />
+              <Link href={aboutItem.link}>
+                <img
+                  src="https://svgshare.com/i/tmn.svg"
+                  className="hover:opacity-70"
+                />
+              </Link>
             </div>
             <div className="text-center pt-5 ">{aboutItem.content[1]}</div>
             <div className="text-center pt-5 ">{aboutItem.content[2]}</div>

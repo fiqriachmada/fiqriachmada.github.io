@@ -51,7 +51,6 @@ function Header() {
                 <Link
                   key={index}
                   href={headerItem.link}
-                  // onClick={() => handleClickHeader(index)}
                   onClick={() => handleClickHeader(headerItem.link)}
                   className={`${
                     activeLink === headerItem.link && 'bg-gray-900'
@@ -68,7 +67,9 @@ function Header() {
           <button
             onClick={() => setIsShowing((isShowing) => !isShowing)}
             type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+            className="inline-flex items-center justify-center rounded-md p-2 text-gray-400
+             hover:bg-gray-700
+              hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
             {isShowing ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -116,8 +117,11 @@ function Header() {
             {headerItems.map((headerItem) => (
               <Link
                 href={headerItem.link}
-                className="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium capitalize"
-                aria-current="page">
+                onClick={() => handleClickHeader(headerItem.link)}
+                // bg-gray-900
+                className={`${
+                  activeLink === headerItem.link && 'bg-gray-900'
+                } text-white block rounded-md px-3 py-2 text-base font-medium capitalize`}>
                 {headerItem.title}
               </Link>
             ))}

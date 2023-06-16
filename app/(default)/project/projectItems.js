@@ -2,32 +2,25 @@ const projectItems = [
   {
     image: '/images/fresh-factory-admin.svg',
     title: 'Fresh Factory Admin',
-    description: '',
+    description: 'Fresh Factory Admin',
     link: 'https://admincp.freshfactory.id/',
   },
   {
-    image: '/images/next.svg',
-    title: 'Fresh Factory',
+    image: '/images/fresh-factory-admin.svg',
+    title: 'Fresh Factory Warehouse App',
     description: '',
-    link: '',
+    link: 'https://play.google.com/store/apps/details?id=com.strategies360.freshfactory',
+    googlePlay:
+      'https://play.google.com/store/apps/details?id=com.strategies360.freshfactory',
   },
   {
-    image: 'vercel.svg',
-    title: 'Fresh Factory',
+    image: '/images/fresh-factory-admin.svg',
+    title: 'Freezy Fresh App',
     description: '',
-    link: '',
-  },
-  {
-    image: 'vercel.svg',
-    title: 'Fresh Factory',
-    description: '',
-    link: '',
-  },
-  {
-    image: 'icon.svg',
-    title: 'Fresh Factory',
-    description: '',
-    link: '',
+    link: 'https://play.google.com/store/apps/details?id=com.freezy.app&hl=id&gl=US',
+    googlePlay:
+      'https://play.google.com/store/apps/details?id=com.freezy.app&hl=id&gl=US',
+    AppStore: 'https://apps.apple.com/us/app/freezy-fresh/id1580053719',
   },
 ];
 

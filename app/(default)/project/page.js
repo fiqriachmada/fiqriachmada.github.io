@@ -16,20 +16,16 @@ function Project() {
             <a href={projectItem.link} target="_blank">
               <img
                 src={projectItem.image}
-                className="hover:opacity-70 object-fill rounded-t-md"
+                className="hover:opacity-70 object-fill rounded-t-md hover:shadow-xl"
               />
             </a>
           </div>
-          <div className="p-6 md::px-10">
-            <>
-              <div className="flex justify-start pt-5 capitalize">
-                <a href={projectItem.link} target="_blank">
-                  {projectItem.title}
-                </a>
-              </div>
-              {/* <div className='text-center pt-5 '>{projectItem.content[1]}</div>
-              <div className='text-center pt-5 '>{projectItem.content[2]}</div> */}
-            </>
+          <div className="p-6">
+            <div className="flex justify-start capitalize">
+              <a href={projectItem.link} target="_blank">
+                {projectItem.title}
+              </a>
+            </div>
           </div>
         </div>
       ))}

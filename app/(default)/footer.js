@@ -1,19 +1,30 @@
 'use client';
 
 import { Transition } from '@headlessui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import headerItems from '@/data/headerItems';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import socialMediaItems from './socialMediaItems';
 
 function Footer() {
+  const [activeLink, setActiveLink] = useState('');
   const [isShowing, setIsShowing] = useState(false);
 
   const router = useRouter();
 
+  const pathname = usePathname();
+
   const handleClick = () => {
     router.push('/');
+  };
+
+  useEffect(() => {
+    setActiveLink(pathname);
+  });
+
+  const handleClickFooter = (link) => {
+    setActiveLink(link);
   };
 
   return (
@@ -43,8 +54,11 @@ function Footer() {
               {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
               {headerItems.map((headerItem) => (
                 <Link
+                  onClick={() => handleClickFooter(headerItem.link)}
                   href={headerItem.link}
-                  className="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium capitalize">
+                  className={`${
+                    activeLink === headerItem.link && 'bg-gray-900'
+                  } text-white rounded-md px-3 py-2 text-sm font-medium capitalize`}>
                   {headerItem.title}
                 </Link>
               ))}
@@ -104,8 +118,10 @@ function Footer() {
             {headerItems.map((headerItem) => (
               <Link
                 href={headerItem.link}
-                className="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium capitalize"
-                aria-current="page">
+                onClick={() => handleClickFooter(headerItem.link)}
+                className={`${
+                  activeLink === headerItem.link && 'bg-gray-900'
+                } text-white block rounded-md px-3 py-2 text-base font-medium capitalize`}>
                 {headerItem.title}
               </Link>
             ))}

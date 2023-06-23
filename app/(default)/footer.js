@@ -56,9 +56,10 @@ function Footer() {
                 <Link
                   onClick={() => handleClickFooter(headerItem.link)}
                   href={headerItem.link}
-                  className={`${
-                    activeLink === headerItem.link && 'bg-gray-900'
-                  } text-white rounded-md px-3 py-2 text-sm font-medium capitalize`}>
+                  className={`${activeLink === headerItem.link && 'bg-gray-900'}
+                  
+                 ${activeLink != headerItem.link && 'hover:bg-slate-500'}
+                  text-white rounded-md px-3 py-2 text-sm font-medium capitalize`}>
                   {headerItem.title}
                 </Link>
               ))}
@@ -119,9 +120,10 @@ function Footer() {
               <Link
                 href={headerItem.link}
                 onClick={() => handleClickFooter(headerItem.link)}
-                className={`${
-                  activeLink === headerItem.link && 'bg-gray-900'
-                } text-white block rounded-md px-3 py-2 text-base font-medium capitalize`}>
+                className={`  
+                ${activeLink === headerItem.link && 'bg-gray-900'}
+                 ${activeLink != headerItem.link && 'hover:bg-slate-500'}
+                text-white block rounded-md px-3 py-2 text-base font-medium capitalize`}>
                 {headerItem.title}
               </Link>
             ))}
@@ -134,7 +136,7 @@ function Footer() {
           <li className="ml-4">
             <a
               href={item.link}
-              className="flex justify-center items-center text-gray-600 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
+              className="flex justify-center items-center text-gray-600 hover:text-gray-900 bg-slate-300 hover:bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
               aria-label={item.text}>
               <svg
                 className="w-6 h-6 fill-current"

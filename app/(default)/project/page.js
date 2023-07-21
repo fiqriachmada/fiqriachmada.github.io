@@ -13,18 +13,18 @@ function Project() {
       {projectItems.map((projectItem) => (
         <div className="bg-white text-black shadow-xl rounded-md mt-5">
           <div className="flex justify-center">
-            <a href={projectItem.link} target="_blank">
+            <Link href={'project/'+projectItem.id} target="_blank">
               <img
                 src={projectItem.image}
-                className="hover:opacity-70 object-fill rounded-t-md hover:shadow-xl"
+                className="hover:opacity-70 object-fill rounded-t-md hover:shadow-xl hover:scale-105 hover:rounded-md"
               />
-            </a>
+            </Link>
           </div>
           <div className="p-6">
             <div className="flex justify-start capitalize">
-              <a href={projectItem.link} target="_blank">
+              <Link href={'project/'+projectItem.id} target="_blank">
                 {projectItem.title}
-              </a>
+              </Link>
             </div>
           </div>
         </div>

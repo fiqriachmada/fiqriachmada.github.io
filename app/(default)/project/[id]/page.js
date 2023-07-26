@@ -22,6 +22,7 @@ function Detail() {
           <h2>{detailItem.title}</h2>
           <img src={detailItem.image} className='rounded-md mt-5 mb-5' />
 
+          <p className='mt-5 mb-5 text-justify'>{detailItem.description}</p>
           <a href={detailItem.link}>{detailItem.link}</a>
           <a href={detailItem.googlePlay}>{detailItem.googlePlay}</a>
           <a href={detailItem.appStore}>{detailItem.appStore}</a>

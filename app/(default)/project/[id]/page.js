@@ -1,37 +1,33 @@
-'use client';
+'use client'
 
-import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
-import projectItems from '../projectItems';
+import { usePathname, useRouter } from 'next/navigation'
+import React from 'react'
+import projectItems from '../projectItems'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { icon } from '@fortawesome/fontawesome-svg-core'
+import { faGooglePay, faGooglePlay } from '@fortawesome/free-brands-svg-icons'
+import DetailProjectPage from './components/detail'
 
-function Detail() {
-  const router = useRouter();
+function Detail () {
+  const router = useRouter()
 
-  const path = usePathname();
+  const path = usePathname()
 
-  const id = path.split('/').pop();
+  const id = path.split('/').pop()
 
   const detailItem = projectItems.find(
-    (item) => item.id.toString() === id.toString()
-  );
+    item => item.id.toString() === id.toString()
+  )
 
   return (
     <div>
       {detailItem ? (
-        <div>
-          <h2>{detailItem.title}</h2>
-          <img src={detailItem.image} className='rounded-md mt-5 mb-5' />
-
-          <p className='mt-5 mb-5 text-justify'>{detailItem.description}</p>
-          <a href={detailItem.link}>{detailItem.link}</a>
-          <a href={detailItem.googlePlay}>{detailItem.googlePlay}</a>
-          <a href={detailItem.appStore}>{detailItem.appStore}</a>
-        </div>
+        <DetailProjectPage detailItem={detailItem} />
       ) : (
         <p>Item with ID {id} not found.</p>
       )}
     </div>
-  );
+  )
 }
 
-export default Detail;
+export default Detail

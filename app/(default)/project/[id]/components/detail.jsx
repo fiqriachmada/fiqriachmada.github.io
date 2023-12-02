@@ -14,7 +14,7 @@ function DetailProjectPage(props) {
       <h2>{detailItem.title}</h2>
       <img src={detailItem.image} className="rounded-md mt-5 mb-5" />
       <p className="mt-5 mb-5 text-justify">{detailItem.description}</p>
-      {/* <a href={detailItem.link}>{detailItem.link}</a> */}
+
       <div className="flex space-x-10 text-xl lg:text-5xl">
         {detailItem.link && (
           <a href={detailItem.link} target="_blank">

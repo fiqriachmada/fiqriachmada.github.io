@@ -1,20 +1,23 @@
 export const workItems = [
   {
-    company: 'Fresh Factory',
+    company: 'PT Gudang Segar Indonesia (Fresh Factory)',
     startDate: '09/2022',
     endDate: 'now',
-    title: 'Junior Front End Developer'
+    title: 'Junior Front End Developer',
+    image: '/images/fresh-factory.png'
   },
   {
-    company: 'Sreeya Sewu',
+    company: 'PT Sreeya Sewu Indonesia Tbk',
     startDate: '02/2022',
     endDate: '07/2022',
-    title: 'Cloud Engineer Intern'
+    title: 'Cloud Engineer Intern',
+    image: '/images/sreeya-sewu-indonesia.svg'
   },
   {
-    company: 'Bank Negara Indonesia',
+    company: 'PT Bank Negara Indonesia Tbk',
     startDate: '07/2021',
     endDate: '02/2022',
-    title: 'Back End Engineer Intern'
+    title: 'Back End Engineer Intern',
+    image: '/images/bni-logo-id.svg'
   }
 ]

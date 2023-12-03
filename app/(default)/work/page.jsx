@@ -1,6 +1,8 @@
 import React from "react";
 import { workItems } from "./components/workItems";
 
+const workItem = workItems.map((workItem) => workItem.company);
+
 function Work() {
   return (
     <div>
@@ -8,6 +10,7 @@ function Work() {
       <div className="flex-col space-y-10 my-10">
         {workItems.map((workItem) => (
           <div className="bg-white text-black rounded-lg">
+            <img src={workItem.image} style={{ width: 400, height: 400 }} />
             <div className="px-10 py-10 ">
               Company Name:
               <div>{workItem.company}</div>

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Transition } from '@headlessui/react';
-import { useEffect, useState } from 'react';
-import headerItems from '@/data/headerItems';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { Transition } from "@headlessui/react";
+import { useEffect, useState } from "react";
+import headerItems from "@/data/headerItems";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
 function Header() {
-  const [activeLink, setActiveLink] = useState('');
+  const [activeLink, setActiveLink] = useState("");
   const [isShowing, setIsShowing] = useState(false);
 
   const router = useRouter();
@@ -15,7 +15,7 @@ function Header() {
   const pathname = usePathname();
 
   const handleClick = () => {
-    router.push('/');
+    router.push("/");
   };
 
   useEffect(() => {
@@ -30,7 +30,7 @@ function Header() {
     <div>
       <div className="flex justify-between">
         <div className="sm:items-center mt-3 mb-3" onClick={handleClick}>
-          <Link href={'/'}>
+          <Link href={"/"}>
             <img
               className="block h-8 w-auto lg:hidden"
               src="https://svgshare.com/i/tmn.svg"
@@ -52,8 +52,8 @@ function Header() {
                   key={index}
                   href={headerItem.link}
                   onClick={() => handleClickHeader(headerItem.link)}
-                  className={`${activeLink === headerItem.link && 'bg-gray-900'}
-                 ${activeLink != headerItem.link && 'hover:bg-slate-500'}
+                  className={`${activeLink === headerItem.link && "bg-gray-900"}
+                 ${activeLink != headerItem.link && "hover:bg-slate-500"}
                   text-white rounded-md px-3 py-2 text-sm font-medium capitalize`}>
                   {headerItem.title}
                 </Link>
@@ -114,14 +114,15 @@ function Header() {
           leaveTo="opacity-0">
           {/* <div className="space-y-1 px-2 pb-3 pt-2"> */}
           <div className="space-y-1 pb-3">
-            {headerItems.map((headerItem) => (
+            {headerItems.map((headerItem, index) => (
               <Link
+                key={index}
                 href={headerItem.link}
                 onClick={() => handleClickHeader(headerItem.link)}
                 className={`
-                ${activeLink === headerItem.link && 'bg-gray-900'}
+                ${activeLink === headerItem.link && "bg-gray-900"}
                  ${
-                   activeLink != headerItem.link && 'hover:bg-slate-500'
+                   activeLink != headerItem.link && "hover:bg-slate-500"
                  } text-white block rounded-md px-3 py-2 text-base font-medium capitalize`}>
                 {headerItem.title}
               </Link>

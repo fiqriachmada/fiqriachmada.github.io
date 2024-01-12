@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { Transition } from '@headlessui/react';
-import { useEffect, useState } from 'react';
-import headerItems from '@/data/headerItems';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import socialMediaItems from './socialMediaItems';
+import { Transition } from "@headlessui/react";
+import { useEffect, useState } from "react";
+import headerItems from "@/data/headerItems";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import socialMediaItems from "./socialMediaItems";
 
 function Footer() {
-  const [activeLink, setActiveLink] = useState('');
+  const [activeLink, setActiveLink] = useState("");
   const [isShowing, setIsShowing] = useState(false);
 
   const router = useRouter();
@@ -16,7 +16,7 @@ function Footer() {
   const pathname = usePathname();
 
   const handleClick = () => {
-    router.push('/');
+    router.push("/");
   };
 
   useEffect(() => {
@@ -52,13 +52,14 @@ function Footer() {
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4">
               {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-              {headerItems.map((headerItem) => (
+              {headerItems.map((headerItem, index) => (
                 <Link
+                  key={index}
                   onClick={() => handleClickFooter(headerItem.link)}
                   href={headerItem.link}
-                  className={`${activeLink === headerItem.link && 'bg-gray-900'}
+                  className={`${activeLink === headerItem.link && "bg-gray-900"}
                   
-                 ${activeLink != headerItem.link && 'hover:bg-slate-500'}
+                 ${activeLink != headerItem.link && "hover:bg-slate-500"}
                   text-white rounded-md px-3 py-2 text-sm font-medium capitalize`}>
                   {headerItem.title}
                 </Link>
@@ -116,13 +117,14 @@ function Footer() {
           leaveTo="opacity-0">
           {/* <div className="space-y-1 px-2 pb-3 pt-2"> */}
           <div className="space-y-1 pb-3">
-            {headerItems.map((headerItem) => (
+            {headerItems.map((headerItem, index) => (
               <Link
+                key={index}
                 href={headerItem.link}
                 onClick={() => handleClickFooter(headerItem.link)}
                 className={`  
-                ${activeLink === headerItem.link && 'bg-gray-900'}
-                 ${activeLink != headerItem.link && 'hover:bg-slate-500'}
+                ${activeLink === headerItem.link && "bg-gray-900"}
+                 ${activeLink != headerItem.link && "hover:bg-slate-500"}
                 text-white block rounded-md px-3 py-2 text-base font-medium capitalize`}>
                 {headerItem.title}
               </Link>
@@ -132,8 +134,8 @@ function Footer() {
       </div>
 
       <ul className="flex justify-center md:justify-end md:mt-12 mt-auto pb-5">
-        {socialMediaItems.map((item) => (
-          <li className="ml-4">
+        {socialMediaItems.map((item, index) => (
+          <li className="ml-4" key={index}>
             <a
               href={item.link}
               className="flex justify-center items-center text-gray-600 hover:text-gray-900 bg-slate-300 hover:bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"

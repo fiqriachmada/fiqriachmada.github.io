@@ -54,7 +54,7 @@ function Header() {
                   onClick={() => handleClickHeader(headerItem.link)}
                   className={`${activeLink === headerItem.link && "bg-gray-900"}
                  ${activeLink != headerItem.link && "hover:bg-slate-500"}
-                  text-white rounded-md px-3 py-2 text-sm font-medium capitalize`}>
+                  text-white rounded-md px-3 py-2 text-sm font-bold capitalize`}>
                   {headerItem.title}
                 </Link>
               ))}
@@ -123,7 +123,7 @@ function Header() {
                 ${activeLink === headerItem.link && "bg-gray-900"}
                  ${
                    activeLink != headerItem.link && "hover:bg-slate-500"
-                 } text-white block rounded-md px-3 py-2 text-base font-medium capitalize`}>
+                 } text-white block rounded-md px-3 py-2 text-base font-bold capitalize`}>
                 {headerItem.title}
               </Link>
             ))}

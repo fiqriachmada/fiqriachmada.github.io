@@ -5,6 +5,7 @@ import {
   faGooglePlay,
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 import React from "react";
 
 function DetailProjectPage(props) {
@@ -12,10 +13,15 @@ function DetailProjectPage(props) {
   return (
     <div>
       <h2>{detailItem.title}</h2>
-      <img src={detailItem.image} className="rounded-md mt-5 mb-5" />
+      <Image
+        width={20}
+        height={20}
+        src={detailItem.image}
+        className="w-full h-full rounded-md mt-5 mb-5"
+      />
       <p className="mt-5 mb-5 text-justify">{detailItem.description}</p>
 
-      <div className="flex space-x-10 text-xl lg:text-5xl">
+      <div className="flex space-x-10 text-xl lg:text-3xl">
         {detailItem.link && (
           <a href={detailItem.link} target="_blank">
             <FontAwesomeIcon icon={faChrome} />

@@ -1,23 +1,21 @@
-'use client'
+"use client";
 
-import { usePathname, useRouter } from 'next/navigation'
-import React from 'react'
-import projectItems from '../projectItems'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { icon } from '@fortawesome/fontawesome-svg-core'
-// import { faGooglePay, faGooglePlay } from '@fortawesome/free-brands-svg-icons'
-import DetailProjectPage from './components/detail'
+import { usePathname, useRouter } from "next/navigation";
+import React from "react";
+import projectItems from "../projectItems";
 
-function Detail () {
-  const router = useRouter()
+import DetailProjectPage from "./components/detail";
 
-  const path = usePathname()
+function Detail() {
+  const router = useRouter();
 
-  const id = path.split('/').pop()
+  const path = usePathname();
+
+  const id = path.split("/").pop();
 
   const detailItem = projectItems.find(
-    item => item.id.toString() === id.toString()
-  )
+    (item) => item.id.toString() === id.toString()
+  );
 
   return (
     <div>
@@ -27,7 +25,7 @@ function Detail () {
         <p>Item with ID {id} not found.</p>
       )}
     </div>
-  )
+  );
 }
 
-export default Detail
+export default Detail;

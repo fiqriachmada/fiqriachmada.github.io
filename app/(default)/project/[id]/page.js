@@ -3,9 +3,9 @@
 import { usePathname, useRouter } from 'next/navigation'
 import React from 'react'
 import projectItems from '../projectItems'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { icon } from '@fortawesome/fontawesome-svg-core'
-import { faGooglePay, faGooglePlay } from '@fortawesome/free-brands-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { icon } from '@fortawesome/fontawesome-svg-core'
+// import { faGooglePay, faGooglePlay } from '@fortawesome/free-brands-svg-icons'
 import DetailProjectPage from './components/detail'
 
 function Detail () {

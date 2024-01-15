@@ -1,32 +1,26 @@
-'use client';
+// "use client";
 
-import { usePathname, useRouter } from 'next/navigation';
-import React from 'react';
-import projectItems from '../projectItems';
+// import { usePathname, useRouter } from "next/navigation";
+import React from "react";
+import projectItems from "../projectItems";
 
-function Detail() {
-  const router = useRouter();
+import DetailProjectPage from "./components/detail";
 
-  const path = usePathname();
+export function generateStaticParams() {
+  const id = projectItems;
 
-  const id = path.split('/').pop();
+  return id;
+}
 
-  const detailItem = projectItems.find(
-    (item) => item.id.toString() === id.toString()
-  );
+function Detail(params) {
+  const id = params.params.id;
+
+  const detailItem = projectItems.find((item) => item.id.toString() === id);
 
   return (
     <div>
       {detailItem ? (
-        <div>
-          <h2>{detailItem.title}</h2>
-          <img src={detailItem.image} className='rounded-md mt-5 mb-5' />
-
-          <p className='mt-5 mb-5 text-justify'>{detailItem.description}</p>
-          <a href={detailItem.link}>{detailItem.link}</a>
-          <a href={detailItem.googlePlay}>{detailItem.googlePlay}</a>
-          <a href={detailItem.appStore}>{detailItem.appStore}</a>
-        </div>
+        <DetailProjectPage detailItem={detailItem} />
       ) : (
         <p>Item with ID {id} not found.</p>
       )}

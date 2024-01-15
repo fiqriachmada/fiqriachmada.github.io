@@ -10,6 +10,10 @@ const headerItems = [
   {
     title: 'project',
     link: '/project'
+  },
+  {
+    title: 'work',
+    link: '/work'
   }
 ]
 

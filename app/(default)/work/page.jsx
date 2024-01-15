@@ -22,12 +22,12 @@ function Work() {
             <div className="m-8 lg:m-0 lg:px-10 lg:py-10 space-y-2">
               <div className="">Company Name:</div>
               <div>{workItem.company}</div>
+              <div className="">Title:</div>
+              <div>{workItem.title}</div>
               <div className="">Start Date:</div>
               <div>{workItem.startDate}</div>
               <div className="">End Date:</div>
               <div>{workItem.endDate}</div>
-              <div className="">Title:</div>
-              <div>{workItem.title}</div>
             </div>
           </div>
         ))}

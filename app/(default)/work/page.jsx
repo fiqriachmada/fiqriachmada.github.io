@@ -8,8 +8,10 @@ function Work() {
     <div>
       Work History
       <div className=" grid grid-cols-1 space-y-10 my-10">
-        {workItems.map((workItem) => (
-          <div className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg lg:p-12 gap-3">
+        {workItems.map((workItem, index) => (
+          <div
+            key={index}
+            className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg lg:p-12 gap-3">
             <div className="mx-4 lg:mx-0">
               <img
                 className="object-contain "

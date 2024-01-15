@@ -1,21 +1,21 @@
-"use client";
+// "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+// import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import projectItems from "../projectItems";
 
 import DetailProjectPage from "./components/detail";
 
-function Detail() {
-  const router = useRouter();
+export function generateStaticParams() {
+  const id = projectItems;
 
-  const path = usePathname();
+  return id;
+}
 
-  const id = path.split("/").pop();
+function Detail(params) {
+  const id = params.params.id;
 
-  const detailItem = projectItems.find(
-    (item) => item.id.toString() === id.toString()
-  );
+  const detailItem = projectItems.find((item) => item.id.toString() === id);
 
   return (
     <div>

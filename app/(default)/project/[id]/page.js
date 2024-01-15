@@ -14,6 +14,7 @@ export function generateStaticParams() {
 
 function Detail(params) {
   const id = params.params.id;
+  
 
   const detailItem = projectItems.find((item) => item.id.toString() === id);
 

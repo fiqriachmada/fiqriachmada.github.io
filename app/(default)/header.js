@@ -51,9 +51,20 @@ function Header() {
                 <Link
                   key={index}
                   href={headerItem.link}
-                  onClick={() => handleClickHeader(headerItem.link)}
-                  className={`${activeLink === headerItem.link && "bg-gray-900"}
-                 ${activeLink != headerItem.link && "hover:bg-slate-500"}
+                  onClick={() => {
+                    handleClickHeader(headerItem.link);
+                  }}
+                  //   className={`${activeLink === headerItem.link && "bg-gray-900"}
+                  //  ${activeLink != headerItem.link && "hover:bg-slate-500"}
+                  //   text-white rounded-md px-3 py-2 text-sm font-bold capitalize`}
+                  className={`${
+                    pathname.startsWith(headerItem.link) &&
+                    // activeLink.startsWith()
+                    "bg-gray-900"
+                  }
+                 ${
+                   !pathname.startsWith(headerItem.link) && "hover:bg-slate-500"
+                 }
                   text-white rounded-md px-3 py-2 text-sm font-bold capitalize`}>
                   {headerItem.title}
                 </Link>
@@ -120,9 +131,10 @@ function Header() {
                 href={headerItem.link}
                 onClick={() => handleClickHeader(headerItem.link)}
                 className={`
-                ${activeLink === headerItem.link && "bg-gray-900"}
+                ${pathname.startsWith(headerItem.link) && "bg-gray-900"}
                  ${
-                   activeLink != headerItem.link && "hover:bg-slate-500"
+                   !pathname.startsWith(headerItem.link) && "hover:bg-slate-500"
+                   
                  } text-white block rounded-md px-3 py-2 text-base font-bold capitalize`}>
                 {headerItem.title}
               </Link>

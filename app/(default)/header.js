@@ -134,6 +134,7 @@ function Header() {
                 ${pathname.startsWith(headerItem.link) && "bg-gray-900"}
                  ${
                    !pathname.startsWith(headerItem.link) && "hover:bg-slate-500"
+                   
                  } text-white block rounded-md px-3 py-2 text-base font-bold capitalize`}>
                 {headerItem.title}
               </Link>

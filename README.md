@@ -36,3 +36,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Netlify Status
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/8c9c76f8-1455-4842-9e8d-d9c01ecaab46/deploy-status)](https://app.netlify.com/sites/fiqriachmada/deploys)
+
+## GitHub Pages Status
+
+[![Deploy Next.js site to Pages](https://github.com/fiqriachmada/fiqriachmada.github.io/actions/workflows/nextjs.yml/badge.svg)](https://github.com/fiqriachmada/fiqriachmada.github.io/actions/workflows/nextjs.yml)

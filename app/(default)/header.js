@@ -27,9 +27,10 @@ function Header() {
   };
 
   return (
-    <div>
-      <div className="flex justify-between">
-        <div className="sm:items-center mt-3 mb-3" onClick={handleClick}>
+    <div className="">
+      {/* desktop */}
+      <div className="flex justify-between items-center px-4 py-0 lg:px-6 lg:py-4">
+        <div className="" onClick={handleClick}>
           <Link href={"/"}>
             <img
               className="block h-8 w-auto lg:hidden"
@@ -43,37 +44,36 @@ function Header() {
             />
           </Link>
         </div>
-        <div className="mt-3 mb-3">
-          <div className="hidden sm:ml-6 sm:block">
-            <div className="flex space-x-4">
-              {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-              {headerItems.map((headerItem, index) => (
-                <Link
-                  key={index}
-                  href={headerItem.link}
-                  onClick={() => {
-                    handleClickHeader(headerItem.link);
-                  }}
-                  //   className={`${activeLink === headerItem.link && "bg-gray-900"}
-                  //  ${activeLink != headerItem.link && "hover:bg-slate-500"}
-                  //   text-white rounded-md px-3 py-2 text-sm font-bold capitalize`}
-                  className={`${
-                    pathname.startsWith(headerItem.link) &&
-                    // activeLink.startsWith()
-                    "bg-gray-900"
-                  }
+
+        <div className="hidden lg:block">
+          <div className="flex space-x-4">
+            {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
+            {headerItems.map((headerItem, index) => (
+              <Link
+                key={index}
+                href={headerItem.link}
+                onClick={() => {
+                  handleClickHeader(headerItem.link);
+                }}
+                //   className={`${activeLink === headerItem.link && "bg-gray-900"}
+                //  ${activeLink != headerItem.link && "hover:bg-slate-500"}
+                //   text-white rounded-md px-3 py-2 text-sm font-bold capitalize`}
+                className={`${
+                  pathname.startsWith(headerItem.link) &&
+                  // activeLink.startsWith()
+                  "bg-gray-900 font-extrabold"
+                }
                  ${
-                   !pathname.startsWith(headerItem.link) && "hover:bg-slate-500"
+                   !pathname.startsWith(headerItem.link) && "hover:bg-slate-500 hover:font-bold"
                  }
-                  text-white rounded-md px-3 py-2 text-sm font-bold capitalize`}>
-                  {headerItem.title}
-                </Link>
-              ))}
-            </div>
+                  text-white rounded-md px-3 py-2 text-sm font-medium capitalize`}>
+                {headerItem.title}
+              </Link>
+            ))}
           </div>
         </div>
 
-        <div className="sm:hidden mt-3 mb-3">
+        <div className="lg:hidden mt-3 mb-3">
           {/* <!-- Mobile menu button--> */}
           <button
             onClick={() => setIsShowing((isShowing) => !isShowing)}
@@ -114,7 +114,8 @@ function Header() {
         </div>
       </div>
 
-      <div className="sm:hidden" id="mobile-menu">
+      {/* mobile */}
+      <div className="lg:hidden" id="mobile-menu">
         <Transition
           show={isShowing}
           enter="transition-opacity duration-75"
@@ -134,7 +135,6 @@ function Header() {
                 ${pathname.startsWith(headerItem.link) && "bg-gray-900"}
                  ${
                    !pathname.startsWith(headerItem.link) && "hover:bg-slate-500"
-                   
                  } text-white block rounded-md px-3 py-2 text-base font-bold capitalize`}>
                 {headerItem.title}
               </Link>

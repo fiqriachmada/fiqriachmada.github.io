@@ -26,17 +26,17 @@ function DetailProjectPage(props) {
       <div className="flex space-x-10 text-xl lg:text-3xl">
         {detailItem.link && (
           <a href={detailItem.link} target="_blank">
-            <FontAwesomeIcon className="h-10" icon={faChrome} />
+            <FontAwesomeIcon className="hover:scale-[110%] h-10" icon={faChrome} />
           </a>
         )}
         {detailItem.googlePlay && (
           <a href={detailItem.googlePlay}>
-            <FontAwesomeIcon className="h-10" icon={faGooglePlay} />
+            <FontAwesomeIcon className="hover:scale-[110%] h-10" icon={faGooglePlay} />
           </a>
         )}
         {detailItem.appStore && (
           <a href={detailItem.appStore}>
-            <FontAwesomeIcon className="h-10" icon={faAppStoreIos} />
+            <FontAwesomeIcon className="hover:scale-[110%] h-10" icon={faAppStoreIos} />
           </a>
         )}
       </div>

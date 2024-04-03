@@ -1,17 +1,17 @@
-import Link from 'next/link';
-import homeItems from './homeItems';
+import Link from "next/link";
+import homeItems from "./homeItems";
 
-const title = 'home';
+const title = "home";
 export const metadata = {
-  title: 'fiqriachmada | ' + title,
-  description: 'pernosal site',
+  title: "fiqriachmada | " + title,
+  description: "pernosal site",
 };
 
 export default function Home() {
   return (
     <div>
-      {homeItems.map((homeItem) => (
-        <div className="bg-white text-black shadow-xl rounded-md">
+      {homeItems.map((homeItem, index) => (
+        <div className="bg-white text-black shadow-xl rounded-md" key={index}>
           <div className="p-6 lg:px-32">
             <div className="flex justify-center pt-5 capitalize">
               {homeItem.welcome}

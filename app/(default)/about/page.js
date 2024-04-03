@@ -11,8 +11,8 @@ export const metadata = {
 function About() {
   return (
     <div>
-      {aboutItems.map((aboutItem) => (
-        <div className="bg-white text-black shadow-xl rounded-md">
+      {aboutItems.map((aboutItem, index) => (
+        <div className="bg-white text-black shadow-xl rounded-md" key={index}>
           <div className="p-6 lg:px-32">
             <div className="flex justify-center pt-5 capitalize">
               {aboutItem.welcome}

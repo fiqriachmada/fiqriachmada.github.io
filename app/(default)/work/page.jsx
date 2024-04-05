@@ -15,7 +15,7 @@ function Work() {
         {workItems.map((workItem, index) => (
           <div
             key={index}
-            className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg lg:p-12 gap-3">
+            className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg px-10 gap-3">
             <div className="mx-4 lg:mx-0">
               <img
                 className="object-contain "

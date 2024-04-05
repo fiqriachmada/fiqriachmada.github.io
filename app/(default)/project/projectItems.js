@@ -1,8 +1,9 @@
 import EarthseaSite from "@/public/images/earthsea/earthsea_site.svg";
+import SwipeySite from "@/public/images/swipey/swipey_site.svg";
 
 const projectItems = [
   {
-    id: '1',
+    id: "1",
     image: "/images/fresh-factory-admin.svg",
     title: "Fresh Factory Admin",
     description:
@@ -10,7 +11,7 @@ const projectItems = [
     link: "https://admincp.freshfactory.id/",
   },
   {
-    id: '2',
+    id: "2",
     image: "/images/fresh-factory-admin.svg",
     title: "Fresh Factory Tenant",
     description:
@@ -18,7 +19,7 @@ const projectItems = [
     link: "https://tenant.freshfactory.id/",
   },
   {
-    id: '3',
+    id: "3",
     image: "/images/fresh-factory-admin.svg",
     title: "Fresh Factory Warehouse App",
     description:
@@ -27,7 +28,7 @@ const projectItems = [
       "https://play.google.com/store/apps/details?id=com.strategies360.freshfactory",
   },
   {
-    id: '4',
+    id: "4",
     image: "/images/fresh-factory-admin.svg",
     title: "Freezy Fresh App",
     description:
@@ -38,14 +39,18 @@ const projectItems = [
     appStore: "https://apps.apple.com/us/app/freezy-fresh/id1580053719",
   },
   {
-    id: '5',
+    id: "5",
     image: EarthseaSite,
     title: "earthsea",
     description: `Earthsea adalah inisiatif CSR dari PT. Uber Sari Kertalangu yang berfokus pada penyuplai tanaman, pengelolaan taman, pembibitan tanaman, dan pengelolaan limbah.`,
     link: "https://earthsea-indonesia.vercel.app/",
-    // googlePlay:
-    //   "https://play.google.com/store/apps/details?id=com.freezy.app&hl=id&gl=US",
-    // appStore: "https://apps.apple.com/us/app/freezy-fresh/id1580053719",
+  },
+  {
+    id: "6",
+    image: SwipeySite,
+    title: "swipey",
+    description: `Swipey saves you time and money on company subscriptions, expenses, invoices, reimbursements and much more. My work here as a front-end freelance development in migrate from Tailwind CSS version 2 to version 3`,
+    link: "https://app.swipey.co/",
   },
 ];
 

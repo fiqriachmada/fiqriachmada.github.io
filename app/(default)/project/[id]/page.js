@@ -1,6 +1,3 @@
-// "use client";
-
-// import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import projectItems from "../projectItems";
 
@@ -12,9 +9,14 @@ export function generateStaticParams() {
   return id;
 }
 
+const title = "project";
+export const metadata = {
+  title: "fiqriachmada | " + title,
+  description: "personal site",
+};
+
 function Detail(params) {
   const id = params.params.id;
-  
 
   const detailItem = projectItems.find((item) => item.id.toString() === id);
 

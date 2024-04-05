@@ -1,17 +1,21 @@
 import React from "react";
-import { workItems } from "./components/workItems";
+import { workItems } from "./workItems";
 
-const workItem = workItems.map((workItem) => workItem.company);
+
+const title = "work";
+export const metadata = {
+  title: "fiqriachmada | " + title,
+  description: "personal site",
+};
 
 function Work() {
   return (
     <div>
-      Work History
-      <div className=" grid grid-cols-1 space-y-10 my-10">
+      <div className="grid grid-cols-1 gap-10">
         {workItems.map((workItem, index) => (
           <div
             key={index}
-            className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg lg:p-12 gap-3">
+            className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg px-10 gap-3">
             <div className="mx-4 lg:mx-0">
               <img
                 className="object-contain "

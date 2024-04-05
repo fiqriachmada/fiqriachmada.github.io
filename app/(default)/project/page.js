@@ -3,7 +3,7 @@ import projectItems from "./projectItems";
 import Link from "next/link";
 import Image from "next/image";
 
-const title = "project";
+const title = "projects";
 export const metadata = {
   title: "fiqriachmada | " + title,
   description: "personal site",
@@ -12,8 +12,10 @@ export const metadata = {
 function Project() {
   return (
     <div className="grid lg:grid-cols-3 gap-4 grid-cols-1">
-      {projectItems.map((projectItem) => (
-        <div className="bg-white text-black shadow-xl rounded-md mt-5 hover:opacity-70 hover:shadow-xl hover:scale-105 hover:rounded-md">
+      {projectItems.map((projectItem, index) => (
+        <div
+          className="bg-gray-200 text-black shadow-xl rounded-md mt-5 hover:opacity-70 hover:shadow-xl hover:scale-[102%] hover:rounded-md hover:text-gray-700 hover:font-medium"
+          key={index}>
           <div className="flex justify-center">
             <Link href={"project/" + projectItem.id}>
               <Image

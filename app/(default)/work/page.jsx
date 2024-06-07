@@ -1,6 +1,6 @@
 import React from "react";
 import { workItems } from "./workItems";
-
+import { fetchWorkData } from "@/lib/fetchWorkData";
 
 const title = "work";
 export const metadata = {
@@ -8,18 +8,47 @@ export const metadata = {
   description: "personal site",
 };
 
-function Work() {
+// export async function getServerSideProps() {
+//   try {
+//     const data = await fetchWorkData();
+//     return {
+//       props: {
+//         data,
+//       },
+//     };
+//   } catch (error) {
+//     return {
+//       props: {
+//         data: null,
+//         error: error.message,
+//       },
+//     };
+//   }
+// }
+
+async function Work(
+  // { data, error }
+) {
+  let data = [];
+  let error = null;
+
+  try {
+    data = await fetchWorkData();
+  } catch (err) {
+    error = err.message;
+  }
   return (
     <div>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
       <div className="grid grid-cols-1 gap-10">
-        {workItems.map((workItem, index) => (
+        {data.data.map((workItem, index) => (
           <div
             key={index}
             className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg px-10 gap-3">
             <div className="mx-4 lg:mx-0">
               <img
                 className="object-contain "
-                src={workItem.image}
+                src={workItem.imageUrl}
                 style={{ width: 400, height: 400 }}
               />
             </div>

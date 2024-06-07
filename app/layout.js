@@ -1,5 +1,5 @@
-import Footer from "./(default)/footer";
-import Header from "./(default)/header";
+import Footer from "../components/footer";
+import Header from "../components/header";
 import "./globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
 

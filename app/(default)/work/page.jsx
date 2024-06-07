@@ -21,8 +21,8 @@ async function Work() {
   }
   return (
     <div>
-      <pre>{JSON.stringify(data, null, 2)}</pre>
-      <pre>{JSON.stringify(error, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+      {/* <pre>{JSON.stringify(error, null, 2)}</pre> */}
       <div className="grid grid-cols-1 gap-10">
         {data.data.map((workItem, index) => (
           <div
@@ -39,7 +39,7 @@ async function Work() {
               <div className="">Company Name:</div>
               <div>{workItem.name}</div>
               <div className="">Title:</div>
-              <div>{workItem.title}</div>
+              <div>{workItem.description}</div>
               <div className="">Start Date:</div>
               <div>{dayjs(workItem.startDate).format("DD/MM/YYYY")}</div>
               <div className="">End Date:</div>

@@ -5,21 +5,9 @@ import { fetchWorkDataById } from "@/lib/fetchWorkDataById";
 
 // Define the generateStaticParams function
 export async function generateStaticParams() {
-  // Fetch work data to determine dynamic paths
   const data = await fetchWorkData();
-  console.log("data", data);
+
   return data.data;
-
-  // Generate static paths based on the fetched data
-  // const paths = data.map((workItem) => ({
-  //   params: { id: workItem.id.toString() },
-  // }));
-
-  // // Return the generated static paths
-  // return {
-  //   paths,
-  //   fallback: false,
-  // };
 }
 
 // Export the default function for the Server Component

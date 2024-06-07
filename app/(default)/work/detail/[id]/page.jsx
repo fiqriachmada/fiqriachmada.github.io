@@ -23,12 +23,12 @@ export default async function WorkDetailPage(params) {
     error = err.message;
   }
   return (
-    <>
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-      <div className="grid grid-cols-1 gap-10">
+
+    <div className="">
+        {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
         <WorkCardDetail data={data.data} />
       </div>
-    </>
-  );
+
+);
   // Your component implementation...
 }

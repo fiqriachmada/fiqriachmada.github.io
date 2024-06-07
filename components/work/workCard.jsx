@@ -9,7 +9,7 @@ function WorkCard({ data }) {
     router.push("/work/detail/" + id);
   };
   return (
-    <div>
+    <div className="grid grid-cols-1 gap-10">
       {data.map((workItem, index) => (
         <div
           onClick={() => handleOnClick(workItem.id)}

@@ -22,12 +22,8 @@ async function Work() {
   }
 
   return (
-    <div>
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
-      {/* <pre>{JSON.stringify(error, null, 2)}</pre> */}
-      <div className="grid grid-cols-1 gap-10">
-        <WorkCard data={data.data} />
-      </div>
+    <div className="10">
+      <WorkCard data={data.data} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import { workItems } from "./workItems";
 import { fetchWorkData } from "@/lib/fetchWorkData";
+import dayjs from "dayjs";
 
 const title = "work";
 export const metadata = {
@@ -8,27 +9,8 @@ export const metadata = {
   description: "personal site",
 };
 
-// export async function getServerSideProps() {
-//   try {
-//     const data = await fetchWorkData();
-//     return {
-//       props: {
-//         data,
-//       },
-//     };
-//   } catch (error) {
-//     return {
-//       props: {
-//         data: null,
-//         error: error.message,
-//       },
-//     };
-//   }
-// }
-
-async function Work(
+async function Work() {
   // { data, error }
-) {
   let data = [];
   let error = null;
 
@@ -40,6 +22,7 @@ async function Work(
   return (
     <div>
       <pre>{JSON.stringify(data, null, 2)}</pre>
+      <pre>{JSON.stringify(error, null, 2)}</pre>
       <div className="grid grid-cols-1 gap-10">
         {data.data.map((workItem, index) => (
           <div
@@ -54,13 +37,13 @@ async function Work(
             </div>
             <div className="m-8 lg:m-0 lg:px-10 lg:py-10 space-y-2">
               <div className="">Company Name:</div>
-              <div>{workItem.company}</div>
+              <div>{workItem.name}</div>
               <div className="">Title:</div>
               <div>{workItem.title}</div>
               <div className="">Start Date:</div>
-              <div>{workItem.startDate}</div>
+              <div>{dayjs(workItem.startDate).format("DD/MM/YYYY")}</div>
               <div className="">End Date:</div>
-              <div>{workItem.endDate}</div>
+              <div>{dayjs(workItem.endDate).format("DD/MM/YYYY")}</div>
             </div>
           </div>
         ))}

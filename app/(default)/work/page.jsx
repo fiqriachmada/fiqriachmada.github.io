@@ -23,7 +23,7 @@ async function Work() {
 
   return (
     <div className="10">
-      {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
+      <pre>{JSON.stringify(data, null, 2)}</pre>
       <WorkCard data={data.data} />
     </div>
   );

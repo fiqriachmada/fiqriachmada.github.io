@@ -1,7 +1,7 @@
 import React from "react";
-import projectItems from "../projectItems";
+import projectItems from "../../../data/projectItems";
 
-import DetailProjectPage from "./components/detail";
+import DetailProjectPage from "../../../components/project/detail/detail";
 
 export function generateStaticParams() {
   const id = projectItems;

@@ -1,5 +1,5 @@
 import React from "react";
-import projectItems from "./projectItems";
+import projectItems from "../../data/projectItems";
 import Link from "next/link";
 import Image from "next/image";
 

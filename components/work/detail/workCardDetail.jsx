@@ -8,7 +8,7 @@ function WorkCardDetail({ data }) {
         <div className="mx-4 lg:mx-0">
           <img
             className="object-contain "
-            src={data?.imageUrl}
+            src={data?.imageUrl||'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png'}
             style={{ width: 400, height: 400 }}
           />
         </div>

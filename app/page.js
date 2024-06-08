@@ -1,5 +1,5 @@
 import Link from "next/link";
-import homeItems from "./homeItems";
+import homeItems from "../data/homeItems";
 
 const title = "home";
 export const metadata = {

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import headerItems from "@/data/headerItems";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import socialMediaItems from "../app/(default)/socialMediaItems";
+import socialMediaItems from "../data/socialMediaItems";
 
 function Footer() {
   const [activeLink, setActiveLink] = useState("");

@@ -2,10 +2,11 @@
 
 import { Transition } from "@headlessui/react";
 import { useEffect, useState } from "react";
-import headerItems from "@/data/headerItems";
+
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import socialMediaItems from "../data/socialMediaItems";
+import routes from "@/routes/routes";
 
 function Footer() {
   const [activeLink, setActiveLink] = useState("");
@@ -52,16 +53,16 @@ function Footer() {
           <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4">
               {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-              {headerItems.map((headerItem, index) => (
+              {routes.map((route, index) => (
                 <Link
                   key={index}
-                  onClick={() => handleClickFooter(headerItem.link)}
-                  href={headerItem.link}
-                  className={`${activeLink === headerItem.link && "bg-gray-900"}
+                  onClick={() => handleClickFooter(route.link)}
+                  href={route.link}
+                  className={`${activeLink === route.link && "bg-gray-900"}
                   
-                 ${activeLink != headerItem.link && "hover:bg-slate-500"}
+                 ${activeLink != route.link && "hover:bg-slate-500"}
                   text-white rounded-md px-3 py-2 text-sm font-bold capitalize`}>
-                  {headerItem.title}
+                  {route.title}
                 </Link>
               ))}
             </div>
@@ -117,16 +118,16 @@ function Footer() {
           leaveTo="opacity-0">
           {/* <div className="space-y-1 px-2 pb-3 pt-2"> */}
           <div className="space-y-1 pb-3">
-            {headerItems.map((headerItem, index) => (
+            {routes.map((route, index) => (
               <Link
                 key={index}
-                href={headerItem.link}
-                onClick={() => handleClickFooter(headerItem.link)}
+                href={route.link}
+                onClick={() => handleClickFooter(route.link)}
                 className={`  
-                ${activeLink === headerItem.link && "bg-gray-900"}
-                 ${activeLink != headerItem.link && "hover:bg-slate-500"}
+                ${activeLink === route.link && "bg-gray-900"}
+                 ${activeLink != route.link && "hover:bg-slate-500"}
                 text-white block rounded-md px-3 py-2 text-base font-bold capitalize`}>
-                {headerItem.title}
+                {route.title}
               </Link>
             ))}
           </div>

@@ -23,8 +23,12 @@ export default function ThemeButton() {
   }, []);
 
   if (!mounted) return null;
+
+  const isActive = (option) => theme.startsWith(option);
+
   return (
     <div className="">
+      {/* Desktop */}
       <div className="hidden lg:block ">
         <Menu __demoMode>
           <MenuButton className="inline-flex items-center gap-2 rounded-md bg-gray-800 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-700 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
@@ -96,21 +100,26 @@ export default function ThemeButton() {
           </MenuItems>
         </Menu>
       </div>
+      {/* Mobile */}
       <div className="block lg:hidden">
-        <div className="flex justify-between">
+        <div className="flex justify-between gap-2">
           {themes.map((option) => (
             <button
               onClick={() => {
                 setTheme(option);
               }}
-              className="flex w-full items-center gap-3 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+              className={`${
+                isActive(option)
+                  ? "font-extrabold bg-gray-900 text-white"
+                  : "hover:bg-gray-400 hover:text-darkText"
+              } flex justify-center w-full items-center gap-1 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10`}>
               {option === "light" ? (
                 // <WbSunny className="text-yellow-300" />
                 <SunIcon className="size-4 fill-yellow-300" />
               ) : option === "dark" ? (
-                <MoonIcon className="size-4 fill-white/40" />
+                <MoonIcon className="size-4 text-black dark:fill-white/40" />
               ) : (
-                <AdjustmentsHorizontalIcon className="size-4 fill-white/40" />
+                <AdjustmentsHorizontalIcon className="size-4 text-gray-800 dark:fill-white/40" />
               )}{" "}
               {option}
             </button>

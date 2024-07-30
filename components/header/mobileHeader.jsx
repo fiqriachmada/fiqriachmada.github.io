@@ -18,6 +18,8 @@ function MobileHeader() {
     router.push("/");
   };
 
+  const isActive = (route) => pathname.startsWith(route.link);
+
   return (
     <div className="lg:hidden block">
       <div className=" flex justify-between items-center px-4 py-0 lg:px-6 lg:py-4">
@@ -93,9 +95,13 @@ function MobileHeader() {
                 href={route.link}
                 onClick={() => handleClickHeader(route.link)}
                 className={`
-                ${pathname.startsWith(route.link) && "bg-gray-900 text-darkText "}
+                ${
+                  isActive(route) &&
+                  "bg-gray-900 dark:text-darkText text-white"
+                }
                  ${
-                   !pathname.startsWith(route.link) && "hover:bg-slate-500"
+                   !isActive(route) &&
+                   "hover:bg-slate-500  dark:text-darkText text-lightText hover:text-darkText hover:font-bold"
                  } text-lightText dark:text-darkText block rounded-md px-3 py-2 text-base font-bold capitalize`}>
                 {route.title}
               </Link>

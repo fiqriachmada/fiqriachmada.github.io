@@ -14,7 +14,7 @@ function Project() {
     <div className="grid lg:grid-cols-3 gap-4 grid-cols-1">
       {projectItems.map((projectItem, index) => (
         <div
-          className="bg-gray-200 dark:bg-black text-black shadow-xl rounded-md mt-5 hover:opacity-70 hover:shadow-xl hover:scale-[102%] hover:rounded-md hover:text-gray-700 hover:font-medium"
+          className="bg-gray-200 text-black shadow-xl rounded-md mt-5 hover:opacity-70 hover:shadow-xl hover:scale-[102%] hover:rounded-md hover:text-gray-700 hover:font-medium"
           key={index}>
           <div className="flex justify-center">
             <Link href={"project/" + projectItem.id}>

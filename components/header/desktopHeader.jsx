@@ -46,10 +46,13 @@ function DesktopHeader() {
                 className={`${
                   isActive(route) &&
                   // activeLink.startsWith()
-                  "bg-gray-900 font-extrabold"
+                  "bg-gray-900 dark:text-darkText text-darkText font-extrabold"
                 }
-                 ${!isActive(route) && "hover:bg-slate-500 hover:font-bold"}
-                  text-lightText dark:text-darkText rounded-md px-3 py-2 text-sm font-medium capitalize`}>
+                 ${
+                   !isActive(route) &&
+                   "hover:bg-slate-500  dark:text-darkText text-lightText hover:font-bold"
+                 }
+                    rounded-md px-3 py-2 text-sm font-medium capitalize`}>
                 {route.title}
               </Link>
             ))}

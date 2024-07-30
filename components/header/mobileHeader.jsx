@@ -93,7 +93,7 @@ function MobileHeader() {
                 href={route.link}
                 onClick={() => handleClickHeader(route.link)}
                 className={`
-                ${pathname.startsWith(route.link) && "bg-gray-900"}
+                ${pathname.startsWith(route.link) && "bg-gray-900 text-darkText "}
                  ${
                    !pathname.startsWith(route.link) && "hover:bg-slate-500"
                  } text-lightText dark:text-darkText block rounded-md px-3 py-2 text-base font-bold capitalize`}>

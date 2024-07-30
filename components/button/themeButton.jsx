@@ -44,7 +44,8 @@ export default function ThemeButton() {
           <MenuItems
             transition
             anchor="bottom end"
-            className="bg-darkBg z-10 w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0">
+            className="bg-darkBg dark:bg-lightBg text-darkText dark:text-lightText z-10 my-2 p-1 origin-top-right rounded-xl w-36 transition duration-100 ease-out">
+            {/* z-10 w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 */}
             {themes.map((option) => (
               <MenuItem>
                 <button

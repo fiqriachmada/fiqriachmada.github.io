@@ -63,7 +63,7 @@ const homeItems = [
         </p>
       ),
       4: (
-        <div className="flex space-x-10">
+        <div className="flex gap-10">
           {links.map((link, index) => (
             <div key={index} className="cursor-pointer">
               <Link href={link.link} title={link.title} target="_blank">

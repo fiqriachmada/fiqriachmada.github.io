@@ -13,10 +13,10 @@ function About() {
   return (
     <div>
       {/* <pre>{JSON.stringify(profile, null, 2)}</pre> */}
-      
+
       {aboutItems.map((aboutItem, index) => (
         <div
-          className="bg-gray-200 dark:bg-slate-900 text-black shadow-xl rounded-md"
+          className="bg-gray-200 text-black shadow-xl rounded-md"
           key={index}>
           <div className="p-6 lg:px-20">
             <div className="lg:flex lg:justify-stretch justify-center gap-10 items-center pt-5">
@@ -27,7 +27,6 @@ function About() {
                     src={profile.src}
                     alt=""
                   />
-                  
                 </Link>
               </div>
               <div className="pt-5">

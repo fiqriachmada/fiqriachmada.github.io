@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { Transition } from "@headlessui/react";
 import React, { useEffect, useState } from "react";
+import ThemeButton from "../button/themeButton";
 
 function MobileHeader() {
   const [isShowing, setIsShowing] = useState(false);
@@ -95,10 +96,11 @@ function MobileHeader() {
                 ${pathname.startsWith(route.link) && "bg-gray-900"}
                  ${
                    !pathname.startsWith(route.link) && "hover:bg-slate-500"
-                 } text-white block rounded-md px-3 py-2 text-base font-bold capitalize`}>
+                 } text-lightText dark:text-darkText block rounded-md px-3 py-2 text-base font-bold capitalize`}>
                 {route.title}
               </Link>
             ))}
+            <ThemeButton />
           </div>
         </Transition>
       </div>

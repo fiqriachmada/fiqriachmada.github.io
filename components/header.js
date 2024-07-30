@@ -30,7 +30,7 @@ function Header() {
   };
 
   return (
-    <div className="fixed top-0 right-0 left-0 z-10 mx-6 lg:mx-28 my-5 dark:bg-gray-800 bg-black  mb-16 rounded-xl hover:scale-[101%]">
+    <div className="fixed top-0 right-0 left-0 z-10 mx-6 lg:mx-28 my-5 dark:bg-gray-800 bg-white  mb-16 rounded-xl hover:scale-[101%]">
       {/* desktop */}
       <DesktopHeader />
       <MobileHeader />

@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${jakarta.className}`}>
-        <ThemeProvider>
+        <ThemeProvider attribute="class">
           <Header />
           <div className="mx-6 lg:mx-28 my-24 lg:my-28">{children}</div>
         </ThemeProvider>

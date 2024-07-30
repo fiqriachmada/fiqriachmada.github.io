@@ -3,10 +3,6 @@ import homeItems from "@/data/homeItems";
 import React from "react";
 
 function HomeCard() {
-  const darkTheme =
-    global.window.matchMedia("(prefers-color-scheme: dark)").media ===
-    "(prefers-color-scheme: dark)";
-  console.log("darkTheme", darkTheme);
   return (
     <div>
       {homeItems.map((homeItem, index) => (

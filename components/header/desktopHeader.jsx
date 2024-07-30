@@ -14,6 +14,8 @@ function DesktopHeader() {
     router.push("/");
   };
 
+  const isActive = (route) => pathname.startsWith(route.link);
+
   return (
     <div className="hidden lg:block">
       <div className="flex justify-between items-center px-4 py-0 lg:px-6 lg:py-4">
@@ -34,7 +36,6 @@ function DesktopHeader() {
 
         <div className="">
           <div className="flex space-x-4">
-            {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
             {routes.map((route, index) => (
               <Link
                 key={index}
@@ -42,19 +43,13 @@ function DesktopHeader() {
                 onClick={() => {
                   handleClickHeader(route.link);
                 }}
-                //   className={`${activeLink === route.link && "bg-gray-900"}
-                //  ${activeLink != route.link && "hover:bg-slate-500"}
-                //   text-white rounded-md px-3 py-2 text-sm font-bold capitalize`}
                 className={`${
-                  pathname.startsWith(route.link) &&
+                  isActive(route) &&
                   // activeLink.startsWith()
                   "bg-gray-900 font-extrabold"
                 }
-                 ${
-                   !pathname.startsWith(route.link) &&
-                   "hover:bg-slate-500 hover:font-bold"
-                 }
-                  text-white rounded-md px-3 py-2 text-sm font-medium capitalize`}>
+                 ${!isActive(route) && "hover:bg-slate-500 hover:font-bold"}
+                  text-lightText dark:text-darkText rounded-md px-3 py-2 text-sm font-medium capitalize`}>
                 {route.title}
               </Link>
             ))}

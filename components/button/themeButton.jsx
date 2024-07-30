@@ -17,8 +17,9 @@ function ThemeButton() {
 
   return (
     <div className="w-[150px]">
+      <pre>{JSON.stringify(themes, null, 2)}</pre>
       <TextField
-        className="bg-white dark:bg-black rounded"
+        className="dark:bg-white bg-gray-800 rounded"
         value={theme}
         select
         fullWidth

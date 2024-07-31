@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 
 function Work() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     async function fetchData() {
@@ -13,6 +14,8 @@ function Work() {
         setData(result.data);
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setLoading(false); // Set loading to false after data is fetched or an error occurs
       }
     }
 
@@ -21,7 +24,11 @@ function Work() {
 
   return (
     <div>
-      <WorkCard data={data} />
+      {loading ? ( // Conditional rendering based on loading state
+        <p>Loading...</p>
+      ) : (
+        <WorkCard data={data} />
+      )}
     </div>
   );
 }

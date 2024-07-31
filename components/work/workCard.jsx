@@ -5,9 +5,9 @@ import dayjs from "dayjs";
 
 function WorkCard({ data }) {
   const router = useRouter();
-  const handleOnClick = (id) => {
-    router.push("/work/" + id);
-  };
+  // const handleOnClick = (id) => {
+  //   router.push("/work/" + id);
+  // };
   return (
     <div className="grid grid-cols-1 gap-10">
       {data?.map((workItem, index) => (

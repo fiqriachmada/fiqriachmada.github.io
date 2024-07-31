@@ -48,22 +48,26 @@ export default function ThemeButton() {
           <MenuItems
             transition
             anchor="bottom end"
-            className="bg-darkBg dark:bg-lightBg text-darkText dark:text-lightText z-10 my-2 p-1 origin-top-right rounded-xl w-36 transition duration-100 ease-out">
+            className="bg-darkBg dark:bg-lightBg text-darkText dark:text-lightText z-10 my-2 p-1 origin-top-right rounded-xl w-36 transition duration-100 ease-out space-y-1">
             {/* z-10 w-52 origin-top-right rounded-xl border border-white/5 bg-white/5 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 */}
-            {themes.map((option) => (
-              <MenuItem>
+            {themes.map((option, index) => (
+              <MenuItem key={index}>
                 <button
                   onClick={() => {
                     setTheme(option);
                   }}
-                  className="group flex w-full items-center gap-3 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10">
+                  className={`${
+                    isActive(option)
+                      ? "bg-lightBg text-lightText font-bold dark:bg-darkBg dark:text-darkText "
+                      : "data-[focus]:bg-white/10 dark:data-[focus]:bg-gray-500 dark:data-[focus]:text-darkText"
+                  } group flex w-full items-center gap-3 rounded-lg py-1.5 px-3`}>
                   {option === "light" ? (
                     // <WbSunny className="text-yellow-300" />
                     <SunIcon className="size-4 fill-yellow-300" />
                   ) : option === "dark" ? (
-                    <MoonIcon className="size-4 fill-white/40" />
+                    <MoonIcon className="size-4 fill-white/40 dark:text-black" />
                   ) : (
-                    <AdjustmentsHorizontalIcon className="size-4 fill-white/40" />
+                    <AdjustmentsHorizontalIcon className="size-4 fill-white/40 dark:text-gray-900" />
                   )}{" "}
                   {option}
                 </button>

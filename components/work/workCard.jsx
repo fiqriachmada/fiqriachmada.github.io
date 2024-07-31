@@ -14,11 +14,14 @@ function WorkCard({ data }) {
         <div
           onClick={() => handleOnClick(workItem.id)}
           key={index}
-          className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg px-10 gap-3">
+          className="grid grid-cols-1 lg:flex items-center bg-gray-200 text-black rounded-lg px-10 gap-3">
           <div className="mx-4 lg:mx-0">
             <img
               className="object-contain "
-              src={workItem.imageUrl||'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png'}
+              src={
+                workItem.imageUrl ||
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
+              }
               style={{ width: 400, height: 400 }}
             />
           </div>

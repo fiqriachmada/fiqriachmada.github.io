@@ -1,5 +1,4 @@
 import React from "react";
-
 import { fetchWorkData, fetchWorkDataById } from "@/lib/workApi";
 import WorkCardDetail from "@/components/work/detail/workCardDetail";
 
@@ -10,22 +9,40 @@ export const metadata = {
 };
 
 export async function generateStaticParams() {
-  const data = await fetchWorkData();
-  return data.data;
+  const response = await fetchWorkData();
+
+  // Check if data is present and format correctly
+  if (!response.data) {
+    return [];
+  }
+
+  return response.data.map((item) => ({
+    params: { id: item.id },
+  }));
 }
 
-async function Detail(params) {
-  const id = params.params.id;
+async function Detail({ params }) {
+  // const { id } = params;
+  // let data = null;
+  // let error = null;
 
-  var data = [];
-  try {
-    data = await fetchWorkDataById(id);
-  } catch (error) {
-    console.log("error", error);
-  }
+  // try {
+  //   const result = await fetchWorkDataById(id);
+  //   data = result.data;
+  // } catch (err) {
+  //   console.error("Failed to fetch data:", err);
+  //   error = err;
+  // }
+
+  // if (error) return <div>Error loading data.</div>;
+  // if (!data) return <div>Loading...</div>;
+
   return (
     <div>
-      <WorkCardDetail data={data.data} />
+      <pre>{JSON.stringify(params, null, 2)}</pre>
+      <WorkCardDetail
+      // data={data}
+      />
     </div>
   );
 }

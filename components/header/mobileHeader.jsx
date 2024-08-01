@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
 import { Transition } from "@headlessui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ThemeButton from "../button/themeButton";
 
 function MobileHeader() {
@@ -19,10 +19,38 @@ function MobileHeader() {
   };
 
   const isActive = (route) => pathname.startsWith(route.link);
+  const [mounted, setMounted] = useState(false);
+
+  const buttonRef = useRef(null);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    setMounted(true);
+
+    // Handler untuk klik di luar menu
+    const handleClickOutside = (event) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        setIsShowing(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <div className="lg:hidden block">
-      <div className=" flex justify-between items-center px-4 py-0 lg:px-6 lg:py-4">
+      <div className="flex justify-between items-center px-4 py-0 lg:px-6 lg:py-4">
         <div className="" onClick={handleClick}>
           <Link href={"/"}>
             <img
@@ -41,6 +69,7 @@ function MobileHeader() {
         {/* <!-- Mobile menu toggle --> */}
         <div className="lg:hidden mt-3 mb-3">
           <button
+            ref={buttonRef}
             onClick={() => setIsShowing((isShowing) => !isShowing)}
             type="button"
             className="inline-flex items-center justify-center rounded-md p-2 text-gray-400
@@ -78,14 +107,13 @@ function MobileHeader() {
           </button>
         </div>
       </div>
-      {/* mobile */}
-      <div className="lg:hidden" id="mobile-menu">
+      <div ref={menuRef} className="lg:hidden" id="mobile-menu">
         <Transition
           show={isShowing}
-          enter="transition-opacity duration-75"
+          enter="transition-opacity duration-100"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="transition-opacity duration-150"
+          leave="transition-opacity duration-500"
           leaveFrom="opacity-100"
           leaveTo="opacity-0">
           <div className="space-y-2 p-2">
@@ -96,8 +124,7 @@ function MobileHeader() {
                 onClick={() => handleClickHeader(route.link)}
                 className={`
                 ${
-                  isActive(route) &&
-                  "bg-gray-900 dark:text-darkText text-white"
+                  isActive(route) && "bg-gray-900 dark:text-darkText text-white"
                 }
                  ${
                    !isActive(route) &&
@@ -110,6 +137,7 @@ function MobileHeader() {
           </div>
         </Transition>
       </div>
+      {/* mobile */}
     </div>
   );
 }

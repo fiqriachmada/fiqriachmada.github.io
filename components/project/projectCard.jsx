@@ -1,30 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
-import Loading from "@/app/loading";
-import { fetchWorkData } from "@/lib/workApi";
 
-function WorkCard() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await fetchWorkData();
-        setData(result.data);
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        setLoading(false); // Set loading to false after data is fetched or an error occurs
-      }
-    }
-
-    fetchData();
-  }, []);
+function ProjectCard({ data }) {
   const [selectedId, setSelectedId] = useState(null);
 
   const [open, setOpen] = useState(false);
@@ -45,13 +26,12 @@ function WorkCard() {
 
   return (
     <div>
-      {loading ? (
-        <Loading />
-      ) : selectedId ? (
+      {selectedId ? (
         <Transition show={open} appear={true}>
           <div className="transition duration-500 ease-in data-[closed]:opacity-0 grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs lg:text-sm">
             {filteredData.map((workItem, index) => (
               <div
+                // onClick={() => handleOnClick(workItem.id)}
                 key={index}
                 className="grid grid-cols-1 lg:flex items-center bg-gray-200 text-black rounded-lg lg:px-10 gap-3">
                 <div className="mx-4 my-4 lg:mx-0 flex justify-center">
@@ -80,9 +60,8 @@ function WorkCard() {
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs lg:text-sm">
           {filteredData.map((workItem, index) => (
-            <Transition show={!open} appear={true} key={index}>
+            <Transition show={!open} appear={true}>
               <div
-                key={index}
                 className={clsx(
                   "size-full rounded-xl shadow-lg transition duration-400",
                   "data-[closed]:translate-y-12 data-[closed]:opacity-0",
@@ -91,6 +70,7 @@ function WorkCard() {
                 )}>
                 <div
                   onClick={() => handleOnClick(workItem.id)}
+                  key={index}
                   className="grid grid-cols-1 lg:flex items-center bg-gray-200 text-black rounded-lg lg:px-10 gap-3">
                   <div className="mx-4 my-4 lg:mx-0 flex justify-center">
                     <img
@@ -129,4 +109,4 @@ function WorkCard() {
   );
 }
 
-export default WorkCard;
+export default ProjectCard;

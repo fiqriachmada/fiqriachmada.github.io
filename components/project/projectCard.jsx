@@ -1,11 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
+import projectItems from "@/data/projectItems";
+import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAppStoreIos,
+  faChrome,
+  faGooglePlay,
+} from "@fortawesome/free-brands-svg-icons";
+import Loading from "@/app/loading";
 
-function ProjectCard({ data }) {
+function ProjectCard() {
   const [selectedId, setSelectedId] = useState(null);
 
   const [open, setOpen] = useState(false);
@@ -21,46 +30,85 @@ function ProjectCard({ data }) {
   };
 
   const filteredData = selectedId
-    ? data.filter((workItem) => workItem.id === selectedId)
-    : data;
+    ? projectItems.filter((projectItem) => projectItem.id === selectedId)
+    : projectItems;
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setMounted(true);
+    }, 1000);
+  }, []);
+
+  if (!mounted) return <Loading />;
 
   return (
-    <div>
+    <div className="">
       {selectedId ? (
         <Transition show={open} appear={true}>
-          <div className="transition duration-500 ease-in data-[closed]:opacity-0 grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs lg:text-sm">
-            {filteredData.map((workItem, index) => (
+          <div
+            className={clsx(
+              "transition duration-500 ease-in data-[closed]:opacity-0"
+            )}>
+            {filteredData.map((projectItem, index) => (
               <div
-                // onClick={() => handleOnClick(workItem.id)}
                 key={index}
-                className="grid grid-cols-1 lg:flex items-center bg-gray-200 text-black rounded-lg lg:px-10 gap-3">
-                <div className="mx-4 my-4 lg:mx-0 flex justify-center">
-                  <img
-                    className="object-contain w-full lg:w-[100px] h-full rounded-lg"
-                    src={
-                      workItem.imageUrl ||
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
-                    }
+                className="bg-gray-200 p-4 lg:p-10 rounded-lg text-gray-600">
+                {/* <div className="flex justify-center">
+                  <Image
+                    width={20}
+                    height={20}
+                    src={projectItem.image}
+                    className="w-full h-full object-fill rounded-t-md"
                   />
                 </div>
-                <div className="m-8 lg:m-0 lg:px-10 lg:py-10 space-y-2">
-                  <div>Company Name:</div>
-                  <div>{workItem.name}</div>
-                  <div>Title:</div>
-                  <div>{workItem.description}</div>
-                  <div>Start Date:</div>
-                  <div>{dayjs(workItem.startDate).format("DD/MM/YYYY")}</div>
-                  <div>End Date:</div>
-                  <div>{dayjs(workItem.endDate).format("DD/MM/YYYY")}</div>
+                <div className="p-6">
+                  <div className="flex justify-start capitalize">
+                    {projectItem.title}
+                  </div>
+                </div> */}
+                <Image
+                  width={20}
+                  height={20}
+                  src={projectItem.image}
+                  className="w-full h-full rounded-md mt-5 mb-5"
+                />
+                <p className="mt-5 mb-5 text-justify">
+                  {projectItem.description}
+                </p>
+
+                <div className="flex space-x-10 text-xl lg:h-10">
+                  {projectItem.link && (
+                    <a href={projectItem.link} target="_blank">
+                      <FontAwesomeIcon
+                        className="hover:scale-[110%] h-10"
+                        icon={faChrome}
+                      />
+                    </a>
+                  )}
+                  {projectItem.googlePlay && (
+                    <a href={projectItem.googlePlay}>
+                      <FontAwesomeIcon
+                        className="hover:scale-[110%] h-10"
+                        icon={faGooglePlay}
+                      />
+                    </a>
+                  )}
+                  {projectItem.appStore && (
+                    <a href={projectItem.appStore}>
+                      <FontAwesomeIcon className="h-10" icon={faAppStoreIos} />
+                    </a>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         </Transition>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs lg:text-sm">
-          {filteredData.map((workItem, index) => (
-            <Transition show={!open} appear={true}>
+        <div className="grid lg:grid-cols-3 gap-4 grid-cols-1">
+          {filteredData.map((projectItem, index) => (
+            <Transition show={!open} appear={true} key={index}>
               <div
                 className={clsx(
                   "size-full rounded-xl shadow-lg transition duration-400",
@@ -69,27 +117,25 @@ function ProjectCard({ data }) {
                   "data-[leave]:data-[closed]:scale-95 data-[leave]:data-[closed]:rotate-[0deg]"
                 )}>
                 <div
-                  onClick={() => handleOnClick(workItem.id)}
-                  key={index}
-                  className="grid grid-cols-1 lg:flex items-center bg-gray-200 text-black rounded-lg lg:px-10 gap-3">
-                  <div className="mx-4 my-4 lg:mx-0 flex justify-center">
-                    <img
-                      className="object-contain lg:w-32 w-full  lg:h-full h-[80px] rounded-lg"
-                      src={
-                        workItem.imageUrl ||
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
-                      }
+                  onClick={() => handleOnClick(projectItem.id)}
+                  className="bg-gray-200 cursor-pointer text-black shadow-xl rounded-md mt-5 hover:opacity-70 hover:shadow-xl hover:scale-[102%] hover:rounded-md hover:text-gray-700 hover:font-medium"
+                  key={index}>
+                  <div className="flex justify-center">
+                    {/* <Link href={"project/" + projectItem.id}> */}
+                    <Image
+                      width={20}
+                      height={20}
+                      src={projectItem.image}
+                      className="w-full h-full object-fill rounded-t-md"
                     />
+                    {/* </Link> */}
                   </div>
-                  <div className="m-8 lg:m-0 lg:px-10 lg:py-10 space-y-2">
-                    <div>Company Name:</div>
-                    <div>{workItem.name}</div>
-                    <div>Title:</div>
-                    <div>{workItem.description}</div>
-                    <div>Start Date:</div>
-                    <div>{dayjs(workItem.startDate).format("DD/MM/YYYY")}</div>
-                    <div>End Date:</div>
-                    <div>{dayjs(workItem.endDate).format("DD/MM/YYYY")}</div>
+                  <div className="p-6">
+                    <div className="flex justify-start capitalize">
+                      {/* <Link href={"project/" + projectItem.id}> */}
+                      {projectItem.title}
+                      {/* </Link> */}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -97,7 +143,6 @@ function ProjectCard({ data }) {
           ))}
         </div>
       )}
-
       {selectedId && (
         <button
           onClick={handleBack}

@@ -13,7 +13,7 @@ function AboutCard() {
   useEffect(() => {
     setTimeout(() => {
       setMounted(true);
-    }, 2000);
+    }, 1000);
   }, []);
 
   if (!mounted) return <Loading />;

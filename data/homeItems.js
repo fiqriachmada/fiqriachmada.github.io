@@ -45,7 +45,7 @@ const homeItems = [
             {" "}
             (Fresh Factory){" "}
           </a>
-          and still Student (Hopefully graduate 2024) at
+          and still Student (Hopefully graduate in 2024) at
           <a className="text-blue-500" href="https://itats.ac.id/">
             {" "}
             ITATS.{" "}

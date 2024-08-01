@@ -97,6 +97,7 @@ export default function ThemeButton() {
                 <button
                   onClick={() => {
                     setTheme(option);
+                    setOpen(false)
                   }}
                   className={`${
                     isActive(option)

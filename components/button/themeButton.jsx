@@ -10,7 +10,7 @@ import {
   SunIcon,
   TrashIcon,
 } from "@heroicons/react/16/solid";
-import { DarkMode, DisplaySettings, WbSunny } from "@mui/icons-material";
+
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 

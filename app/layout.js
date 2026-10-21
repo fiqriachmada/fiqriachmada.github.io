@@ -1,6 +1,7 @@
 import { ThemeProvider } from "next-themes";
 
 import Header from "../components/header";
+import AnalyticsTracker from "../components/analytics/analyticsTracker";
 import "./globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${jakarta.className}`}>
         <ThemeProvider attribute="class">
+          <AnalyticsTracker />
           <Header />
           <div className="mx-6 lg:mx-28 my-24 lg:my-28">{children}</div>
         </ThemeProvider>

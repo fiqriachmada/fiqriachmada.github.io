@@ -32,24 +32,24 @@ const HomeCard = () => {
         <div>
           {homeItems({ currentWork }).map((homeItem, index) => (
             <div
-              className="bg-gray-200 text-gray-700 shadow-xl rounded-md"
+              className="bg-white/90 dark:bg-gray-900/90 text-gray-900 dark:text-gray-100 border border-gray-200/80 dark:border-gray-800 shadow-xl rounded-2xl backdrop-blur-sm"
               key={index}>
               <div className="p-6 lg:px-20">
-                <div className="text-start text-3xl pt-5 font-extrabold">
+                <div className="text-start text-3xl pt-5 font-extrabold text-gray-950 dark:text-white tracking-tight">
                   {homeItem.content[0]}
                 </div>
-                <div className="text-start text-xl font-medium text-gray-800 dark:text-gray-200">
-                  {homeItem.content[1]}
+                <div className="text-start text-xl font-medium text-blue-600 dark:text-blue-400 mt-1">
+                  {currentWork?.position || homeItem.content[1]}
                 </div>
 
                 {/* Dynamic Current Work Section */}
                 <div className="text-start py-6 leading-7 space-y-4">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 dark:bg-gray-800/80 border border-gray-300 dark:border-gray-700 shadow-xs">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-xs">
                     {currentWork ? (
                       <>
                         <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {currentWork.position || currentWork.description || "Fullstack Developer"} di{" "}
+                        <span className="text-gray-800 dark:text-gray-200">
+                          {currentWork.position || "Fullstack Developer"} di{" "}
                           {currentWork.url ? (
                             <a
                               href={currentWork.url}
@@ -59,7 +59,7 @@ const HomeCard = () => {
                               {currentWork.name}
                             </a>
                           ) : (
-                            <span className="font-bold text-gray-900 dark:text-white">
+                            <span className="font-bold text-gray-950 dark:text-white">
                               {currentWork.name}
                             </span>
                           )}
@@ -75,12 +75,12 @@ const HomeCard = () => {
                     )}
                   </div>
 
-                  <p className="text-sm lg:text-base text-gray-600 dark:text-gray-300">
+                  <p className="text-sm lg:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
                     Fullstack Developer. Sometimes doing code, Mobile Legends and Basketball with ❤️. Currently based on Jakarta, Indonesia.
                   </p>
                 </div>
 
-                <div className="text-start pt-2">{homeItem.content[3]}</div>
+                <div className="text-start pt-2 text-gray-700 dark:text-gray-300">{homeItem.content[3]}</div>
                 <div className="text-start pt-5">{homeItem.content[4]}</div>
               </div>
             </div>

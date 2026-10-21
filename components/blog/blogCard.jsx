@@ -7,6 +7,7 @@ import Loading from "@/app/loading";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBlogsData } from "@/lib/blogApi";
 import { BookOpen, Calendar, Clock, ArrowRight, User } from "lucide-react";
+import { BlogContentRenderer, extractBlogPlainText } from "./blogContentRenderer";
 
 const FALLBACK_COVER =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
@@ -98,8 +99,8 @@ export default function BlogCard() {
             )}
           </div>
 
-          <div className="prose dark:prose-invert max-w-none text-sm lg:text-base leading-relaxed whitespace-pre-line text-gray-700 dark:text-gray-300 border-t border-gray-200 dark:border-gray-800 pt-6">
-            {selectedBlog.content}
+          <div className="border-t border-gray-200 dark:border-gray-800 pt-6">
+            <BlogContentRenderer content={selectedBlog.content} />
           </div>
 
           <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
@@ -149,7 +150,7 @@ export default function BlogCard() {
                 </h2>
 
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-3">
-                  {blog.excerpt || blog.content?.substring(0, 120) || "Baca artikel selengkapnya..."}
+                  {blog.excerpt || extractBlogPlainText(blog.content, 120) || "Baca artikel selengkapnya..."}
                 </p>
               </div>
 

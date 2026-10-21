@@ -1,12 +1,25 @@
 "use client";
+
 import homeItems from "@/data/homeItems";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
 import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchCurrentWork } from "@/lib/workApi";
+import { Briefcase, Sparkles } from "lucide-react";
 
 function HomeCard() {
-  
-  const [open, setOpen] = useState(false);
+  const [open] = useState(false);
+
+  // Fetch pekerjaan saat ini secara dinamis dari CMS
+  const { data: currentWorkResponse, isLoading } = useQuery({
+    queryKey: ["current-work"],
+    queryFn: () => fetchCurrentWork(),
+  });
+
+  const currentWork = currentWorkResponse?.data;
+  const isAvailable = currentWorkResponse?.isAvailable ?? (!currentWork && !isLoading);
+
   return (
     <Transition show={!open} appear={true}>
       <div
@@ -25,14 +38,50 @@ function HomeCard() {
                 <div className="text-start text-3xl pt-5 font-extrabold">
                   {homeItem.content[0]}
                 </div>
-                <div className="text-start text-xl font-medium">
+                <div className="text-start text-xl font-medium text-gray-800 dark:text-gray-200">
                   {homeItem.content[1]}
                 </div>
-                <div className="text-start py-8 leading-7">
-                  {homeItem.content[2]}
+
+                {/* Dynamic Current Work Section */}
+                <div className="text-start py-6 leading-7 space-y-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 dark:bg-gray-800/80 border border-gray-300 dark:border-gray-700 shadow-xs">
+                    {currentWork ? (
+                      <>
+                        <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {currentWork.description || "Fullstack Developer"} di{" "}
+                          {currentWork.url ? (
+                            <a
+                              href={currentWork.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+                              {currentWork.name}
+                            </a>
+                          ) : (
+                            <span className="font-bold text-gray-900 dark:text-white">
+                              {currentWork.name}
+                            </span>
+                          )}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-ping" />
+                        <span className="text-blue-600 dark:text-blue-400 font-bold">
+                          ✨ Terbuka untuk bekerja (Open to Work)
+                        </span>
+                      </>
+                    )}
+                  </div>
+
+                  <p className="text-sm lg:text-base text-gray-600 dark:text-gray-300">
+                    Fullstack Developer. Sometimes doing code, Mobile Legends and Basketball with ❤️. Currently based on Jakarta, Indonesia.
+                  </p>
                 </div>
-                <div className="text-start pt-5 ">{homeItem.content[3]}</div>
-                <div className="text-start pt-5 ">{homeItem.content[4]}</div>
+
+                <div className="text-start pt-2">{homeItem.content[3]}</div>
+                <div className="text-start pt-5">{homeItem.content[4]}</div>
               </div>
             </div>
           ))}

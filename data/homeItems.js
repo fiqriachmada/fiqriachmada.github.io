@@ -1,32 +1,24 @@
-import {
-  faGithub,
-  faInstagram,
-  faLinkedin,
-  faLinkedinIn,
-  faXTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import { faX } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faInstagram,
+  faGithub,
+  faLinkedin,
+} from "@fortawesome/free-brands-svg-icons";
 
-const links = [
-  {
-    title: "LinkedIn",
-    link: "https://www.linkedin.com/in/fiqriachmada",
-    icon: faLinkedinIn,
-  },
+export const links = [
   {
     title: "Instagram",
-    link: "https://www.instagram.com/fiqriachmada",
+    link: "https://www.instagram.com/fiqriachmada/",
     icon: faInstagram,
   },
   {
-    title: "X",
-    link: "https://x.com/fiqriachmada",
-    icon: faXTwitter,
+    title: "LinkedIn",
+    link: "https://www.linkedin.com/in/fiqri-achmada-8575a7178/",
+    icon: faLinkedin,
   },
   {
-    title: "Github",
+    title: "GitHub",
     link: "https://github.com/fiqriachmada",
     icon: faGithub,
   },
@@ -37,20 +29,10 @@ const homeItems = [
     welcome: `Hi, It's Mada`,
     content: {
       0: <p>Achmada Fiqri</p>,
-      1: <p>Front-End Engineer</p>,
+      1: <p>Fullstack Developer</p>,
       2: (
         <p className="p1 margin-left--sm margin-right--sm avatar avatar--vertical">
-          Junior Software Developer at PT Gudang Segar Indonesia
-          <a className="text-blue-500" href="https://freshfactory.id/">
-            {" "}
-            (Fresh Factory){" "}
-          </a>
-          and still Student (Hopefully graduate in 2024) at
-          <a className="text-blue-500" href="https://itats.ac.id/">
-            {" "}
-            ITATS.{" "}
-          </a>
-          Sometimes doing code, Mobile Legends and Basketball with ❤️. Currently
+          Fullstack Developer. Sometimes doing code, Mobile Legends and Basketball with ❤️. Currently
           based on Jakarta, Indonesia
         </p>
       ),

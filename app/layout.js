@@ -2,9 +2,9 @@ import { ThemeProvider } from "next-themes";
 
 import Header from "../components/header";
 import AnalyticsTracker from "../components/analytics/analyticsTracker";
+import QueryProvider from "../components/providers/query-provider";
 import "./globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import QueryProvider from "@/components/queryProvider";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -31,9 +31,9 @@ export default function RootLayout({ children }) {
             "light",
             "dark",
             "system",
-            "neo-brutalism",
-            "neo-brutalism-dark",
-            "neo-brutalism-system",
+            "neo-light",
+            "neo-dark",
+            "neo-system",
           ]}
         >
           <QueryProvider>

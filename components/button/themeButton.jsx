@@ -35,80 +35,82 @@ const THEME_OPTIONS = [
     iconColor: "text-slate-400 fill-slate-400",
   },
   {
-    id: "neo-brutalism",
+    id: "neo-light",
     label: "Neo Light",
     group: "neo",
     icon: SparklesIcon,
-    iconColor: "text-pink-500 fill-pink-500",
+    iconColor: "text-amber-500 fill-amber-400",
   },
   {
-    id: "neo-brutalism-dark",
+    id: "neo-dark",
     label: "Neo Dark",
     group: "neo",
     icon: SparklesIcon,
-    iconColor: "text-pink-400 fill-pink-400",
+    iconColor: "text-lime-400 fill-lime-400",
   },
   {
-    id: "neo-brutalism-system",
+    id: "neo-system",
     label: "Neo System",
     group: "neo",
     icon: SparklesIcon,
-    iconColor: "text-cyan-400 fill-cyan-400",
+    iconColor: "text-pink-500 fill-pink-500",
   },
 ];
 
 export default function ThemeButton() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
-  const buttonRef = useRef(null);
+  const [mounted, setMounted] = useState(false);
   const menuRef = useRef(null);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
 
-    const handleClickOutside = (event) => {
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target)
-      ) {
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
         setOpen(false);
       }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
+    }
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [open]);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return (
+      <div className="w-24 h-8 bg-gray-200 dark:bg-gray-700 animate-pulse rounded-lg" />
+    );
+  }
 
   const currentOption =
     THEME_OPTIONS.find((t) => t.id === theme) || THEME_OPTIONS[2];
   const CurrentIcon = currentOption.icon;
-
-  const handleOnClick = () => {
-    setOpen(!open);
-  };
+  const isNeo = theme?.startsWith("neo-");
 
   return (
-    <div className="">
-      {/* Desktop Dropdown */}
+    <div className="relative">
+      {/* Desktop Dropdown Trigger */}
       <div className="hidden lg:block relative">
         <button
-          ref={buttonRef}
-          onClick={handleOnClick}
-          className="inline-flex items-center gap-2 rounded-lg bg-gray-800 dark:bg-gray-900 border border-white/10 py-1.5 px-3 text-xs font-semibold text-white shadow-xs focus:outline-hidden hover:bg-gray-700 transition cursor-pointer"
+          onClick={() => setOpen(!open)}
+          className={clsx(
+            "flex items-center gap-2 rounded-lg py-1.5 px-3 text-xs font-semibold shadow-xs transition-all cursor-pointer",
+            isNeo
+              ? "bg-[#ff5277] text-white border-2 border-black dark:border-white shadow-[2px_2px_0px_0px_#000000]"
+              : "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900 hover:opacity-90"
+          )}
         >
           <CurrentIcon className={clsx("size-4", currentOption.iconColor)} />
           <span>{currentOption.label}</span>
           <ChevronDownIcon
             className={clsx(
-              "size-3.5 fill-white/60 transition-transform duration-200",
+              "size-3.5 fill-current transition-transform duration-200",
               open ? "rotate-180" : "rotate-0"
             )}
           />
@@ -116,7 +118,6 @@ export default function ThemeButton() {
 
         <Transition
           show={open}
-          as="div"
           enter="transition ease-out duration-100"
           enterFrom="transform opacity-0 scale-95"
           enterTo="transform opacity-100 scale-100"
@@ -130,7 +131,7 @@ export default function ThemeButton() {
           >
             {/* Standard Themes Group */}
             <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-              Standard
+              Standard (3)
             </div>
             {THEME_OPTIONS.filter((t) => t.group === "standard").map(
               (option) => {
@@ -155,7 +156,7 @@ export default function ThemeButton() {
                       <span>{option.label}</span>
                     </div>
                     {isSelected && (
-                      <span className="size-1.5 rounded-full bg-pink-500" />
+                      <span className="size-1.5 rounded-full bg-blue-500" />
                     )}
                   </button>
                 );
@@ -164,8 +165,9 @@ export default function ThemeButton() {
 
             {/* Neo Brutalism Themes Group */}
             <div className="border-t border-gray-200 dark:border-gray-800 my-1 pt-1">
-              <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-pink-500">
-                Neo Brutalism
+              <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-pink-500 font-extrabold flex items-center gap-1">
+                <SparklesIcon className="w-3 h-3 text-pink-500" />
+                <span>Neo Brutalism (3)</span>
               </div>
               {THEME_OPTIONS.filter((t) => t.group === "neo").map((option) => {
                 const Icon = option.icon;
@@ -180,7 +182,7 @@ export default function ThemeButton() {
                     className={clsx(
                       "group flex w-full items-center justify-between gap-2.5 rounded-lg py-1.5 px-2.5 text-xs transition cursor-pointer",
                       isSelected
-                        ? "bg-pink-500 text-white font-bold"
+                        ? "bg-pink-500 text-white font-bold shadow-xs"
                         : "hover:bg-pink-50 dark:hover:bg-pink-950/30 text-gray-800 dark:text-gray-100 font-medium"
                     )}
                   >
@@ -201,28 +203,51 @@ export default function ThemeButton() {
 
       {/* Mobile Selector */}
       <div className="block lg:hidden">
-        <div className="grid grid-cols-3 gap-1.5 p-1 bg-gray-100 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
-          {THEME_OPTIONS.map((option) => {
-            const Icon = option.icon;
-            const isSelected = theme === option.id;
-            return (
-              <button
-                key={option.id}
-                onClick={() => setTheme(option.id)}
-                className={clsx(
-                  "flex items-center justify-center gap-1.5 rounded-md py-1.5 px-2 text-[11px] transition cursor-pointer",
-                  isSelected
-                    ? option.group === "neo"
-                      ? "bg-pink-500 text-white font-bold shadow-xs"
-                      : "bg-gray-900 dark:bg-gray-800 text-white font-bold shadow-xs"
-                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                )}
-              >
-                <Icon className={clsx("size-3.5", option.iconColor)} />
-                <span className="truncate">{option.label}</span>
-              </button>
-            );
-          })}
+        <div className="flex flex-col gap-1 p-1 bg-gray-100 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
+          <div className="grid grid-cols-3 gap-1">
+            {THEME_OPTIONS.filter((t) => t.group === "standard").map(
+              (option) => {
+                const Icon = option.icon;
+                const isSelected = theme === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    onClick={() => setTheme(option.id)}
+                    className={clsx(
+                      "flex items-center justify-center gap-1 rounded-md py-1 px-1.5 text-[10px] transition cursor-pointer",
+                      isSelected
+                        ? "bg-gray-900 dark:bg-gray-800 text-white font-bold"
+                        : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                    )}
+                  >
+                    <Icon className={clsx("size-3", option.iconColor)} />
+                    <span className="truncate">{option.label}</span>
+                  </button>
+                );
+              }
+            )}
+          </div>
+          <div className="grid grid-cols-3 gap-1 pt-1 border-t border-gray-200 dark:border-gray-800">
+            {THEME_OPTIONS.filter((t) => t.group === "neo").map((option) => {
+              const Icon = option.icon;
+              const isSelected = theme === option.id;
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => setTheme(option.id)}
+                  className={clsx(
+                    "flex items-center justify-center gap-1 rounded-md py-1 px-1.5 text-[10px] transition cursor-pointer",
+                    isSelected
+                      ? "bg-pink-500 text-white font-bold"
+                      : "text-pink-600 dark:text-pink-400 hover:opacity-80"
+                  )}
+                >
+                  <Icon className={clsx("size-3", option.iconColor)} />
+                  <span className="truncate">{option.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

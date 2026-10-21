@@ -1,24 +1,64 @@
 "use client";
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Transition,
-} from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 import {
   AdjustmentsHorizontalIcon,
   ChevronDownIcon,
   MoonIcon,
   SunIcon,
+  SparklesIcon,
 } from "@heroicons/react/16/solid";
 import clsx from "clsx";
 
 import { useTheme } from "next-themes";
 import { useEffect, useState, useRef } from "react";
 
+const THEME_OPTIONS = [
+  {
+    id: "light",
+    label: "Light",
+    group: "standard",
+    icon: SunIcon,
+    iconColor: "text-amber-500 fill-amber-400",
+  },
+  {
+    id: "dark",
+    label: "Dark",
+    group: "standard",
+    icon: MoonIcon,
+    iconColor: "text-indigo-400 fill-indigo-400",
+  },
+  {
+    id: "system",
+    label: "System",
+    group: "standard",
+    icon: AdjustmentsHorizontalIcon,
+    iconColor: "text-slate-400 fill-slate-400",
+  },
+  {
+    id: "neo-brutalism",
+    label: "Neo Light",
+    group: "neo",
+    icon: SparklesIcon,
+    iconColor: "text-pink-500 fill-pink-500",
+  },
+  {
+    id: "neo-brutalism-dark",
+    label: "Neo Dark",
+    group: "neo",
+    icon: SparklesIcon,
+    iconColor: "text-pink-400 fill-pink-400",
+  },
+  {
+    id: "neo-brutalism-system",
+    label: "Neo System",
+    group: "neo",
+    icon: SparklesIcon,
+    iconColor: "text-cyan-400 fill-cyan-400",
+  },
+];
+
 export default function ThemeButton() {
-  const { theme, themes, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const buttonRef = useRef(null);
@@ -27,7 +67,6 @@ export default function ThemeButton() {
   useEffect(() => {
     setMounted(true);
 
-    // Handler untuk klik di luar menu
     const handleClickOutside = (event) => {
       if (
         menuRef.current &&
@@ -48,7 +87,9 @@ export default function ThemeButton() {
 
   if (!mounted) return null;
 
-  const isActive = (option) => theme.startsWith(option);
+  const currentOption =
+    THEME_OPTIONS.find((t) => t.id === theme) || THEME_OPTIONS[2];
+  const CurrentIcon = currentOption.icon;
 
   const handleOnClick = () => {
     setOpen(!open);
@@ -56,23 +97,18 @@ export default function ThemeButton() {
 
   return (
     <div className="">
-      {/* Desktop */}
+      {/* Desktop Dropdown */}
       <div className="hidden lg:block relative">
         <button
           ref={buttonRef}
           onClick={handleOnClick}
-          className="inline-flex items-center gap-2 rounded-md bg-gray-800 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-700 data-[open]:bg-gray-700 data-[focus]:outline-1 data-[focus]:outline-white">
-          {theme === "light" ? (
-            <SunIcon className="size-4 fill-yellow-300" />
-          ) : theme === "dark" ? (
-            <MoonIcon className="size-4 fill-white/40" />
-          ) : (
-            <AdjustmentsHorizontalIcon className="size-4 fill-white/40" />
-          )}{" "}
-          {theme}
+          className="inline-flex items-center gap-2 rounded-lg bg-gray-800 dark:bg-gray-900 border border-white/10 py-1.5 px-3 text-xs font-semibold text-white shadow-xs focus:outline-hidden hover:bg-gray-700 transition cursor-pointer"
+        >
+          <CurrentIcon className={clsx("size-4", currentOption.iconColor)} />
+          <span>{currentOption.label}</span>
           <ChevronDownIcon
             className={clsx(
-              "size-4 fill-white/60",
+              "size-3.5 fill-white/60 transition-transform duration-200",
               open ? "rotate-180" : "rotate-0"
             )}
           />
@@ -86,81 +122,107 @@ export default function ThemeButton() {
           enterTo="transform opacity-100 scale-100"
           leave="transition ease-in duration-75"
           leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95">
+          leaveTo="transform opacity-0 scale-95"
+        >
           <div
             ref={menuRef}
-            className={clsx(
-              "absolute right-0 bg-darkBg dark:bg-lightBg text-darkText dark:text-lightText z-10 my-2 p-1 origin-top-right rounded-xl w-36 transition duration-500 ease-out space-y-1"
-            )}>
-            {themes.map((option, index) => (
-              <div key={index}>
-                <button
-                  onClick={() => {
-                    setTheme(option);
-                    setOpen(false)
-                  }}
-                  className={`${
-                    isActive(option)
-                      ? "font-extrabold bg-gray-900 text-white"
-                      : "hover:bg-gray-400 hover:text-darkText"
-                  } group flex w-full items-center gap-3 rounded-lg py-1.5 px-3`}>
-                  {option === "light" ? (
-                    <SunIcon className="size-4 fill-yellow-300" />
-                  ) : option === "dark" ? (
-                    <MoonIcon
-                      className={clsx(
-                        "size-4 dark:fill-black fill-white/40",
-                        isActive(option) && "fill-white dark:fill-white"
-                      )}
-                    />
-                  ) : (
-                    <AdjustmentsHorizontalIcon
-                      className={clsx(
-                        "size-4  dark:fill-gray-800 fill-white/40",
-                        isActive(option) && "fill-white dark:fill-white"
-                      )}
-                    />
-                  )}{" "}
-                  {option}
-                </button>
+            className="absolute right-0 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-800 z-50 my-2 p-1.5 origin-top-right rounded-xl w-48 shadow-xl space-y-1"
+          >
+            {/* Standard Themes Group */}
+            <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+              Standard
+            </div>
+            {THEME_OPTIONS.filter((t) => t.group === "standard").map(
+              (option) => {
+                const Icon = option.icon;
+                const isSelected = theme === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    onClick={() => {
+                      setTheme(option.id);
+                      setOpen(false);
+                    }}
+                    className={clsx(
+                      "group flex w-full items-center justify-between gap-2.5 rounded-lg py-1.5 px-2.5 text-xs transition cursor-pointer",
+                      isSelected
+                        ? "bg-gray-900 dark:bg-gray-800 text-white font-bold"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-800/60 font-medium"
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Icon className={clsx("size-4", option.iconColor)} />
+                      <span>{option.label}</span>
+                    </div>
+                    {isSelected && (
+                      <span className="size-1.5 rounded-full bg-pink-500" />
+                    )}
+                  </button>
+                );
+              }
+            )}
+
+            {/* Neo Brutalism Themes Group */}
+            <div className="border-t border-gray-200 dark:border-gray-800 my-1 pt-1">
+              <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-pink-500">
+                Neo Brutalism
               </div>
-            ))}
+              {THEME_OPTIONS.filter((t) => t.group === "neo").map((option) => {
+                const Icon = option.icon;
+                const isSelected = theme === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    onClick={() => {
+                      setTheme(option.id);
+                      setOpen(false);
+                    }}
+                    className={clsx(
+                      "group flex w-full items-center justify-between gap-2.5 rounded-lg py-1.5 px-2.5 text-xs transition cursor-pointer",
+                      isSelected
+                        ? "bg-pink-500 text-white font-bold"
+                        : "hover:bg-pink-50 dark:hover:bg-pink-950/30 text-gray-800 dark:text-gray-100 font-medium"
+                    )}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Icon className={clsx("size-4", option.iconColor)} />
+                      <span>{option.label}</span>
+                    </div>
+                    {isSelected && (
+                      <span className="size-1.5 rounded-full bg-white" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </Transition>
       </div>
-      {/* Mobile */}
+
+      {/* Mobile Selector */}
       <div className="block lg:hidden">
-        <div className="flex justify-between gap-2">
-          {themes.map((option) => (
-            <button
-              onClick={() => {
-                setTheme(option);
-              }}
-              className={`${
-                isActive(option)
-                  ? "font-extrabold bg-gray-900 text-white"
-                  : "hover:bg-gray-400 hover:text-darkText"
-              } flex justify-center w-full items-center gap-1 rounded-lg py-1.5 px-3 data-[focus]:bg-white/10`}>
-              {option === "light" ? (
-                <SunIcon className="size-4 fill-yellow-300" />
-              ) : option === "dark" ? (
-                <MoonIcon
-                  className={clsx(
-                    "size-4 fill-gray-500 dark:fill-white/40",
-                    isActive(option) && "fill-white dark:fill-white"
-                  )}
-                />
-              ) : (
-                <AdjustmentsHorizontalIcon
-                  className={clsx(
-                    "size-4  fill-gray-600 dark:fill-white/40",
-                    isActive(option) && "fill-white dark:fill-white"
-                  )}
-                />
-              )}
-              {option}
-            </button>
-          ))}
+        <div className="grid grid-cols-3 gap-1.5 p-1 bg-gray-100 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
+          {THEME_OPTIONS.map((option) => {
+            const Icon = option.icon;
+            const isSelected = theme === option.id;
+            return (
+              <button
+                key={option.id}
+                onClick={() => setTheme(option.id)}
+                className={clsx(
+                  "flex items-center justify-center gap-1.5 rounded-md py-1.5 px-2 text-[11px] transition cursor-pointer",
+                  isSelected
+                    ? option.group === "neo"
+                      ? "bg-pink-500 text-white font-bold shadow-xs"
+                      : "bg-gray-900 dark:bg-gray-800 text-white font-bold shadow-xs"
+                    : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                )}
+              >
+                <Icon className={clsx("size-3.5", option.iconColor)} />
+                <span className="truncate">{option.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>

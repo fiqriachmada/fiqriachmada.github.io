@@ -4,6 +4,7 @@ import Header from "../components/header";
 import AnalyticsTracker from "../components/analytics/analyticsTracker";
 import "./globals.css";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import QueryProvider from "@/components/queryProvider";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -14,7 +15,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta
           name="google-site-verification"
@@ -22,10 +23,24 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={`${jakarta.className}`}>
-        <ThemeProvider attribute="class">
-          <AnalyticsTracker />
-          <Header />
-          <div className="mx-6 lg:mx-28 my-24 lg:my-28">{children}</div>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem={true}
+          themes={[
+            "light",
+            "dark",
+            "system",
+            "neo-brutalism",
+            "neo-brutalism-dark",
+            "neo-brutalism-system",
+          ]}
+        >
+          <QueryProvider>
+            <AnalyticsTracker />
+            <Header />
+            <div className="mx-6 lg:mx-28 my-24 lg:my-28">{children}</div>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

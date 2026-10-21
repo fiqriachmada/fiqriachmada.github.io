@@ -1,129 +1,139 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
-import { Transition } from "@headlessui/react";
 import clsx from "clsx";
 import Loading from "@/app/loading";
+import { useQuery } from "@tanstack/react-query";
 import { fetchWorkData } from "@/lib/workApi";
+import { Briefcase, Building2, Calendar } from "lucide-react";
+
+const FALLBACK_LOGO =
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
 
 function WorkCard() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const result = await fetchWorkData();
-        setData(result.data);
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        setLoading(false); // Set loading to false after data is fetched or an error occurs
-      }
-    }
-
-    fetchData();
-  }, []);
   const [selectedId, setSelectedId] = useState(null);
 
-  const [open, setOpen] = useState(false);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["client-works"],
+    queryFn: () => fetchWorkData({ limit: 50 }),
+  });
+
+  const works = data?.data || [];
 
   const handleOnClick = (id) => {
     setSelectedId(id);
-    setOpen(!open);
   };
 
   const handleBack = () => {
     setSelectedId(null);
-    setOpen(!open);
   };
 
-  const filteredData = selectedId
-    ? data.filter((workItem) => workItem.id === selectedId)
-    : data;
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError) {
+    return (
+      <div className="p-8 text-center rounded-xl border border-red-200 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400">
+        <p className="font-semibold">Gagal memuat riwayat pekerjaan</p>
+        <p className="text-xs mt-1 text-gray-500 dark:text-gray-400">
+          {error?.message || "Terjadi kesalahan koneksi API CMS"}
+        </p>
+      </div>
+    );
+  }
+
+  const selectedWork = selectedId
+    ? works.find((w) => w.id === selectedId)
+    : null;
 
   return (
-    <div>
-      {loading ? (
-        <Loading />
-      ) : selectedId ? (
-        <Transition show={open} appear={true}>
-          <div className="transition duration-500 ease-in data-[closed]:opacity-0 grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs lg:text-sm">
-            {filteredData.map((workItem, index) => (
-              <div
-                key={index}
-                className="grid grid-cols-1 lg:flex items-center bg-gray-200 text-black rounded-lg lg:px-10 gap-3">
-                <div className="mx-4 my-4 lg:mx-0 flex justify-center">
-                  <img
-                    className="object-contain w-full lg:w-[100px] h-full rounded-lg"
-                    src={
-                      workItem.imageUrl ||
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
-                    }
-                  />
-                </div>
-                <div className="m-8 lg:m-0 lg:px-10 lg:py-10 space-y-2">
-                  <div>Company Name:</div>
-                  <div>{workItem.name}</div>
-                  <div>Title:</div>
-                  <div>{workItem.description}</div>
-                  <div>Start Date:</div>
-                  <div>{dayjs(workItem.startDate).format("DD/MM/YYYY")}</div>
-                  <div>End Date:</div>
-                  <div>{dayjs(workItem.endDate).format("DD/MM/YYYY")}</div>
-                </div>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+          Work Experience
+        </h1>
+        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Jejak karier, pengalaman profesional, dan peran kepemimpinan rekayasa teknologi.
+        </p>
+      </div>
+
+      {selectedWork ? (
+        <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 lg:p-10 rounded-2xl text-gray-800 dark:text-gray-200 shadow-lg space-y-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <img
+              className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-xl bg-white p-2 border border-gray-200 dark:border-gray-800 shadow-sm"
+              src={selectedWork.imageUrl || FALLBACK_LOGO}
+              alt={selectedWork.name}
+            />
+            <div>
+              <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
+                {selectedWork.name}
+              </h2>
+              <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">
+                {selectedWork.description}
+              </p>
+              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>
+                  {dayjs(selectedWork.startDate).format("MMMM YYYY")} —{" "}
+                  {selectedWork.endDate
+                    ? dayjs(selectedWork.endDate).format("MMMM YYYY")
+                    : "Present"}
+                </span>
               </div>
-            ))}
+            </div>
           </div>
-        </Transition>
+
+          <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
+            <button
+              onClick={handleBack}
+              className="bg-black text-white dark:bg-white dark:text-black font-semibold px-5 py-2.5 rounded-lg text-sm hover:opacity-80 transition shadow-sm">
+              ← Kembali ke Daftar
+            </button>
+          </div>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-xs lg:text-sm">
-          {filteredData.map((workItem, index) => (
-            <Transition show={!open} appear={true} key={index}>
-              <div
-                key={index}
-                className={clsx(
-                  "size-full rounded-xl shadow-lg transition duration-400",
-                  "data-[closed]:translate-y-12 data-[closed]:opacity-0",
-                  "data-[leave]:duration-500 data-[leave]:ease-in-out",
-                  "data-[leave]:data-[closed]:scale-95 data-[leave]:data-[closed]:rotate-[0deg]"
-                )}>
-                <div
-                  onClick={() => handleOnClick(workItem.id)}
-                  className="grid grid-cols-1 lg:flex items-center bg-gray-200 text-black rounded-lg lg:px-10 gap-3">
-                  <div className="mx-4 my-4 lg:mx-0 flex justify-center">
-                    <img
-                      className="object-contain lg:w-32 w-full  lg:h-full h-[80px] rounded-lg"
-                      src={
-                        workItem.imageUrl ||
-                        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
-                      }
-                    />
-                  </div>
-                  <div className="m-8 lg:m-0 lg:px-10 lg:py-10 space-y-2">
-                    <div>Company Name:</div>
-                    <div>{workItem.name}</div>
-                    <div>Title:</div>
-                    <div>{workItem.description}</div>
-                    <div>Start Date:</div>
-                    <div>{dayjs(workItem.startDate).format("DD/MM/YYYY")}</div>
-                    <div>End Date:</div>
-                    <div>{dayjs(workItem.endDate).format("DD/MM/YYYY")}</div>
-                  </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {works.map((workItem) => (
+            <div
+              key={workItem.id}
+              onClick={() => handleOnClick(workItem.id)}
+              className={clsx(
+                "group cursor-pointer rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-4"
+              )}>
+              <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 flex items-center justify-center rounded-xl bg-white dark:bg-gray-800 p-2 border border-gray-100 dark:border-gray-700 shadow-xs">
+                <img
+                  className="w-full h-full object-contain rounded-lg"
+                  src={workItem.imageUrl || FALLBACK_LOGO}
+                  alt={workItem.name}
+                />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 font-semibold mb-0.5">
+                  <Building2 className="w-3.5 h-3.5" />
+                  <span className="truncate">{workItem.name}</span>
+                </div>
+
+                <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  {workItem.description}
+                </h3>
+
+                <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>
+                    {dayjs(workItem.startDate).format("MMM YYYY")} –{" "}
+                    {workItem.endDate
+                      ? dayjs(workItem.endDate).format("MMM YYYY")
+                      : "Present"}
+                  </span>
                 </div>
               </div>
-            </Transition>
+            </div>
           ))}
         </div>
-      )}
-
-      {selectedId && (
-        <button
-          onClick={handleBack}
-          className="bg-black text-white dark:bg-white dark:text-black font-bold px-4 py-2 my-4 rounded-lg">
-          Back
-        </button>
       )}
     </div>
   );

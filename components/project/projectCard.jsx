@@ -1,154 +1,193 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import { Transition } from "@headlessui/react";
+import React, { useState } from "react";
 import clsx from "clsx";
-import projectItems from "@/data/projectItems";
-import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAppStoreIos,
-  faChrome,
-  faGooglePlay,
-} from "@fortawesome/free-brands-svg-icons";
 import Loading from "@/app/loading";
+import { useQuery } from "@tanstack/react-query";
+import { fetchProjectsData } from "@/lib/projectApi";
+import { LayoutGrid, BookOpen, ExternalLink, Image as ImageIcon } from "lucide-react";
+import { ProjectBook3D } from "./project-book-3d";
+
+const FALLBACK_IMAGE =
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
 
 function ProjectCard() {
   const [selectedId, setSelectedId] = useState(null);
+  const [viewMode, setViewMode] = useState("grid"); // 'grid' | 'book'
 
-  const [open, setOpen] = useState(false);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["client-projects"],
+    queryFn: () => fetchProjectsData({ limit: 50 }),
+  });
+
+  const projects = data?.data || [];
 
   const handleOnClick = (id) => {
     setSelectedId(id);
-    setOpen(!open);
   };
 
   const handleBack = () => {
     setSelectedId(null);
-    setOpen(!open);
   };
 
-  const filteredData = selectedId
-    ? projectItems.filter((projectItem) => projectItem.id === selectedId)
-    : projectItems;
+  if (isLoading) {
+    return <Loading />;
+  }
 
-  const [mounted, setMounted] = useState(false);
+  if (isError) {
+    return (
+      <div className="p-8 text-center rounded-xl border border-red-200 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400">
+        <p className="font-semibold">Gagal memuat daftar proyek</p>
+        <p className="text-xs mt-1 text-gray-500 dark:text-gray-400">
+          {error?.message || "Terjadi kesalahan pada koneksi API CMS"}
+        </p>
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    setTimeout(() => {
-      setMounted(true);
-    }, 1000);
-  }, []);
-
-  if (!mounted) return <Loading />;
+  const selectedProject = selectedId
+    ? projects.find((p) => p.id === selectedId)
+    : null;
 
   return (
-    <div className="">
-      {selectedId ? (
-        <Transition show={open} appear={true}>
-          <div
-            className={clsx(
-              "transition duration-500 ease-in data-[closed]:opacity-0"
-            )}>
-            {filteredData.map((projectItem, index) => (
-              <div
-                key={index}
-                className="bg-gray-200 p-4 lg:p-10 rounded-lg text-gray-600">
-                {/* <div className="flex justify-center">
-                  <Image
-                    width={20}
-                    height={20}
-                    src={projectItem.image}
-                    className="w-full h-full object-fill rounded-t-md"
+    <div className="space-y-6">
+      {/* Top Header & View Mode Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-4">
+        <div>
+          <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+            Projects
+          </h1>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
+            Kumpulan showcase karya rekayasa perangkat lunak dan portofolio aplikasi.
+          </p>
+        </div>
+
+        {/* View Mode Toggle Switcher */}
+        {!selectedId && (
+          <div className="flex items-center rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/60 p-1 shadow-sm self-start sm:self-auto">
+            <button
+              onClick={() => setViewMode("grid")}
+              className={clsx(
+                "flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-200",
+                viewMode === "grid"
+                  ? "bg-black text-white dark:bg-white dark:text-black shadow-sm"
+                  : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+              )}>
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>Grid Feed</span>
+            </button>
+
+            <button
+              onClick={() => setViewMode("book")}
+              className={clsx(
+                "flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-200",
+                viewMode === "book"
+                  ? "bg-black text-white dark:bg-white dark:text-black shadow-sm"
+                  : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+              )}>
+              <BookOpen className="w-3.5 h-3.5" />
+              <span>Memory Book 3D</span>
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Main View Mode Area */}
+      {selectedProject ? (
+        <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 lg:p-10 rounded-2xl text-gray-800 dark:text-gray-200 shadow-lg space-y-6">
+          <div className="relative w-full aspect-video max-h-[500px] rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+            <img
+              src={selectedProject.image || selectedProject.bannerUrl || FALLBACK_IMAGE}
+              alt={selectedProject.title}
+              className="w-full h-full object-cover rounded-xl"
+            />
+          </div>
+
+          <div>
+            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
+              {selectedProject.title}
+            </h2>
+            <p className="mt-4 text-sm lg:text-base leading-relaxed text-gray-600 dark:text-gray-300 whitespace-pre-line">
+              {selectedProject.description || "Tidak ada deskripsi rinci untuk proyek ini."}
+            </p>
+          </div>
+
+          {/* Project Gallery if more than 1 image */}
+          {selectedProject.projectImages && selectedProject.projectImages.length > 1 && (
+            <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-1.5">
+                <ImageIcon className="w-4 h-4" />
+                <span>Galeri Tangkapan Layar</span>
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {selectedProject.projectImages.map((img) => (
+                  <a
+                    key={img.id}
+                    href={img.imageUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="relative aspect-video rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 group">
+                    <img
+                      src={img.imageUrl}
+                      alt="Project gallery"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="pt-2">
+            <button
+              onClick={handleBack}
+              className="bg-black text-white dark:bg-white dark:text-black font-semibold px-5 py-2.5 rounded-lg text-sm hover:opacity-80 transition shadow-sm">
+              ← Kembali ke Daftar
+            </button>
+          </div>
+        </div>
+      ) : viewMode === "book" ? (
+        <ProjectBook3D projects={projects} />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((project) => (
+            <div
+              key={project.id}
+              onClick={() => handleOnClick(project.id)}
+              className={clsx(
+                "group cursor-pointer rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+              )}>
+              <div>
+                <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-4 flex items-center justify-center">
+                  <img
+                    src={project.image || project.bannerUrl || FALLBACK_IMAGE}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
                   />
                 </div>
-                <div className="p-6">
-                  <div className="flex justify-start capitalize">
-                    {projectItem.title}
-                  </div>
-                </div> */}
-                <Image
-                  width={20}
-                  height={20}
-                  src={projectItem.image}
-                  className="w-full h-full rounded-md mt-5 mb-5"
-                />
-                <p className="mt-5 mb-5 text-justify">
-                  {projectItem.description}
-                </p>
 
-                <div className="flex space-x-10 text-xl lg:h-10">
-                  {projectItem.link && (
-                    <a href={projectItem.link} target="_blank">
-                      <FontAwesomeIcon
-                        className="hover:scale-[110%] h-10"
-                        icon={faChrome}
-                      />
-                    </a>
-                  )}
-                  {projectItem.googlePlay && (
-                    <a href={projectItem.googlePlay}>
-                      <FontAwesomeIcon
-                        className="hover:scale-[110%] h-10"
-                        icon={faGooglePlay}
-                      />
-                    </a>
-                  )}
-                  {projectItem.appStore && (
-                    <a href={projectItem.appStore}>
-                      <FontAwesomeIcon className="h-10" icon={faAppStoreIos} />
-                    </a>
-                  )}
+                <div className="flex items-start justify-between gap-2">
+                  <h2 className="font-bold text-base lg:text-lg text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
+                    {project.title}
+                  </h2>
+                  <ExternalLink className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
                 </div>
+
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
+                  {project.description || "Lihat detail proyek..."}
+                </p>
               </div>
-            ))}
-          </div>
-        </Transition>
-      ) : (
-        <div className="grid lg:grid-cols-3 gap-4 grid-cols-1">
-          {filteredData.map((projectItem, index) => (
-            <Transition show={!open} appear={true} key={index}>
-              <div
-                className={clsx(
-                  "size-full rounded-xl shadow-lg transition duration-400",
-                  "data-[closed]:translate-y-12 data-[closed]:opacity-0",
-                  "data-[leave]:duration-500 data-[leave]:ease-in-out",
-                  "data-[leave]:data-[closed]:scale-95 data-[leave]:data-[closed]:rotate-[0deg]"
-                )}>
-                <div
-                  onClick={() => handleOnClick(projectItem.id)}
-                  className="bg-gray-200 cursor-pointer text-black shadow-xl rounded-md mt-5 hover:opacity-70 hover:shadow-xl hover:scale-[102%] hover:rounded-md hover:text-gray-700 hover:font-medium"
-                  key={index}>
-                  <div className="flex justify-center">
-                    {/* <Link href={"project/" + projectItem.id}> */}
-                    <Image
-                      width={20}
-                      height={20}
-                      src={projectItem.image}
-                      className="w-full h-full object-fill rounded-t-md"
-                    />
-                    {/* </Link> */}
-                  </div>
-                  <div className="p-6">
-                    <div className="flex justify-start capitalize">
-                      {/* <Link href={"project/" + projectItem.id}> */}
-                      {projectItem.title}
-                      {/* </Link> */}
-                    </div>
-                  </div>
-                </div>
+
+              <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[11px] text-gray-400">
+                <span>Showcase Portfolio</span>
+                <span className="font-medium text-blue-600 dark:text-blue-400">
+                  Lihat Detail →
+                </span>
               </div>
-            </Transition>
+            </div>
           ))}
         </div>
-      )}
-      {selectedId && (
-        <button
-          onClick={handleBack}
-          className="bg-black text-white dark:bg-white dark:text-black font-bold px-4 py-2 my-4 rounded-lg">
-          Back
-        </button>
       )}
     </div>
   );

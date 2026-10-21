@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchCurrentWork } from "@/lib/workApi";
 import { Briefcase, Sparkles } from "lucide-react";
 
-function HomeCard() {
+const HomeCard = () => {
   const [open] = useState(false);
 
   // Fetch pekerjaan saat ini secara dinamis dari CMS
@@ -30,7 +30,7 @@ function HomeCard() {
           "data-[leave]:data-[closed]:scale-95 data-[leave]:data-[closed]:rotate-[0deg]"
         )}>
         <div>
-          {homeItems.map((homeItem, index) => (
+          {homeItems({ currentWork }).map((homeItem, index) => (
             <div
               className="bg-gray-200 text-gray-700 shadow-xl rounded-md"
               key={index}>

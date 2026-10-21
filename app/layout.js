@@ -1,6 +1,6 @@
 import { ThemeProvider } from "next-themes";
 
-import Header from "../components/header";
+import FloatingNav from "../components/navigation/floatingNav";
 import AnalyticsTracker from "../components/analytics/analyticsTracker";
 import QueryProvider from "../components/providers/query-provider";
 import "./globals.css";
@@ -38,8 +38,10 @@ export default function RootLayout({ children }) {
         >
           <QueryProvider>
             <AnalyticsTracker />
-            <Header />
-            <div className="mx-6 lg:mx-28 my-24 lg:my-28">{children}</div>
+            <FloatingNav />
+            <main className="mx-6 lg:mx-28 my-10 lg:my-14 min-h-[calc(100vh-5rem)]">
+              {children}
+            </main>
           </QueryProvider>
         </ThemeProvider>
       </body>

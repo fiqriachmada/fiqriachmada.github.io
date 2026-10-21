@@ -24,7 +24,7 @@ export const links = [
   },
 ];
 
-const homeItems = [
+const homeItems = ({ work } = {}) => [
   {
     welcome: `Hi, It's Mada`,
     content: {

@@ -127,18 +127,49 @@ body {
   box-shadow: var(--neo-shadow) !important;
 }
 
-:is(.neo-dark, [data-theme="neo-dark"]) {
-  --bg-page: #0d0e12;
-  --bg-card: #15171e;
-  --bg-header: #15171e;
-  --text-main: #ffffff;
-  --text-muted: #cbd5e1;
-  --border-color: #ffffff;
-  --neo-shadow: 4px 4px 0px 0px #ffffff;
-  --neo-shadow-sm: 2px 2px 0px 0px #ffffff;
+/* Ensure cards in neo-dark mode are dark and text is bright white */
+:is(.neo-dark, [data-theme="neo-dark"]) .bg-white\/90,
+:is(.neo-dark, [data-theme="neo-dark"]) .bg-white\/60,
+:is(.neo-dark, [data-theme="neo-dark"]) .bg-gray-100 {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+}
+
+:is(.neo-dark, [data-theme="neo-dark"]) .text-gray-950,
+:is(.neo-dark, [data-theme="neo-dark"]) .text-gray-900,
+:is(.neo-dark, [data-theme="neo-dark"]) .text-gray-800,
+:is(.neo-dark, [data-theme="neo-dark"]) .text-gray-700 {
+  color: #f8fafc !important;
+}
+
+:is(.neo-dark, [data-theme="neo-dark"]) .text-gray-600,
+:is(.neo-dark, [data-theme="neo-dark"]) .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :is(.neo-system, [data-theme="neo-system"]) .bg-white\/90,
+  :is(.neo-system, [data-theme="neo-system"]) .bg-white\/60,
+  :is(.neo-system, [data-theme="neo-system"]) .bg-gray-100 {
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+  }
+
+  :is(.neo-system, [data-theme="neo-system"]) .text-gray-950,
+  :is(.neo-system, [data-theme="neo-system"]) .text-gray-900,
+  :is(.neo-system, [data-theme="neo-system"]) .text-gray-800,
+  :is(.neo-system, [data-theme="neo-system"]) .text-gray-700 {
+    color: #f8fafc !important;
+  }
+
+  :is(.neo-system, [data-theme="neo-system"]) .text-gray-600,
+  :is(.neo-system, [data-theme="neo-system"]) .text-gray-500 {
+    color: #94a3b8 !important;
+  }
 }
 
 :is(.neo-light, .neo-dark, .neo-system, .neo-brutalism, .neo-brutalism-dark, .neo-brutalism-system) button,
 :is(.neo-light, .neo-dark, .neo-system, .neo-brutalism, .neo-brutalism-dark, .neo-brutalism-system) a.rounded-md {
   border-color: var(--border-color);
 }
+

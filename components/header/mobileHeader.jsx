@@ -55,12 +55,12 @@ function MobileHeader() {
           <Link href={"/"}>
             <img
               className="block h-8 w-auto lg:hidden"
-              src="https://svgshare.com/i/tmn.svg"
+              src="/icon.svg"
               alt="fiqriachmada-logo"
             />
             <img
               className="hidden h-8 w-auto lg:block"
-              src="https://svgshare.com/i/tmn.svg"
+              src="/icon.svg"
               alt="fiqriachmada-logo"
             />
           </Link>

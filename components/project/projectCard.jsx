@@ -1,11 +1,20 @@
 "use client";
 
 import React, { useState } from "react";
+import dayjs from "dayjs";
 import clsx from "clsx";
 import Loading from "@/app/loading";
 import { useQuery } from "@tanstack/react-query";
 import { fetchProjectsData } from "@/lib/projectApi";
-import { LayoutGrid, BookOpen, ExternalLink, Image as ImageIcon } from "lucide-react";
+import {
+  LayoutGrid,
+  BookOpen,
+  FolderGit2,
+  Calendar,
+  Image as ImageIcon,
+  ArrowRight,
+  ExternalLink,
+} from "lucide-react";
 import { ProjectBook3D } from "./project-book-3d";
 
 const FALLBACK_IMAGE =
@@ -74,7 +83,7 @@ function ProjectCard() {
                   : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
               )}>
               <LayoutGrid className="w-3.5 h-3.5" />
-              <span>Grid Feed</span>
+              <span>Grid View</span>
             </button>
 
             <button
@@ -104,6 +113,16 @@ function ProjectCard() {
           </div>
 
           <div>
+            <div className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 font-semibold mb-2">
+              <FolderGit2 className="w-4 h-4" />
+              <span>Case Study Proyek</span>
+              {selectedProject.updatedAt && (
+                <span className="text-gray-400 font-normal">
+                  • Diperbarui {dayjs(selectedProject.updatedAt).format("MMM YYYY")}
+                </span>
+              )}
+            </div>
+
             <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
               {selectedProject.title}
             </h2>
@@ -142,48 +161,52 @@ function ProjectCard() {
             <button
               onClick={handleBack}
               className="bg-black text-white dark:bg-white dark:text-black font-semibold px-5 py-2.5 rounded-lg text-sm hover:opacity-80 transition shadow-sm">
-              ← Kembali ke Daftar
+              ← Kembali ke Daftar Proyek
             </button>
           </div>
         </div>
       ) : viewMode === "book" ? (
         <ProjectBook3D projects={projects} />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {projects.map((project) => (
             <div
               key={project.id}
               onClick={() => handleOnClick(project.id)}
               className={clsx(
-                "group cursor-pointer rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm p-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
+                "group cursor-pointer rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-4"
               )}>
-              <div>
-                <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-4 flex items-center justify-center">
-                  <img
-                    src={project.image || project.bannerUrl || FALLBACK_IMAGE}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                </div>
-
-                <div className="flex items-start justify-between gap-2">
-                  <h2 className="font-bold text-base lg:text-lg text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
-                    {project.title}
-                  </h2>
-                  <ExternalLink className="w-4 h-4 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
-                </div>
-
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
-                  {project.description || "Lihat detail proyek..."}
-                </p>
+              <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xs flex items-center justify-center">
+                <img
+                  src={project.image || project.bannerUrl || FALLBACK_IMAGE}
+                  alt={project.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
               </div>
 
-              <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[11px] text-gray-400">
-                <span>Showcase Portfolio</span>
-                <span className="font-medium text-blue-600 dark:text-blue-400">
-                  Lihat Detail →
-                </span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 font-semibold mb-0.5">
+                  <FolderGit2 className="w-3.5 h-3.5" />
+                  <span>Showcase Proyek</span>
+                </div>
+
+                <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  {project.title}
+                </h3>
+
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
+                  {project.description || "Lihat detail proyek..."}
+                </p>
+
+                <div className="flex items-center gap-1.5 text-[11px] text-gray-400 mt-2">
+                  <Calendar className="w-3 h-3" />
+                  <span>
+                    {project.createdAt
+                      ? dayjs(project.createdAt).format("MMM YYYY")
+                      : "Portfolio"}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

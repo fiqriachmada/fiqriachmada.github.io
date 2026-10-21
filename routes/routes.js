@@ -15,6 +15,10 @@ const routes = [
     title: "work",
     link: "/work",
   },
+  {
+    title: "blog",
+    link: "/blog",
+  },
 ];
 
 export default routes;

@@ -49,7 +49,7 @@ const HomeCard = () => {
                       <>
                         <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
                         <span className="text-gray-700 dark:text-gray-300">
-                          {currentWork.description || "Fullstack Developer"} di{" "}
+                          {currentWork.position || currentWork.description || "Fullstack Developer"} di{" "}
                           {currentWork.url ? (
                             <a
                               href={currentWork.url}

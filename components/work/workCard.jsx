@@ -71,10 +71,17 @@ function WorkCard() {
               <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
                 {selectedWork.name}
               </h2>
-              <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">
-                {selectedWork.description}
-              </p>
-              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">
+              {selectedWork.position && (
+                <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                  {selectedWork.position}
+                </p>
+              )}
+              {selectedWork.description && (
+                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1">
+                  {selectedWork.description}
+                </p>
+              )}
+              <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-2">
                 <Calendar className="w-3.5 h-3.5" />
                 <span>
                   {dayjs(selectedWork.startDate).format("MMMM YYYY")} —{" "}
@@ -118,8 +125,14 @@ function WorkCard() {
                 </div>
 
                 <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                  {workItem.description}
+                  {workItem.position || workItem.description}
                 </h3>
+
+                {workItem.position && workItem.description && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
+                    {workItem.description}
+                  </p>
+                )}
 
                 <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mt-2">
                   <Calendar className="w-3.5 h-3.5" />

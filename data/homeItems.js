@@ -39,8 +39,8 @@ const homeItems = [
       3: (
         <p className="p2 margin-left--sm margin-right--sm avatar avatar--vertical">
           Reach me via email at{" "}
-          <a className="text-blue-500" href="mailto:achmada1998@gmail.com">
-            achmada1998@gmail.com
+          <a className="text-blue-500" href="mailto:achmadafiqri.work@gmail.com">
+            achmadafiqri.work@gmail.com
           </a>
         </p>
       ),

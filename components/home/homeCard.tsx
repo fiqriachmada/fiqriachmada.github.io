@@ -35,13 +35,15 @@ const HomeCard = () => {
           "size-full rounded-xl shadow-lg transition duration-400",
           "data-[closed]:translate-y-12 data-[closed]:opacity-0",
           "data-[leave]:duration-500 data-[leave]:ease-in-out",
-          "data-[leave]:data-[closed]:scale-95 data-[leave]:data-[closed]:rotate-[0deg]"
-        )}>
+          "data-[leave]:data-[closed]:scale-95 data-[leave]:data-[closed]:rotate-[0deg]",
+        )}
+      >
         <div>
           {homeItems({ currentWork, socials }).map((homeItem, index) => (
             <div
               className="bg-white/90 dark:bg-gray-900/90 text-gray-900 dark:text-gray-100 border border-gray-200/80 dark:border-gray-800 shadow-xl rounded-2xl backdrop-blur-sm"
-              key={index}>
+              key={index}
+            >
               <div className="p-6 lg:px-20">
                 <div className="text-start text-3xl pt-5 font-extrabold text-gray-950 dark:text-white tracking-tight">
                   {homeItem.content[0]}
@@ -63,7 +65,8 @@ const HomeCard = () => {
                               href={currentWork.url}
                               target="_blank"
                               rel="noreferrer"
-                              className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+                              className="text-blue-600 dark:text-blue-400 font-bold hover:underline"
+                            >
                               {currentWork.name}
                             </a>
                           ) : (
@@ -84,11 +87,15 @@ const HomeCard = () => {
                   </div>
 
                   <p className="text-sm lg:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                    Fullstack Developer. Sometimes doing code, Mobile Legends and Basketball with ❤️. Currently based on Jakarta, Indonesia.
+                    {currentWork?.position || "Fullstack Developer"}. Sometimes
+                    doing code, Mobile Legends and Basketball with ❤️. Currently
+                    based on Jakarta, Indonesia.
                   </p>
                 </div>
 
-                <div className="text-start pt-2 text-gray-700 dark:text-gray-300">{homeItem.content[3]}</div>
+                <div className="text-start pt-2 text-gray-700 dark:text-gray-300">
+                  {homeItem.content[3]}
+                </div>
                 <div className="text-start pt-5">{homeItem.content[4]}</div>
               </div>
             </div>
@@ -97,6 +104,6 @@ const HomeCard = () => {
       </div>
     </Transition>
   );
-}
+};
 
 export default HomeCard;

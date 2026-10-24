@@ -8,10 +8,10 @@ Dokumen ini mengatur standarisasi alur kerja Git, konvensi penamaan branch, form
 
 Repositori ini menerapkan strategi **Development-First**:
 
-1. **`master`** (Production Branch):
+1. **`prod`** (Production Branch):
    - Selalu dalam kondisi stabil dan siap deploy ke lingkungan produksi.
-   - Tidak boleh melakukan commit langsung (`direct commit`) ke `master`.
-   - Kode hanya masuk ke `master` melalui merge/PR dari branch `development` atau hotfix resmi.
+   - Tidak boleh melakukan commit langsung (`direct commit`) ke `prod`.
+   - Kode hanya masuk ke `prod` melalui merge/PR dari branch `development` atau hotfix resmi.
 
 2. **`development`** (Integration / Staging Branch):
    - Branch pusat integrasi fitur, perbaikan, optimasi performa, dan refactor yang sedang aktif dikembangkan.
@@ -40,7 +40,7 @@ Setiap branch baru wajib menggunakan format:
 | `perf` | Optimasi performa halaman, aset gambar, atau konsumsi GPU | `perf/next-image-blur-cleanup`<br>`perf/reduce-backdrop-filter` |
 | `chore` | Update dependensi, konfigurasi build, tooling, script | `chore/upgrade-next-15`<br>`chore/update-tailwind-config` |
 | `docs` | Perubahan atau penambahan dokumentasi | `docs/update-agent-rules`<br>`docs/security-audit-guide` |
-| `hotfix` | Perbaikan darurat langsung ke master/production | `hotfix/critical-build-failure` |
+| `hotfix` | Perbaikan darurat langsung ke prod/production | `hotfix/critical-build-failure` |
 
 > [!IMPORTANT]
 > Gunakan huruf kecil semua (`lowercase`), pisahkan kata dengan tanda strip (`-`), dan hindari nama yang terlalu panjang atau ambigu (contoh buruk: `fix1`, `update`, `coba-coba`).
@@ -69,10 +69,11 @@ Format commit mengikuti standar *Conventional Commits*:
 ## 4. Pre-Push & Validation Checklist
 
 Sebelum melakukan push atau membuat PR, developer maupun AI Agent **wajib** memastikan:
-1. **Linter & Type Check Bersih**:
+1. **Lint, Typecheck & Build Bersih** (wajib lulus semua):
    ```bash
    npm run lint
-   # atau npx tsc --noEmit
+   npm run typecheck
+   npm run build
    ```
 2. **Tidak Ada File Credential/Secret Ter-commit**:
    - Pastikan `.env`, `.env.local`, `.env dev`, file backup, atau secret keys tidak masuk ke git staging (`git status`).
@@ -106,13 +107,13 @@ Sesuai kesepakatan, alur PR dan merge dapat dilakukan baik secara otomatis oleh 
    git push origin development
    ```
 
-3. **Promosi ke `master` (Saat Rilis / Siap Produksi)**:
+3. **Promosi ke `prod` (Saat Rilis / Siap Produksi)**:
    ```bash
-   git fetch origin master
-   git checkout master
-   git pull origin master
-   git merge --no-ff development -m "Release: merge development into master"
-   git push origin master
+   git fetch origin prod
+   git checkout prod
+   git pull origin prod
+   git merge --no-ff development -m "Release: merge development into prod"
+   git push origin prod
    ```
 
 4. **Bersihkan Branch Lokal (Opsional)**:
@@ -135,7 +136,7 @@ Jika GitHub CLI (`gh`) telah terpasang atau membuat PR via browser:
 2. **Review & Merge**:
    - Merge PR ke `development` menggunakan strategi *Create a merge commit* atau *Squash and merge*.
 3. **Release PR**:
-   - Saat siap rilis, buat PR dari `development` menuju `master`.
+   - Saat siap rilis, buat PR dari `development` menuju `prod`.
 
 ---
 
@@ -144,5 +145,5 @@ Jika GitHub CLI (`gh`) telah terpasang atau membuat PR via browser:
 Saat AI Agent bekerja pada suatu task:
 1. **Membuat Branch**: Agen membuat branch baru dari `development` sesuai format penamaan (`feat/*`, `fix/*`, dll.).
 2. **Commit & Push**: Agen melakukan commit terstruktur dan push branch ke remote repository.
-3. **Konfirmasi Merge**: Agen melaporkan ringkasan perubahan dan menanyakan persetujuan user sebelum melakukan merge ke `development` atau `master`.
+3. **Konfirmasi Merge**: Agen melaporkan ringkasan perubahan dan menanyakan persetujuan user sebelum melakukan merge ke `development` atau `prod`.
 4. **Eksekusi Merge**: Setelah disetujui, agen melakukan checkout ke target branch (`development`), menjalankan merge `--no-ff`, dan melakukan push ke remote.

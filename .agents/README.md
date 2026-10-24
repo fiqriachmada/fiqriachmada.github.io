@@ -26,10 +26,10 @@ Folder `.agents` ini berisi dokumen standarisasi resmi dan *custom skills* untuk
    - Standar penamaan file environment (`.env`, `.env dev`) dan konstanta `helpers/constants/env.ts`.
 
 5. **[Git & Branching Workflow (`git-workflow.md`)](./git-workflow.md)**
-   - Strategi branching **Development-First** (`master` untuk produksi, `development` untuk staging/integrasi).
+   - Strategi branching **Development-First** (`prod` untuk produksi, `development` untuk staging/integrasi).
    - Standar penamaan branch (`feat/*`, `fix/*`, `refactor/*`, `style/*`, `perf/*`, `chore/*`, `docs/*`, `hotfix/*`).
    - Format pesan *Conventional Commits* dan pre-push checklist (lint & build).
-   - Prosedur pembuatan Pull Request (PR) serta alur merge otomatis via Git CLI ke `development` dan `master`.
+   - Prosedur pembuatan Pull Request (PR) serta alur merge otomatis via Git CLI ke `development` dan `prod`.
 
 ## Daftar Agent Skills (`.agents/skills/`)
 

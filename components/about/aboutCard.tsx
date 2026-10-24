@@ -5,8 +5,11 @@ import profile from "@/public/images/profile.jpg";
 import { Transition } from "@headlessui/react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCurrentWork } from "@/lib/workApi";
-import { links } from "@/data/homeItems";
+import { fetchSocials } from "@/lib/socialApi";
+import { fallbackLinks } from "@/data/homeItems";
+import { SocialIcon } from "@/components/socials/socialIcon";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 
 function AboutCard() {
   const { data: currentWorkResponse } = useQuery({
@@ -14,79 +17,100 @@ function AboutCard() {
     queryFn: () => fetchCurrentWork(),
   });
 
+  const { data: socialsResponse } = useQuery({
+    queryKey: ["public-socials"],
+    queryFn: () => fetchSocials(),
+  });
+
   const currentWork = currentWorkResponse?.data;
   const position = currentWork?.position || "Fullstack Developer";
+  const socials = socialsResponse?.data;
+
+  // Prioritaskan link dari API CMS, jika belum ada fallback ke default
+  const activeSocials =
+    socials && socials.length > 0
+      ? socials.map((s) => ({
+          id: s.id,
+          title: s.title,
+          url: s.url,
+          iconSource: s.iconSource || "radix-ui",
+          iconName: s.iconName || "GlobeIcon",
+          faIcon: null,
+        }))
+      : fallbackLinks;
 
   return (
     <Transition show={true} appear={true}>
-      <div className="size-full rounded-xl shadow-lg transition duration-500 ease-in data-[closed]:opacity-0">
+      <div className="size-full rounded-xl shadow-lg transition duration-400">
         <div className="bg-white/90 dark:bg-gray-900/90 text-gray-900 dark:text-gray-100 border border-gray-200/80 dark:border-gray-800 shadow-xl rounded-2xl backdrop-blur-sm">
           <div className="p-6 lg:px-20">
-            {/* Header: Photo + Name + Position */}
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 pt-5">
-              <div className="shrink-0">
-                <img
-                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover ring-2 ring-gray-200 dark:ring-gray-700 shadow-md hover:scale-105 transition-transform"
-                  src={profile.src}
+            <div className="pt-5 flex flex-col md:flex-row gap-8 items-center md:items-start">
+              <div className="relative w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden shadow-md shrink-0 border-2 border-gray-200 dark:border-gray-700">
+                <Image
+                  src={profile}
                   alt="Achmada Fiqri"
+                  fill
+                  sizes="(max-width: 768px) 144px, 176px"
+                  className="object-cover"
+                  priority
                 />
               </div>
 
-              <div className="text-center sm:text-start flex-1 min-w-0">
+              <div className="text-start flex-1">
                 <h1 className="text-3xl font-extrabold text-gray-950 dark:text-white tracking-tight">
                   Achmada Fiqri
                 </h1>
-                <div className="text-xl font-medium text-blue-600 dark:text-blue-400 mt-1">
+                <h2 className="text-xl font-medium text-blue-600 dark:text-blue-400 mt-1">
                   {position}
-                </div>
-
-                {/* Dynamic Current Work Badge */}
-                <div className="mt-3">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-xs">
-                    {currentWork ? (
-                      <>
-                        <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-gray-800 dark:text-gray-200">
-                          {position} di{" "}
-                          {currentWork.url ? (
-                            <a
-                              href={currentWork.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
-                              {currentWork.name}
-                            </a>
-                          ) : (
-                            <span className="font-bold text-gray-950 dark:text-white">
-                              {currentWork.name}
-                            </span>
-                          )}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="flex h-2 w-2 rounded-full bg-blue-500 animate-ping" />
-                        <span className="text-blue-600 dark:text-blue-400 font-bold">
-                          ✨ Terbuka untuk bekerja (Open to Work)
-                        </span>
-                      </>
-                    )}
-                  </div>
+                </h2>
+                <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold">
+                  <span className="px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300">
+                    Next.js & React
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-800 dark:text-emerald-300">
+                    Node.js & Express
+                  </span>
+                  <span className="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-800 dark:text-indigo-300">
+                    PostgreSQL & MySQL
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Description & Bio */}
-            <div className="text-start py-6 leading-7 space-y-4 border-t border-gray-100 dark:border-gray-800 mt-6">
-              <p className="text-sm lg:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                Hi there! I'm <b>Achmada Fiqri</b>, or you can call me <b>Mada</b>.
+            <div className="text-start py-6 leading-7 space-y-4">
+              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed">
+                Hi! I am a passionate Fullstack Developer based in Jakarta, Indonesia.
+                I enjoy building reliable, performant, and delightful web applications.
               </p>
-              <p className="text-sm lg:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                {position}. Sometimes doing code, Mobile Legends, and Basketball with ❤️. Currently based in Jakarta, Indonesia.
-              </p>
+
+              {currentWork && (
+                <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/60 border border-gray-200 dark:border-gray-700">
+                  <div className="text-xs uppercase font-bold text-gray-500 dark:text-gray-400 tracking-wider">
+                    Current Engagement
+                  </div>
+                  <div className="text-base font-semibold text-gray-900 dark:text-gray-100 mt-1">
+                    {currentWork.position} at{" "}
+                    {currentWork.url ? (
+                      <a
+                        href={currentWork.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 dark:text-blue-400 hover:underline">
+                        {currentWork.name}
+                      </a>
+                    ) : (
+                      currentWork.name
+                    )}
+                  </div>
+                  {currentWork.description && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      {currentWork.description}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
 
-            {/* Contact & Socials */}
             <div className="text-start pt-2 text-gray-700 dark:text-gray-300">
               <p>
                 Reach me via email at{" "}
@@ -98,15 +122,29 @@ function AboutCard() {
               </p>
             </div>
 
+            {/* Dynamic Socials from CMS */}
             <div className="text-start pt-5">
-              <div className="flex gap-8">
-                {links.map((link, index) => (
-                  <div key={index} className="cursor-pointer">
-                    <Link href={link.link} title={link.title} target="_blank">
-                      <FontAwesomeIcon
-                        className="hover:scale-110 h-6 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition"
-                        icon={link.icon}
-                      />
+              <div className="flex gap-6 sm:gap-8 items-center">
+                {activeSocials.map((link) => (
+                  <div key={link.id} className="cursor-pointer">
+                    <Link
+                      href={link.url}
+                      title={link.title}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                      {link.faIcon ? (
+                        <FontAwesomeIcon
+                          className="hover:scale-110 h-6 transition-transform"
+                          icon={link.faIcon}
+                        />
+                      ) : (
+                        <SocialIcon
+                          iconSource={link.iconSource}
+                          iconName={link.iconName}
+                          className="h-6 w-6 hover:scale-110 transition-transform"
+                        />
+                      )}
                     </Link>
                   </div>
                 ))}
@@ -120,4 +158,3 @@ function AboutCard() {
 }
 
 export default AboutCard;
-

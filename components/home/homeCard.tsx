@@ -6,6 +6,7 @@ import clsx from "clsx";
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchCurrentWork } from "@/lib/workApi";
+import { fetchSocials } from "@/lib/socialApi";
 import { Briefcase, Sparkles } from "lucide-react";
 
 const HomeCard = () => {
@@ -17,7 +18,14 @@ const HomeCard = () => {
     queryFn: () => fetchCurrentWork(),
   });
 
+  // Fetch tautan sosial media secara dinamis dari CMS
+  const { data: socialsResponse } = useQuery({
+    queryKey: ["public-socials"],
+    queryFn: () => fetchSocials(),
+  });
+
   const currentWork = currentWorkResponse?.data;
+  const socials = socialsResponse?.data;
   const isAvailable = !currentWork && !isLoading;
 
   return (
@@ -30,7 +38,7 @@ const HomeCard = () => {
           "data-[leave]:data-[closed]:scale-95 data-[leave]:data-[closed]:rotate-[0deg]"
         )}>
         <div>
-          {homeItems({ currentWork }).map((homeItem, index) => (
+          {homeItems({ currentWork, socials }).map((homeItem, index) => (
             <div
               className="bg-white/90 dark:bg-gray-900/90 text-gray-900 dark:text-gray-100 border border-gray-200/80 dark:border-gray-800 shadow-xl rounded-2xl backdrop-blur-sm"
               key={index}>

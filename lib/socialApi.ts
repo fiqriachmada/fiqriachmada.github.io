@@ -14,7 +14,7 @@ export interface SocialItem {
 
 export async function fetchSocials(): Promise<{ data: SocialItem[] }> {
   try {
-    const res = await fetchFromAPI("/socials");
+    const res = await fetchFromAPI("/client/v1/socials");
     return res as { data: SocialItem[] };
   } catch (error) {
     console.error("Error fetching socials from CMS:", error);

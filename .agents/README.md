@@ -25,6 +25,12 @@ Folder `.agents` ini berisi dokumen standarisasi resmi dan *custom skills* untuk
    - Standar **Prisma 7** (`prisma.config.ts` & `@prisma/adapter-mariadb` dengan Global Singleton di `prisma/client/index.ts`).
    - Standar penamaan file environment (`.env`, `.env dev`) dan konstanta `helpers/constants/env.ts`.
 
+5. **[Git & Branching Workflow (`git-workflow.md`)](./git-workflow.md)**
+   - Strategi branching **Development-First** (`master` untuk produksi, `development` untuk staging/integrasi).
+   - Standar penamaan branch (`feat/*`, `fix/*`, `refactor/*`, `style/*`, `perf/*`, `chore/*`, `docs/*`, `hotfix/*`).
+   - Format pesan *Conventional Commits* dan pre-push checklist (lint & build).
+   - Prosedur pembuatan Pull Request (PR) serta alur merge otomatis via Git CLI ke `development` dan `master`.
+
 ## Daftar Agent Skills (`.agents/skills/`)
 
 - **[`security-audit`](./skills/security-audit/SKILL.md)**: Skill audit keamanan berbasis *trust boundary*, *data isolation*, *web protocol & auth*, serta *resource exhaustion* untuk meninjau keamanan kode dan endpoint secara mendalam.

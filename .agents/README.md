@@ -25,6 +25,12 @@ Folder `.agents` ini berisi dokumen standarisasi resmi dan *custom skills* untuk
    - Standar **Prisma 7** (`prisma.config.ts` & `@prisma/adapter-mariadb` dengan Global Singleton di `prisma/client/index.ts`).
    - Standar penamaan file environment (`.env`, `.env dev`) dan konstanta `helpers/constants/env.ts`.
 
+5. **[Git & Branching Workflow (`git-workflow.md`)](./git-workflow.md)**
+   - Strategi branching **Development-First** (`prod` untuk produksi, `development` untuk staging/integrasi).
+   - Standar penamaan branch (`feat/*`, `fix/*`, `refactor/*`, `style/*`, `perf/*`, `chore/*`, `docs/*`, `hotfix/*`).
+   - Format pesan *Conventional Commits* dan pre-push checklist (lint & build).
+   - Prosedur pembuatan Pull Request (PR) serta alur merge otomatis via Git CLI ke `development` dan `prod`.
+
 ## Daftar Agent Skills (`.agents/skills/`)
 
 - **[`security-audit`](./skills/security-audit/SKILL.md)**: Skill audit keamanan berbasis *trust boundary*, *data isolation*, *web protocol & auth*, serta *resource exhaustion* untuk meninjau keamanan kode dan endpoint secara mendalam.
@@ -37,3 +43,6 @@ Folder `.agents` ini berisi dokumen standarisasi resmi dan *custom skills* untuk
 - **Performa Visual & GPU-Friendly**: Efek latar belakang/aurora wajib bersifat `pointer-events-none`, menggunakan ukuran dan radius blur statis yang wajar (`blur-[96px]`), serta tidak menggunakan listener `resize` + `useLayoutEffect` yang memicu layout thrashing atau `backdrop-blur` berlapis satu layar penuh.
 - **Zero Boilerplate**: Saat mengadopsi komponen dari dokumentasi `shadcn/ui` atau Magic UI / Aceternity UI (seperti `Drawer`, `NeonGradientCard`, `PulseBeams`), hapus seluruh kode demo/sample (`recharts`, state `goal`, dll.) yang tidak digunakan oleh fitur asli.
 - **Semantic Color Tokens**: Gunakan `bg-background`, `text-foreground`, `bg-card`, `text-card-foreground`, `bg-primary`, `border-border` agar tampilan selalu konsisten di Light Mode maupun Dark Mode.
+
+> **Catatan:** Proyek ini menggunakan **TypeScript** (`strict`). Lihat bagian *TypeScript* pada [coding-conventions.md](./coding-conventions.md).
+

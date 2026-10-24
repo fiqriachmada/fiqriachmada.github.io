@@ -41,7 +41,7 @@ const homeItems = (
   options: {
     currentWork?: WorkItem | null;
     socials?: SocialItem[] | null;
-  } = {}
+  } = {},
 ) => {
   const { currentWork, socials } = options;
 
@@ -63,11 +63,11 @@ const homeItems = (
       welcome: `Hi, It's Mada`,
       content: {
         0: <p>Achmada Fiqri</p>,
-        1: <p>Fullstack Developer</p>,
+        1: <p>{currentWork?.position}</p>,
         2: (
           <p className="p1 margin-left--sm margin-right--sm avatar avatar--vertical">
-            Fullstack Developer. Sometimes doing code, Mobile Legends and Basketball with ❤️. Currently
-            based on Jakarta, Indonesia
+            {currentWork?.position}. Sometimes doing code, Mobile Legends and
+            Basketball with ❤️. Currently based on Jakarta, Indonesia
           </p>
         ),
         3: (
@@ -75,7 +75,8 @@ const homeItems = (
             Reach me via email at{" "}
             <a
               className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
-              href="mailto:achmadafiqri.work@gmail.com">
+              href="mailto:achmadafiqri.work@gmail.com"
+            >
               achmadafiqri.work@gmail.com
             </a>
           </p>
@@ -89,7 +90,8 @@ const homeItems = (
                   title={link.title}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
                   {link.faIcon ? (
                     <FontAwesomeIcon
                       className="hover:scale-[110%] h-6 hover:text-gray-400 transition-transform"

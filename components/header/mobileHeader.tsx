@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { Transition } from "@headlessui/react";
 import React, { useEffect, useRef, useState } from "react";
+import type { Route } from "@/types/route";
 import ThemeButton from "../button/themeButton";
 
 function MobileHeader() {
@@ -18,22 +19,22 @@ function MobileHeader() {
     router.push("/");
   };
 
-  const isActive = (route) => pathname.startsWith(route.link);
+  const isActive = (route: Route) => pathname.startsWith(route.link);
   const [mounted, setMounted] = useState(false);
 
-  const buttonRef = useRef(null);
-  const menuRef = useRef(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
 
     // Handler untuk klik di luar menu
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         menuRef.current &&
-        !menuRef.current.contains(event.target) &&
+        !menuRef.current.contains(event.target as Node) &&
         buttonRef.current &&
-        !buttonRef.current.contains(event.target)
+        !buttonRef.current.contains(event.target as Node)
       ) {
         setIsShowing(false);
       }
@@ -121,7 +122,6 @@ function MobileHeader() {
               <Link
                 key={index}
                 href={route.link}
-                onClick={() => handleClickHeader(route.link)}
                 className={`
                 ${
                   isActive(route) && "bg-gray-900 dark:text-darkText text-white"

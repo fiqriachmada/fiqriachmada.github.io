@@ -21,8 +21,8 @@ const FALLBACK_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
 
 function ProjectCard() {
-  const [selectedId, setSelectedId] = useState(null);
-  const [viewMode, setViewMode] = useState("grid"); // 'grid' | 'book'
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"grid" | "book">("grid"); // 'grid' | 'book'
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["client-projects"],
@@ -31,7 +31,7 @@ function ProjectCard() {
 
   const projects = data?.data || [];
 
-  const handleOnClick = (id) => {
+  const handleOnClick = (id: string) => {
     setSelectedId(id);
   };
 

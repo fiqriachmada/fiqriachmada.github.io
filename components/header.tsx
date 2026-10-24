@@ -25,7 +25,7 @@ function Header() {
     setActiveLink(pathname);
   });
 
-  const handleClickHeader = (link) => {
+  const handleClickHeader = (link: string) => {
     setActiveLink(link);
   };
 

@@ -1,7 +1,8 @@
 import React from "react";
 import dayjs from "dayjs";
+import type { WorkItem } from "@/types/api";
 
-function WorkCardDetail({ data }) {
+function WorkCardDetail({ data }: { data?: WorkItem | null }) {
   return (
     <div>
       <div className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg px-10 gap-3">

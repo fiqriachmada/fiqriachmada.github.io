@@ -15,7 +15,7 @@ function getVisitorId() {
 
 export default function AnalyticsTracker() {
   const pathname = usePathname();
-  const lastTrackedPath = useRef(null);
+  const lastTrackedPath = useRef<string | null>(null);
 
   useEffect(() => {
     if (!pathname || pathname === lastTrackedPath.current) return;

@@ -15,8 +15,8 @@ export const metadata = {
   description: "personal site",
 };
 
-function Detail(params) {
-  const id = params.params.id;
+async function Detail(props: { params: Promise<{ id: string }> }) {
+  const { id } = await props.params;
 
   const detailItem = projectItems.find((item) => item.id.toString() === id);
 

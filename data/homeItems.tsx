@@ -1,3 +1,4 @@
+import type { WorkItem } from "@/types/api";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -24,7 +25,7 @@ export const links = [
   },
 ];
 
-const homeItems = ({ work } = {}) => [
+const homeItems = (_options: { currentWork?: WorkItem | null } = {}) => [
   {
     welcome: `Hi, It's Mada`,
     content: {

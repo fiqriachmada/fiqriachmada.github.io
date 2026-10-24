@@ -10,8 +10,23 @@ const IS_CODE = 1 << 4;
 const IS_SUBSCRIPT = 1 << 5;
 const IS_SUPERSCRIPT = 1 << 6;
 
-function renderTextNode(node, key) {
-  let content = node.text || "";
+/** Minimal shape of a Lexical serialized node used by the CMS. */
+interface LexicalNode {
+  type?: string;
+  text?: string;
+  format?: number;
+  tag?: string;
+  children?: LexicalNode[];
+  url?: string;
+  src?: string;
+  target?: string;
+  altText?: string;
+  caption?: string;
+  listType?: string;
+}
+
+function renderTextNode(node: LexicalNode, key: string) {
+  let content: React.ReactNode = node.text || "";
   const format = node.format || 0;
 
   if (format & IS_CODE) {
@@ -43,12 +58,12 @@ function renderTextNode(node, key) {
   return <React.Fragment key={key}>{content}</React.Fragment>;
 }
 
-function renderChildren(children) {
+function renderChildren(children?: LexicalNode[]) {
   if (!children || children.length === 0) return null;
-  return children.map((child, i) => renderNode(child, i));
+  return children.map((child: LexicalNode, i: number) => renderNode(child, i));
 }
 
-function renderNode(node, index) {
+function renderNode(node: LexicalNode, index: number) {
   const key = `lexical-node-${index}`;
 
   switch (node.type) {
@@ -188,14 +203,14 @@ function renderNode(node, index) {
   }
 }
 
-export function extractBlogPlainText(content, maxLength = 120) {
+export function extractBlogPlainText(content: string | null | undefined, maxLength = 120) {
   if (!content) return "";
   try {
     const trimmed = content.trim();
     if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
       const parsed = JSON.parse(trimmed);
-      let texts = [];
-      const extractText = (nodes) => {
+      const texts: string[] = [];
+      const extractText = (nodes?: LexicalNode[]): void => {
         if (!nodes) return;
         for (const n of nodes) {
           if (n.text) texts.push(n.text);
@@ -216,7 +231,7 @@ export function extractBlogPlainText(content, maxLength = 120) {
   return stripped.length > maxLength ? stripped.substring(0, maxLength) + "..." : stripped;
 }
 
-export function BlogContentRenderer({ content, className }) {
+export function BlogContentRenderer({ content, className }: { content?: string | null; className?: string }) {
   if (!content) return null;
 
   // Try parsing Lexical JSON format first
@@ -227,7 +242,7 @@ export function BlogContentRenderer({ content, className }) {
       if (parsed.root && Array.isArray(parsed.root.children)) {
         return (
           <div className={clsx("space-y-3 font-sans text-gray-700 dark:text-gray-200", className)}>
-            {parsed.root.children.map((child, index) => renderNode(child, index))}
+            {parsed.root.children.map((child: LexicalNode, index: number) => renderNode(child, index))}
           </div>
         );
       }

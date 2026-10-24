@@ -76,3 +76,15 @@ Selaras dengan `fiqriachmada-cms`:
 1. **`prisma.config.ts`**: Menggunakan `defineConfig` dari `"prisma/config"` dan `"dotenv/config"` untuk menentukan lokasi `schema` dan `datasource.url`.
 2. **`prisma/schema.prisma`**: Generator client menghasilkan output ke `./generated/prisma` (`provider = "prisma-client"`).
 3. **`prisma/client/index.ts`**: Menggunakan driver adapter **`PrismaMariaDb`** (`@prisma/adapter-mariadb`) yang dibungkus dengan pola **Global Singleton** agar aman saat *hot-reload*.
+
+---
+
+## 5. TypeScript
+
+Proyek ini menggunakan **TypeScript** (`strict: true`, lihat `tsconfig.json`) untuk seluruh kode sumber (`.ts` / `.tsx`).
+
+- Alias import `@/*` mengarah ke root proyek.
+- Tipe bersama (respons API, item data, route) disimpan di `types/` (`api.ts`, `project.ts`, `route.ts`).
+- Hindari `any`; jika tidak dapat dihindari, beri komentar alasannya.
+- Jalankan `npm run typecheck` (`tsc --noEmit`) dan `npm run lint` (`eslint .`) sebelum commit.
+

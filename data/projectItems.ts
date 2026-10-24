@@ -1,7 +1,8 @@
+import type { ProjectItem } from "@/types/project";
 import EarthseaSite from "@/public/images/earthsea/earthsea_site.svg";
 import SwipeySite from "@/public/images/swipey/swipey_site.svg";
 
-const projectItems = [
+const projectItems: ProjectItem[] = [
   {
     id: "1",
     image: "/images/fresh-factory-admin.svg",

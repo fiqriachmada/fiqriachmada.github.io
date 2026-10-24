@@ -18,7 +18,7 @@ const HomeCard = () => {
   });
 
   const currentWork = currentWorkResponse?.data;
-  const isAvailable = currentWorkResponse?.isAvailable ?? (!currentWork && !isLoading);
+  const isAvailable = !currentWork && !isLoading;
 
   return (
     <Transition show={!open} appear={true}>

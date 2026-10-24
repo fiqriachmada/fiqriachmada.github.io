@@ -1,4 +1,4 @@
-export async function fetchFromAPI(endpoint) {
+export async function fetchFromAPI<T = unknown>(endpoint: string): Promise<T> {
   const apiUrl =
     process.env.NEXT_PUBLIC_API_URL || "https://fiqriachmada-cms.vercel.app/api";
 
@@ -15,7 +15,7 @@ export async function fetchFromAPI(endpoint) {
       throw new Error(`Failed to fetch (${res.status})`);
     }
 
-    return await res.json();
+    return (await res.json()) as T;
   } catch (error) {
     console.error("Error occurred while fetching:", error);
     throw error;

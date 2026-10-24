@@ -3,6 +3,7 @@ import routes from "@/routes/routes";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
+import type { Route } from "@/types/route";
 import ThemeButton from "../button/themeButton";
 
 function DesktopHeader() {
@@ -14,7 +15,7 @@ function DesktopHeader() {
     router.push("/");
   };
 
-  const isActive = (route) => pathname.startsWith(route.link);
+  const isActive = (route: Route) => pathname.startsWith(route.link);
 
   return (
     <div className="hidden lg:block">
@@ -40,9 +41,6 @@ function DesktopHeader() {
               <Link
                 key={index}
                 href={route.link}
-                onClick={() => {
-                  handleClickHeader(route.link);
-                }}
                 className={`${
                   isActive(route) &&
                   // activeLink.startsWith()

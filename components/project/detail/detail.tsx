@@ -6,12 +6,13 @@ import {
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import type { ProjectItem } from "@/types/project";
 import Image from "next/image";
 import React from "react";
 
 
 
-function DetailProjectPage(props) {
+function DetailProjectPage(props: { detailItem: ProjectItem }) {
   const { detailItem } = props;
   return (
     <div className="bg-gray-200 p-4 lg:p-10 rounded-lg text-gray-600">
@@ -19,6 +20,7 @@ function DetailProjectPage(props) {
       <Image
         width={20}
         height={20}
+        alt={detailItem.title}
         src={detailItem.image}
         className="w-full h-full rounded-md mt-5 mb-5"
       />

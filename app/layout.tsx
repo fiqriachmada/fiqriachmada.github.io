@@ -1,3 +1,4 @@
+import type React from "react";
 import { ThemeProvider } from "next-themes";
 
 import FloatingNav from "../components/navigation/floatingNav";
@@ -13,7 +14,7 @@ export const metadata = {
   description: "personal site",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

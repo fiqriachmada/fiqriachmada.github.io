@@ -24,7 +24,7 @@ function Footer() {
     setActiveLink(pathname);
   });
 
-  const handleClickFooter = (link) => {
+  const handleClickFooter = (link: string) => {
     setActiveLink(link);
   };
 

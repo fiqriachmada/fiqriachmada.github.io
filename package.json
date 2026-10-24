@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 5000",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint",
-    "typecheck": "echo No TypeScript in this project, skipping typecheck",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "update:deps": "npx npm-check-updates -u && npm install"
   },
   "dependencies": {
@@ -33,7 +33,13 @@
     "three": "^0.186.1"
   },
   "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
     "eslint": "^9.22.0",
-    "eslint-config-next": "^16.4.2"
+    "eslint-config-next": "^16.4.2",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.0"
   }
 }

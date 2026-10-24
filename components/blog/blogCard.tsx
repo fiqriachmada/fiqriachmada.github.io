@@ -13,7 +13,7 @@ const FALLBACK_COVER =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
 
 export default function BlogCard() {
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["client-blogs"],
@@ -22,7 +22,7 @@ export default function BlogCard() {
 
   const blogs = data?.data || [];
 
-  const handleOnClick = (id) => {
+  const handleOnClick = (id: string) => {
     setSelectedId(id);
   };
 
@@ -100,7 +100,7 @@ export default function BlogCard() {
           </div>
 
           <div className="border-t border-gray-200 dark:border-gray-800 pt-6">
-            <BlogContentRenderer content={selectedBlog.content} />
+            <BlogContentRenderer content={selectedBlog.content ?? ""} />
           </div>
 
           <div className="pt-4 border-t border-gray-200 dark:border-gray-800">

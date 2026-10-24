@@ -40,3 +40,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## GitHub Pages Status
 
 [![Deploy Next.js site to Pages](https://github.com/fiqriachmada/fiqriachmada.github.io/actions/workflows/nextjs.yml/badge.svg)](https://github.com/fiqriachmada/fiqriachmada.github.io/actions/workflows/nextjs.yml)
+## TypeScript
+
+Proyek ini ditulis dengan TypeScript. Gunakan `npm run typecheck`, `npm run lint`, dan `npm run build` untuk verifikasi.
+

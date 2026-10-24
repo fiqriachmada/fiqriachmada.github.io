@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import routes from "@/routes/routes";
+import type { Route } from "@/types/route";
 import ThemeButton from "@/components/button/themeButton";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
@@ -17,7 +18,7 @@ import {
   BookOpen,
 } from "lucide-react";
 
-const getRouteIcon = (title) => {
+const getRouteIcon = (title: string) => {
   switch (title?.toLowerCase()) {
     case "about":
       return <User className="size-4" />;
@@ -36,15 +37,15 @@ const FloatingNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const isActive = (route) => pathname.startsWith(route.link);
+  const isActive = (route: Route) => pathname.startsWith(route.link);
 
   useEffect(() => {
     setMounted(true);
 
-    const handleClickOutside = (event) => {
-      if (containerRef.current && !containerRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };

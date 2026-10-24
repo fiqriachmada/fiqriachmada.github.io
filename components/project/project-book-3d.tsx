@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import type { ProjectApiItem } from "@/types/api";
 import {
   ChevronLeft,
   ChevronRight,
@@ -10,19 +11,19 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-export function ProjectBook3D({ projects = [] }) {
-  const mountRef = useRef(null);
+export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }) {
+  const mountRef = useRef<HTMLDivElement | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   const totalPages = (projects.length || 0) + 1; // +1 for cover
   const activeProject = currentPage > 0 ? projects[currentPage - 1] : null;
 
-  const sceneRef = useRef(null);
-  const cameraRef = useRef(null);
-  const rendererRef = useRef(null);
-  const bookGroupRef = useRef(null);
-  const pagesMeshRef = useRef([]);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const bookGroupRef = useRef<THREE.Group | null>(null);
+  const pagesMeshRef = useRef<THREE.Object3D[]>([]);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -129,7 +130,7 @@ export function ProjectBook3D({ projects = [] }) {
     bookGroup.add(rightCover);
 
     // Helper canvas texture generator for pages
-    function createPageTexture(title, subtitle, isCover = false) {
+    function createPageTexture(title: string, subtitle: string, isCover = false) {
       const canvas = document.createElement("canvas");
       canvas.width = 1024;
       canvas.height = 1400;
@@ -225,7 +226,7 @@ export function ProjectBook3D({ projects = [] }) {
       return new THREE.CanvasTexture(canvas);
     }
 
-    const pagesList = [];
+    const pagesList: THREE.Object3D[] = [];
     const pageGeo = new THREE.BoxGeometry(
       coverWidth - 0.05,
       0.008,
@@ -270,11 +271,11 @@ export function ProjectBook3D({ projects = [] }) {
 
     pagesMeshRef.current = pagesList;
 
-    let animationFrameId;
+    let animationFrameId = 0;
     let targetRotationY = 0;
     let targetRotationX = 0.35;
 
-    const onPointerMove = (e) => {
+    const onPointerMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -323,7 +324,7 @@ export function ProjectBook3D({ projects = [] }) {
       const initialAngle = mesh.rotation.z;
       const duration = 650;
 
-      const flipStep = (now) => {
+      const flipStep = (now: number) => {
         const progress = Math.min((now - startTime) / duration, 1);
         const ease = 1 - Math.pow(1 - progress, 3);
         mesh.rotation.z = initialAngle + (targetAngle - initialAngle) * ease;

@@ -12,7 +12,7 @@ const FALLBACK_LOGO =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
 
 function WorkCard() {
-  const [selectedId, setSelectedId] = useState(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["client-works"],
@@ -21,7 +21,7 @@ function WorkCard() {
 
   const works = data?.data || [];
 
-  const handleOnClick = (id) => {
+  const handleOnClick = (id: string) => {
     setSelectedId(id);
   };
 

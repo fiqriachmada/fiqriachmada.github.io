@@ -3,7 +3,15 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import * as THREE from "three";
 import type { ProjectImage } from "@/types/api";
-import { ChevronLeft, ChevronRight, Maximize2, Sparkles, Hand } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Maximize2,
+  Sparkles,
+  Hand,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 
 interface PaperMonoFlipbookProps {
   images: ProjectImage[];
@@ -15,6 +23,17 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
   const [currentPage, setCurrentPage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const zoomRef = useRef(1);
+
+  const updateZoom = useCallback((updater: number | ((prev: number) => number)) => {
+    setZoomLevel((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      const clamped = Math.min(Math.max(Number(next.toFixed(2)), 0.6), 2.5);
+      zoomRef.current = clamped;
+      return clamped;
+    });
+  }, []);
 
   // Pages: 0 = Poster Blueprint '8', 1..N = Project Photos
   const totalPages = Math.max(images.length + 1, 2);
@@ -51,7 +70,7 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
       0.1,
       1000
     );
-    camera.position.set(0, mobile ? 0 : 0.05, mobile ? 3.3 : 3.8);
+    camera.position.set(0, mobile ? 0 : 0.05, (mobile ? 3.3 : 3.8) / zoomRef.current);
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
@@ -355,11 +374,12 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
     pagesMeshRef.current = pagesList;
 
     let animationFrameId: number;
+    let isMobileCurrent = mobile;
     let targetRotY = mobile ? 0 : 0.04;
     let targetRotX = mobile ? 0 : 0.04;
 
     const onPointerMove = (e: MouseEvent) => {
-      if (mobile) return;
+      if (isMobileCurrent) return;
       const rect = container.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
@@ -367,13 +387,26 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
       targetRotX = 0.04 - y * 0.06;
     };
 
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey || Math.abs(e.deltaY) > 0) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.12 : -0.12;
+        updateZoom((z) => z + delta);
+      }
+    };
+
     container.addEventListener("mousemove", onPointerMove);
+    container.addEventListener("wheel", onWheel, { passive: false });
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
       bookGroup.rotation.y += (targetRotY - bookGroup.rotation.y) * 0.08;
       bookGroup.rotation.x += (targetRotX - bookGroup.rotation.x) * 0.08;
+
+      const baseZ = isMobileCurrent ? 3.3 : 3.8;
+      const targetZ = baseZ / zoomRef.current;
+      camera.position.z += (targetZ - camera.position.z) * 0.12;
 
       renderer.render(scene, camera);
     };
@@ -385,11 +418,12 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
       const newWidth = container.clientWidth;
       const newHeight = container.clientHeight || 560;
       const newMobile = newWidth < 640;
+      isMobileCurrent = newMobile;
       setIsMobileView(newMobile);
 
       camera.aspect = newWidth / newHeight;
       camera.fov = newMobile ? 48 : 40;
-      camera.position.set(0, newMobile ? 0 : 0.05, newMobile ? 3.3 : 3.8);
+      camera.position.set(0, newMobile ? 0 : 0.05, (newMobile ? 3.3 : 3.8) / zoomRef.current);
       camera.updateProjectionMatrix();
 
       if (newMobile) {
@@ -407,10 +441,11 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
       container.removeEventListener("mousemove", onPointerMove);
+      container.removeEventListener("wheel", onWheel);
       renderer.dispose();
       container.innerHTML = "";
     };
-  }, [images, projectTitle, totalPages]);
+  }, [images, projectTitle, totalPages, updateZoom]);
 
   useEffect(() => {
     pagesMeshRef.current.forEach((mesh, index) => {
@@ -444,15 +479,47 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
     });
   }, [currentPage]);
 
+  // Touch Swipe & Pinch Zoom + Mouse Drag Swipe Gestures
   const touchStartXRef = useRef<number | null>(null);
   const touchStartYRef = useRef<number | null>(null);
+  const pinchStartDistRef = useRef<number | null>(null);
+  const pinchStartZoomRef = useRef<number>(1);
+  const mouseStartXRef = useRef<number | null>(null);
+  const mouseStartYRef = useRef<number | null>(null);
+
+  const getTouchDistance = (touches: React.TouchList) => {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(dx, dy);
+  };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartXRef.current = e.touches[0].clientX;
-    touchStartYRef.current = e.touches[0].clientY;
+    if (e.touches.length === 2) {
+      pinchStartDistRef.current = getTouchDistance(e.touches);
+      pinchStartZoomRef.current = zoomRef.current;
+      touchStartXRef.current = null;
+      touchStartYRef.current = null;
+    } else if (e.touches.length === 1) {
+      touchStartXRef.current = e.touches[0].clientX;
+      touchStartYRef.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && pinchStartDistRef.current !== null) {
+      const currentDist = getTouchDistance(e.touches);
+      const scale = currentDist / pinchStartDistRef.current;
+      updateZoom(pinchStartZoomRef.current * scale);
+    }
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    if (pinchStartDistRef.current !== null) {
+      if (e.touches.length < 2) {
+        pinchStartDistRef.current = null;
+      }
+      return;
+    }
     if (touchStartXRef.current === null || touchStartYRef.current === null) return;
     const diffX = e.changedTouches[0].clientX - touchStartXRef.current;
     const diffY = e.changedTouches[0].clientY - touchStartYRef.current;
@@ -467,6 +534,29 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
 
     touchStartXRef.current = null;
     touchStartYRef.current = null;
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return;
+    mouseStartXRef.current = e.clientX;
+    mouseStartYRef.current = e.clientY;
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (mouseStartXRef.current === null || mouseStartYRef.current === null) return;
+    const diffX = e.clientX - mouseStartXRef.current;
+    const diffY = e.clientY - mouseStartYRef.current;
+
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+
+    mouseStartXRef.current = null;
+    mouseStartYRef.current = null;
   };
 
   return (
@@ -500,16 +590,43 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
             </h3>
             <p className="text-[11px] sm:text-xs text-gray-500 dark:text-gray-400 font-mono">
               {currentPage === 0
-                ? "Cover Blueprint '8' • Geser sentuh jari untuk buka lembar"
+                ? "Cover Blueprint '8' • Drag mouse / geser jari untuk buka lembar"
                 : `Lembar 0${currentPage} / 0${totalPages - 1} • ${images.length} Media Terlampir`}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-[11px] font-mono border border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-[11px] font-mono border border-gray-200 dark:border-gray-700">
             <Hand className="h-3 w-3 animate-pulse text-blue-500" />
-            <span>Swipe Gestur Sentuh Aktif</span>
+            <span>Mouse Drag & Touch Pinch/Swipe</span>
+          </div>
+
+          {/* Zoom Controls */}
+          <div className="flex items-center rounded-md bg-white dark:bg-gray-800 border-2 border-black dark:border-white/30 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+            <button
+              onClick={() => updateZoom((z) => z - 0.2)}
+              disabled={zoomLevel <= 0.6}
+              className="flex items-center justify-center h-8 w-8 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 transition"
+              title="Zoom Out"
+            >
+              <ZoomOut className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => updateZoom(1)}
+              className="px-1.5 h-8 text-[11px] font-mono font-bold border-x border-black/20 dark:border-white/20 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              title="Reset Zoom"
+            >
+              {Math.round(zoomLevel * 100)}%
+            </button>
+            <button
+              onClick={() => updateZoom((z) => z + 0.2)}
+              disabled={zoomLevel >= 2.5}
+              className="flex items-center justify-center h-8 w-8 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 transition"
+              title="Zoom In"
+            >
+              <ZoomIn className="h-3.5 w-3.5" />
+            </button>
           </div>
 
           <button
@@ -522,18 +639,21 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
         </div>
       </div>
 
-      {/* 3D Canvas Mount with Touch Handlers */}
+      {/* 3D Canvas Mount with Mouse Drag & Touch Handlers */}
       <div
         ref={mountRef}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
         onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="relative z-10 w-full flex-1 min-h-[380px] sm:min-h-[460px] cursor-grab active:cursor-grabbing select-none touch-pan-y"
+        className="relative z-10 w-full flex-1 min-h-[380px] sm:min-h-[460px] cursor-grab active:cursor-grabbing select-none touch-none"
       />
 
-      {/* Mobile Swipe Hint */}
-      <div className="sm:hidden relative z-10 flex items-center justify-center gap-1.5 py-1 text-[11px] text-blue-600 dark:text-blue-400 font-mono">
+      {/* Gesture Hint */}
+      <div className="relative z-10 flex items-center justify-center gap-1.5 py-1 text-[11px] text-blue-600 dark:text-blue-400 font-mono">
         <Hand className="h-3.5 w-3.5 animate-bounce" />
-        <span>Geser sentuh jari ke kiri/kanan untuk membalik lembar</span>
+        <span>Geser (Mouse Drag / Swipe) untuk balik lembar • Scroll / Pinch untuk Zoom</span>
       </div>
 
       {/* Bottom Controls */}

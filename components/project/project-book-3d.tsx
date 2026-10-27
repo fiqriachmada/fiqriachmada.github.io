@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import * as THREE from "three";
 import type { ProjectApiItem } from "@/types/api";
 import {
@@ -9,12 +9,26 @@ import {
   BookOpen,
   Maximize2,
   ExternalLink,
+  ZoomIn,
+  ZoomOut,
+  Hand,
 } from "lucide-react";
 
 export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }) {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const zoomRef = useRef(1);
+
+  const updateZoom = useCallback((updater: number | ((prev: number) => number)) => {
+    setZoomLevel((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      const clamped = Math.min(Math.max(Number(next.toFixed(2)), 0.6), 2.5);
+      zoomRef.current = clamped;
+      return clamped;
+    });
+  }, []);
 
   const totalPages = (projects.length || 0) + 1; // +1 for cover
   const activeProject = currentPage > 0 ? projects[currentPage - 1] : null;
@@ -24,6 +38,14 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const bookGroupRef = useRef<THREE.Group | null>(null);
   const pagesMeshRef = useRef<THREE.Object3D[]>([]);
+
+  const handleNext = useCallback(() => {
+    setCurrentPage((prev) => (prev < totalPages - 1 ? prev + 1 : prev));
+  }, [totalPages]);
+
+  const handlePrev = useCallback(() => {
+    setCurrentPage((prev) => (prev > 0 ? prev - 1 : prev));
+  }, []);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -37,7 +59,7 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
-    camera.position.set(0, 1.8, 4.2);
+    camera.position.set(0, 1.8 / zoomRef.current, 4.2 / zoomRef.current);
     camera.lookAt(0, 0, 0);
     cameraRef.current = camera;
 
@@ -283,12 +305,27 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
       targetRotationX = 0.35 - y * 0.15;
     };
 
+    const onWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey || Math.abs(e.deltaY) > 0) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.12 : -0.12;
+        updateZoom((z) => z + delta);
+      }
+    };
+
     container.addEventListener("mousemove", onPointerMove);
+    container.addEventListener("wheel", onWheel, { passive: false });
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       bookGroup.rotation.y += (targetRotationY - bookGroup.rotation.y) * 0.05;
       bookGroup.rotation.x += (targetRotationX - bookGroup.rotation.x) * 0.05;
+
+      const targetY = 1.8 / zoomRef.current;
+      const targetZ = 4.2 / zoomRef.current;
+      camera.position.y += (targetY - camera.position.y) * 0.12;
+      camera.position.z += (targetZ - camera.position.z) * 0.12;
+
       renderer.render(scene, camera);
     };
 
@@ -309,10 +346,11 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
       container.removeEventListener("mousemove", onPointerMove);
+      container.removeEventListener("wheel", onWheel);
       renderer.dispose();
       container.innerHTML = "";
     };
-  }, [projects]);
+  }, [projects, updateZoom]);
 
   // Flip page rotation
   useEffect(() => {
@@ -337,16 +375,84 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
     });
   }, [currentPage]);
 
-  const handleNext = () => {
-    if (currentPage < totalPages - 1) {
-      setCurrentPage((prev) => prev + 1);
+  // Touch Swipe & Pinch Zoom + Mouse Drag Swipe Gestures
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const pinchStartDistRef = useRef<number | null>(null);
+  const pinchStartZoomRef = useRef<number>(1);
+  const mouseStartXRef = useRef<number | null>(null);
+  const mouseStartYRef = useRef<number | null>(null);
+
+  const getTouchDistance = (touches: React.TouchList) => {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(dx, dy);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      pinchStartDistRef.current = getTouchDistance(e.touches);
+      pinchStartZoomRef.current = zoomRef.current;
+      touchStartXRef.current = null;
+      touchStartYRef.current = null;
+    } else if (e.touches.length === 1) {
+      touchStartXRef.current = e.touches[0].clientX;
+      touchStartYRef.current = e.touches[0].clientY;
     }
   };
 
-  const handlePrev = () => {
-    if (currentPage > 0) {
-      setCurrentPage((prev) => prev - 1);
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && pinchStartDistRef.current !== null) {
+      const currentDist = getTouchDistance(e.touches);
+      const scale = currentDist / pinchStartDistRef.current;
+      updateZoom(pinchStartZoomRef.current * scale);
     }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (pinchStartDistRef.current !== null) {
+      if (e.touches.length < 2) {
+        pinchStartDistRef.current = null;
+      }
+      return;
+    }
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const diffX = e.changedTouches[0].clientX - touchStartXRef.current;
+    const diffY = e.changedTouches[0].clientY - touchStartYRef.current;
+
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return;
+    mouseStartXRef.current = e.clientX;
+    mouseStartYRef.current = e.clientY;
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (mouseStartXRef.current === null || mouseStartYRef.current === null) return;
+    const diffX = e.clientX - mouseStartXRef.current;
+    const diffY = e.clientY - mouseStartYRef.current;
+
+    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+
+    mouseStartXRef.current = null;
+    mouseStartYRef.current = null;
   };
 
   return (
@@ -371,7 +477,7 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
             </h2>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               {currentPage === 0
-                ? "Sampul Buku: Balik halaman untuk melihat showcase proyek."
+                ? "Sampul Buku: Drag mouse / geser jari untuk membuka halaman."
                 : `Halaman ${currentPage} dari ${totalPages - 1}: ${
                     activeProject?.title || ""
                   }`}
@@ -391,6 +497,30 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
             </a>
           )}
 
+          {/* Zoom Controls */}
+          <div className="flex items-center rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 overflow-hidden">
+            <button
+              onClick={() => updateZoom((z) => z - 0.2)}
+              disabled={zoomLevel <= 0.6}
+              className="flex items-center justify-center h-8 w-8 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 transition"
+              title="Zoom Out">
+              <ZoomOut className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => updateZoom(1)}
+              className="px-2 h-8 text-xs font-mono font-semibold text-gray-700 dark:text-gray-200 border-x border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              title="Reset Zoom">
+              {Math.round(zoomLevel * 100)}%
+            </button>
+            <button
+              onClick={() => updateZoom((z) => z + 0.2)}
+              disabled={zoomLevel >= 2.5}
+              className="flex items-center justify-center h-8 w-8 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-30 transition"
+              title="Zoom In">
+              <ZoomIn className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
             className="p-2 rounded-lg text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition"
@@ -403,8 +533,19 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
       {/* 3D Canvas Viewport */}
       <div
         ref={mountRef}
-        className="relative w-full flex-1 min-h-[400px] cursor-grab active:cursor-grabbing select-none"
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        className="relative w-full flex-1 min-h-[400px] cursor-grab active:cursor-grabbing select-none touch-none"
       />
+
+      {/* Gesture Hint */}
+      <div className="flex items-center justify-center gap-1.5 py-1 text-[11px] text-blue-600 dark:text-blue-400 font-mono">
+        <Hand className="h-3.5 w-3.5 animate-bounce" />
+        <span>Geser (Mouse Drag / Swipe) untuk balik halaman • Scroll / Pinch untuk Zoom</span>
+      </div>
 
       {/* Floating Bottom Nav Controls */}
       <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-gray-200 dark:border-gray-800 pt-4">

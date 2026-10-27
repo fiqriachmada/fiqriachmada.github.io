@@ -11,6 +11,7 @@ import { fetchProjectsData, fetchProjectById } from "@/lib/projectApi";
 import {
   LayoutGrid,
   BookOpen,
+  Sparkles,
   FolderGit2,
   Calendar,
   Image as ImageIcon,
@@ -18,12 +19,17 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { ProjectBook3D } from "./project-book-3d";
+import { ProjectDetailBook3D } from "./project-detail-book-3d";
+import { PaperMonoFlipbook } from "./paper-mono-flipbook";
 import { useProjectViewStore } from "@/store/project-store";
 
 const FALLBACK_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
 
+type GalleryViewMode = "grid" | "mono" | "book";
+
 function ProjectCard() {
+  const [galleryMode, setGalleryMode] = useState<GalleryViewMode>("grid");
   const {
     selectedProjectId: selectedId,
     setSelectedProjectId: setSelectedId,
@@ -165,33 +171,102 @@ function ProjectCard() {
               </p>
             </div>
 
-            {/* Project Gallery if more than 1 image */}
-            {selectedProject.projectImages && selectedProject.projectImages.length > 1 && (
-              <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-1.5">
-                  <ImageIcon className="w-4 h-4" />
-                  <span>Galeri Tangkapan Layar</span>
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {selectedProject.projectImages.map((img) => (
-                    <Link
-                      key={img.id}
-                      href={img.imageUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="relative aspect-video rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 group block">
-                      <Image
-                        src={img.imageUrl}
-                        alt="Project gallery"
-                        fill
-                        sizes="(max-width: 640px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                        unoptimized
-                      />
-                    </Link>
-                  ))}
+            {/* Project Gallery Section dengan Filter Mode di Bawah */}
+            {selectedProject.projectImages && selectedProject.projectImages.length > 0 && (
+              <section className="pt-6 border-t border-gray-200 dark:border-gray-800 space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <h3 className="text-lg font-bold tracking-tight text-gray-900 dark:text-white flex items-center gap-2">
+                      <ImageIcon className="w-4 h-4 text-blue-500" />
+                      <span>Galeri & Dokumentasi Karya</span>
+                    </h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                      Pilih gaya tampilan galeri dokumentasi di bawah ini
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center rounded-xl border border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-950/60 p-1 backdrop-blur-xs self-start sm:self-auto shadow-xs gap-1">
+                    <button
+                      onClick={() => setGalleryMode("grid")}
+                      className={clsx(
+                        "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-200",
+                        galleryMode === "grid"
+                          ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                          : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                      )}>
+                      <LayoutGrid className="w-3.5 h-3.5" />
+                      <span>Grid Gallery</span>
+                    </button>
+
+                    <button
+                      onClick={() => setGalleryMode("mono")}
+                      className={clsx(
+                        "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-200",
+                        galleryMode === "mono"
+                          ? "bg-amber-500 text-black shadow-xs font-bold"
+                          : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                      )}>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Paper Mono 3D</span>
+                    </button>
+
+                    <button
+                      onClick={() => setGalleryMode("book")}
+                      className={clsx(
+                        "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-200",
+                        galleryMode === "book"
+                          ? "bg-indigo-600 text-white shadow-xs font-bold"
+                          : "text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                      )}>
+                      <BookOpen className="w-3.5 h-3.5" />
+                      <span>Memory Book 3D</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
+
+                {galleryMode === "mono" ? (
+                  <PaperMonoFlipbook
+                    images={selectedProject.projectImages}
+                    projectTitle={selectedProject.title}
+                  />
+                ) : galleryMode === "book" ? (
+                  <ProjectDetailBook3D project={selectedProject} />
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {selectedProject.projectImages.map((img, idx) => (
+                      <Link
+                        key={img.id || idx}
+                        href={img.imageUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className={clsx(
+                          "group relative flex flex-col gap-2 rounded-xl border p-2 overflow-hidden shadow-sm hover:shadow-md transition-all block",
+                          img.isBanner
+                            ? "border-amber-500/60 bg-amber-500/5 ring-1 ring-amber-500/20"
+                            : "border-gray-200 dark:border-gray-800 bg-white/40 dark:bg-gray-950/40"
+                        )}>
+                        <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-800">
+                          <Image
+                            src={img.imageUrl || FALLBACK_IMAGE}
+                            alt={`${selectedProject.title} screenshot ${idx + 1}`}
+                            fill
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                            unoptimized
+                          />
+                          {img.isBanner && (
+                            <div className="absolute top-2 left-2">
+                              <span className="px-2 py-0.5 rounded bg-amber-500 text-black font-bold text-[10px] shadow-sm">
+                                ★ Banner Utama
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </section>
             )}
 
             <div className="pt-2">

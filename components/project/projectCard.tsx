@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import dayjs from "dayjs";
 import clsx from "clsx";
 import Loading from "@/app/loading";
@@ -172,18 +174,21 @@ function ProjectCard() {
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {selectedProject.projectImages.map((img) => (
-                    <a
+                    <Link
                       key={img.id}
                       href={img.imageUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="relative aspect-video rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 group">
-                      <img
+                      className="relative aspect-video rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 group block">
+                      <Image
                         src={img.imageUrl}
                         alt="Project gallery"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        sizes="(max-width: 640px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        unoptimized
                       />
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>

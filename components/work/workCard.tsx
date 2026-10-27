@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import dayjs from "dayjs";
 import clsx from "clsx";
 import Loading from "@/app/loading";
 import { useQuery } from "@tanstack/react-query";
 import { fetchWorkData } from "@/lib/workApi";
-import { Briefcase, Building2, Calendar } from "lucide-react";
+import { Building2, Calendar } from "lucide-react";
 
 const FALLBACK_LOGO =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
@@ -62,10 +63,13 @@ function WorkCard() {
       {selectedWork ? (
         <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 lg:p-10 rounded-2xl text-gray-800 dark:text-gray-200 shadow-lg space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <img
+            <Image
               className="w-16 h-16 sm:w-20 sm:h-20 object-contain rounded-xl bg-white p-2 border border-gray-200 dark:border-gray-800 shadow-sm"
               src={selectedWork.imageUrl || FALLBACK_LOGO}
               alt={selectedWork.name}
+              width={80}
+              height={80}
+              unoptimized
             />
             <div>
               <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
@@ -111,10 +115,13 @@ function WorkCard() {
                 "group cursor-pointer rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-4"
               )}>
               <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 flex items-center justify-center rounded-xl bg-white dark:bg-gray-800 p-2 border border-gray-100 dark:border-gray-700 shadow-xs">
-                <img
+                <Image
                   className="w-full h-full object-contain rounded-lg"
                   src={workItem.imageUrl || FALLBACK_LOGO}
                   alt={workItem.name}
+                  width={80}
+                  height={80}
+                  unoptimized
                 />
               </div>
 

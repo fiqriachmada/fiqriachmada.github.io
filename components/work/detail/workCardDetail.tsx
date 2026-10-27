@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import dayjs from "dayjs";
 import type { WorkItem } from "@/types/api";
 
@@ -7,10 +8,17 @@ function WorkCardDetail({ data }: { data?: WorkItem | null }) {
     <div>
       <div className="grid grid-cols-1 lg:flex items-center bg-white text-black rounded-lg px-10 gap-3">
         <div className="mx-4 lg:mx-0">
-          <img
-            className="object-contain "
-            src={data?.imageUrl||'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png'}
+          <Image
+            className="object-contain"
+            src={
+              data?.imageUrl ||
+              "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png"
+            }
+            alt={data?.name || "Work company logo"}
+            width={400}
+            height={400}
             style={{ width: 400, height: 400 }}
+            unoptimized
           />
         </div>
         <div className="m-8 lg:m-0 lg:px-10 lg:py-10 space-y-2">

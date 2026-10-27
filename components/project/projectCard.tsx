@@ -143,10 +143,13 @@ function ProjectCard() {
         ) : (
           <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 lg:p-10 rounded-2xl text-gray-800 dark:text-gray-200 shadow-lg space-y-6">
             <div className="relative w-full aspect-video max-h-[500px] rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
-              <img
+              <Image
                 src={selectedProject.image || selectedProject.bannerUrl || FALLBACK_IMAGE}
                 alt={selectedProject.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 80vw"
                 className="w-full h-full object-cover rounded-xl"
+                unoptimized
               />
             </div>
 
@@ -287,12 +290,14 @@ function ProjectCard() {
               className={clsx(
                 "group cursor-pointer rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/60 dark:bg-gray-900/40 backdrop-blur-sm p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-4"
               )}>
-              <div className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xs flex items-center justify-center">
-                <img
+              <div className="relative w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-xs flex items-center justify-center">
+                <Image
                   src={project.image || project.bannerUrl || FALLBACK_IMAGE}
                   alt={project.title}
+                  fill
+                  sizes="96px"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
+                  unoptimized
                 />
               </div>
 

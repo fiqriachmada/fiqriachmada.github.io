@@ -20,12 +20,14 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const zoomRef = useRef(1);
+  const panRef = useRef({ x: 0, y: 0 });
 
   const updateZoom = useCallback((updater: number | ((prev: number) => number)) => {
     setZoomLevel((prev) => {
       const next = typeof updater === "function" ? updater(prev) : updater;
       const clamped = Math.min(Math.max(Number(next.toFixed(2)), 0.6), 2.5);
       zoomRef.current = clamped;
+      if (clamped <= 1) panRef.current = { x: 0, y: 0 };
       return clamped;
     });
   }, []);
@@ -321,6 +323,9 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
       bookGroup.rotation.y += (targetRotationY - bookGroup.rotation.y) * 0.05;
       bookGroup.rotation.x += (targetRotationX - bookGroup.rotation.x) * 0.05;
 
+      bookGroup.position.x += (panRef.current.x - bookGroup.position.x) * 0.14;
+      bookGroup.position.y += (panRef.current.y - bookGroup.position.y) * 0.14;
+
       const targetY = 1.8 / zoomRef.current;
       const targetZ = 4.2 / zoomRef.current;
       camera.position.y += (targetY - camera.position.y) * 0.12;
@@ -375,13 +380,24 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
     });
   }, [currentPage]);
 
-  // Touch Swipe & Pinch Zoom + Mouse Drag Swipe Gestures
+  // Touch Swipe & Pinch Zoom + Mouse Drag Swipe / Pan Gestures
   const touchStartXRef = useRef<number | null>(null);
   const touchStartYRef = useRef<number | null>(null);
   const pinchStartDistRef = useRef<number | null>(null);
   const pinchStartZoomRef = useRef<number>(1);
   const mouseStartXRef = useRef<number | null>(null);
   const mouseStartYRef = useRef<number | null>(null);
+  const panStartRef = useRef({ x: 0, y: 0 });
+  const isDraggingRef = useRef(false);
+
+  const clampPan = (x: number, y: number) => {
+    const maxX = Math.max((zoomRef.current - 1) * 1.35, 0);
+    const maxY = Math.max((zoomRef.current - 1) * 1.15, 0);
+    return {
+      x: Math.min(Math.max(x, -maxX), maxX),
+      y: Math.min(Math.max(y, -maxY), maxY),
+    };
+  };
 
   const getTouchDistance = (touches: React.TouchList) => {
     const dx = touches[0].clientX - touches[1].clientX;
@@ -398,6 +414,7 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
     } else if (e.touches.length === 1) {
       touchStartXRef.current = e.touches[0].clientX;
       touchStartYRef.current = e.touches[0].clientY;
+      panStartRef.current = { ...panRef.current };
     }
   };
 
@@ -406,6 +423,15 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
       const currentDist = getTouchDistance(e.touches);
       const scale = currentDist / pinchStartDistRef.current;
       updateZoom(pinchStartZoomRef.current * scale);
+    } else if (
+      e.touches.length === 1 &&
+      zoomRef.current > 1 &&
+      touchStartXRef.current !== null &&
+      touchStartYRef.current !== null
+    ) {
+      const dx = (e.touches[0].clientX - touchStartXRef.current) * 0.0045;
+      const dy = -(e.touches[0].clientY - touchStartYRef.current) * 0.0045;
+      panRef.current = clampPan(panStartRef.current.x + dx, panStartRef.current.y + dy);
     }
   };
 
@@ -417,14 +443,16 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
       return;
     }
     if (touchStartXRef.current === null || touchStartYRef.current === null) return;
-    const diffX = e.changedTouches[0].clientX - touchStartXRef.current;
-    const diffY = e.changedTouches[0].clientY - touchStartYRef.current;
+    if (zoomRef.current <= 1) {
+      const diffX = e.changedTouches[0].clientX - touchStartXRef.current;
+      const diffY = e.changedTouches[0].clientY - touchStartYRef.current;
 
-    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX < 0) {
-        handleNext();
-      } else {
-        handlePrev();
+      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX < 0) {
+          handleNext();
+        } else {
+          handlePrev();
+        }
       }
     }
 
@@ -434,20 +462,39 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.button !== 0) return;
+    isDraggingRef.current = true;
     mouseStartXRef.current = e.clientX;
     mouseStartYRef.current = e.clientY;
+    panStartRef.current = { ...panRef.current };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (
+      !isDraggingRef.current ||
+      zoomRef.current <= 1 ||
+      mouseStartXRef.current === null ||
+      mouseStartYRef.current === null
+    )
+      return;
+    const dx = (e.clientX - mouseStartXRef.current) * 0.0045;
+    const dy = -(e.clientY - mouseStartYRef.current) * 0.0045;
+    panRef.current = clampPan(panStartRef.current.x + dx, panStartRef.current.y + dy);
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
     if (mouseStartXRef.current === null || mouseStartYRef.current === null) return;
-    const diffX = e.clientX - mouseStartXRef.current;
-    const diffY = e.clientY - mouseStartYRef.current;
+    if (zoomRef.current <= 1) {
+      const diffX = e.clientX - mouseStartXRef.current;
+      const diffY = e.clientY - mouseStartYRef.current;
 
-    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX < 0) {
-        handleNext();
-      } else {
-        handlePrev();
+      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX < 0) {
+          handleNext();
+        } else {
+          handlePrev();
+        }
       }
     }
 
@@ -534,7 +581,9 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
       <div
         ref={mountRef}
         onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -544,7 +593,11 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
       {/* Gesture Hint */}
       <div className="flex items-center justify-center gap-1.5 py-1 text-[11px] text-blue-600 dark:text-blue-400 font-mono">
         <Hand className="h-3.5 w-3.5 animate-bounce" />
-        <span>Geser (Mouse Drag / Swipe) untuk balik halaman • Scroll / Pinch untuk Zoom</span>
+        <span>
+          {zoomLevel > 1
+            ? "Mode Zoom Aktif: Geser (Drag / Touch) untuk melihat sisi kiri/kanan/atas/bawah"
+            : "Geser (Mouse Drag / Swipe) untuk balik halaman • Scroll / Pinch untuk Zoom"}
+        </span>
       </div>
 
       {/* Floating Bottom Nav Controls */}

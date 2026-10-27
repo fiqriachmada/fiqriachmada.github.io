@@ -25,12 +25,14 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
   const [isMobileView, setIsMobileView] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const zoomRef = useRef(1);
+  const panRef = useRef({ x: 0, y: 0 });
 
   const updateZoom = useCallback((updater: number | ((prev: number) => number)) => {
     setZoomLevel((prev) => {
       const next = typeof updater === "function" ? updater(prev) : updater;
       const clamped = Math.min(Math.max(Number(next.toFixed(2)), 0.6), 2.5);
       zoomRef.current = clamped;
+      if (clamped <= 1) panRef.current = { x: 0, y: 0 };
       return clamped;
     });
   }, []);
@@ -404,6 +406,10 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
       bookGroup.rotation.y += (targetRotY - bookGroup.rotation.y) * 0.08;
       bookGroup.rotation.x += (targetRotX - bookGroup.rotation.x) * 0.08;
 
+      const baseX = isMobileCurrent ? -0.72 : 0;
+      bookGroup.position.x += (baseX + panRef.current.x - bookGroup.position.x) * 0.14;
+      bookGroup.position.y += (panRef.current.y - bookGroup.position.y) * 0.14;
+
       const baseZ = isMobileCurrent ? 3.3 : 3.8;
       const targetZ = baseZ / zoomRef.current;
       camera.position.z += (targetZ - camera.position.z) * 0.12;
@@ -479,13 +485,24 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
     });
   }, [currentPage]);
 
-  // Touch Swipe & Pinch Zoom + Mouse Drag Swipe Gestures
+  // Touch Swipe & Pinch Zoom + Mouse Drag Swipe / Pan Gestures
   const touchStartXRef = useRef<number | null>(null);
   const touchStartYRef = useRef<number | null>(null);
   const pinchStartDistRef = useRef<number | null>(null);
   const pinchStartZoomRef = useRef<number>(1);
   const mouseStartXRef = useRef<number | null>(null);
   const mouseStartYRef = useRef<number | null>(null);
+  const panStartRef = useRef({ x: 0, y: 0 });
+  const isDraggingRef = useRef(false);
+
+  const clampPan = (x: number, y: number) => {
+    const maxX = Math.max((zoomRef.current - 1) * 1.35, 0);
+    const maxY = Math.max((zoomRef.current - 1) * 1.15, 0);
+    return {
+      x: Math.min(Math.max(x, -maxX), maxX),
+      y: Math.min(Math.max(y, -maxY), maxY),
+    };
+  };
 
   const getTouchDistance = (touches: React.TouchList) => {
     const dx = touches[0].clientX - touches[1].clientX;
@@ -502,6 +519,7 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
     } else if (e.touches.length === 1) {
       touchStartXRef.current = e.touches[0].clientX;
       touchStartYRef.current = e.touches[0].clientY;
+      panStartRef.current = { ...panRef.current };
     }
   };
 
@@ -510,6 +528,15 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
       const currentDist = getTouchDistance(e.touches);
       const scale = currentDist / pinchStartDistRef.current;
       updateZoom(pinchStartZoomRef.current * scale);
+    } else if (
+      e.touches.length === 1 &&
+      zoomRef.current > 1 &&
+      touchStartXRef.current !== null &&
+      touchStartYRef.current !== null
+    ) {
+      const dx = (e.touches[0].clientX - touchStartXRef.current) * 0.0045;
+      const dy = -(e.touches[0].clientY - touchStartYRef.current) * 0.0045;
+      panRef.current = clampPan(panStartRef.current.x + dx, panStartRef.current.y + dy);
     }
   };
 
@@ -521,14 +548,16 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
       return;
     }
     if (touchStartXRef.current === null || touchStartYRef.current === null) return;
-    const diffX = e.changedTouches[0].clientX - touchStartXRef.current;
-    const diffY = e.changedTouches[0].clientY - touchStartYRef.current;
+    if (zoomRef.current <= 1) {
+      const diffX = e.changedTouches[0].clientX - touchStartXRef.current;
+      const diffY = e.changedTouches[0].clientY - touchStartYRef.current;
 
-    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX < 0) {
-        handleNext();
-      } else {
-        handlePrev();
+      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX < 0) {
+          handleNext();
+        } else {
+          handlePrev();
+        }
       }
     }
 
@@ -538,20 +567,39 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (e.button !== 0) return;
+    isDraggingRef.current = true;
     mouseStartXRef.current = e.clientX;
     mouseStartYRef.current = e.clientY;
+    panStartRef.current = { ...panRef.current };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (
+      !isDraggingRef.current ||
+      zoomRef.current <= 1 ||
+      mouseStartXRef.current === null ||
+      mouseStartYRef.current === null
+    )
+      return;
+    const dx = (e.clientX - mouseStartXRef.current) * 0.0045;
+    const dy = -(e.clientY - mouseStartYRef.current) * 0.0045;
+    panRef.current = clampPan(panStartRef.current.x + dx, panStartRef.current.y + dy);
   };
 
   const handleMouseUp = (e: React.MouseEvent) => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
     if (mouseStartXRef.current === null || mouseStartYRef.current === null) return;
-    const diffX = e.clientX - mouseStartXRef.current;
-    const diffY = e.clientY - mouseStartYRef.current;
+    if (zoomRef.current <= 1) {
+      const diffX = e.clientX - mouseStartXRef.current;
+      const diffY = e.clientY - mouseStartYRef.current;
 
-    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX < 0) {
-        handleNext();
-      } else {
-        handlePrev();
+      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX < 0) {
+          handleNext();
+        } else {
+          handlePrev();
+        }
       }
     }
 
@@ -643,7 +691,9 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
       <div
         ref={mountRef}
         onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -653,7 +703,11 @@ export function PaperMonoFlipbook({ images, projectTitle }: PaperMonoFlipbookPro
       {/* Gesture Hint */}
       <div className="relative z-10 flex items-center justify-center gap-1.5 py-1 text-[11px] text-blue-600 dark:text-blue-400 font-mono">
         <Hand className="h-3.5 w-3.5 animate-bounce" />
-        <span>Geser (Mouse Drag / Swipe) untuk balik lembar • Scroll / Pinch untuk Zoom</span>
+        <span>
+          {zoomLevel > 1
+            ? "Mode Zoom Aktif: Geser (Drag / Touch) untuk melihat sisi kiri/kanan/atas/bawah"
+            : "Geser (Mouse Drag / Swipe) untuk balik lembar • Scroll / Pinch untuk Zoom"}
+        </span>
       </div>
 
       {/* Bottom Controls */}

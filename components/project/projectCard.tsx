@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import clsx from "clsx";
 import Loading from "@/app/loading";
 import { useQuery } from "@tanstack/react-query";
-import { fetchProjectsData } from "@/lib/projectApi";
+import { fetchProjectsData, fetchProjectById } from "@/lib/projectApi";
 import {
   LayoutGrid,
   BookOpen,
@@ -27,6 +27,18 @@ function ProjectCard() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["client-projects"],
     queryFn: () => fetchProjectsData({ limit: 50 }),
+  });
+
+  const {
+    data: detailData,
+    isLoading: isDetailLoading,
+    isError: isDetailError,
+    error: detailError,
+  } = useQuery({
+    queryKey: ["client-project", selectedId],
+    queryFn: () => fetchProjectById(selectedId!),
+    enabled: !!selectedId,
+    refetchOnMount: "always",
   });
 
   const projects = data?.data || [];
@@ -54,9 +66,7 @@ function ProjectCard() {
     );
   }
 
-  const selectedProject = selectedId
-    ? projects.find((p) => p.id === selectedId)
-    : null;
+  const selectedProject = detailData?.data;
 
   return (
     <div className="space-y-6">
@@ -102,69 +112,87 @@ function ProjectCard() {
       </div>
 
       {/* Main View Mode Area */}
-      {selectedProject ? (
-        <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 lg:p-10 rounded-2xl text-gray-800 dark:text-gray-200 shadow-lg space-y-6">
-          <div className="relative w-full aspect-video max-h-[500px] rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
-            <img
-              src={selectedProject.image || selectedProject.bannerUrl || FALLBACK_IMAGE}
-              alt={selectedProject.title}
-              className="w-full h-full object-cover rounded-xl"
-            />
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 font-semibold mb-2">
-              <FolderGit2 className="w-4 h-4" />
-              <span>Case Study Proyek</span>
-              {selectedProject.updatedAt && (
-                <span className="text-gray-400 font-normal">
-                  • Diperbarui {dayjs(selectedProject.updatedAt).format("MMM YYYY")}
-                </span>
-              )}
+      {selectedId ? (
+        isDetailLoading ? (
+          <Loading />
+        ) : isDetailError || !selectedProject ? (
+          <div className="p-8 text-center rounded-xl border border-red-200 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 space-y-4">
+            <div>
+              <p className="font-semibold">Gagal memuat detail proyek</p>
+              <p className="text-xs mt-1 text-gray-500 dark:text-gray-400">
+                {detailError?.message || "Terjadi kesalahan pada koneksi API CMS"}
+              </p>
             </div>
-
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
-              {selectedProject.title}
-            </h2>
-            <p className="mt-4 text-sm lg:text-base leading-relaxed text-gray-600 dark:text-gray-300 whitespace-pre-line">
-              {selectedProject.description || "Tidak ada deskripsi rinci untuk proyek ini."}
-            </p>
-          </div>
-
-          {/* Project Gallery if more than 1 image */}
-          {selectedProject.projectImages && selectedProject.projectImages.length > 1 && (
-            <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-1.5">
-                <ImageIcon className="w-4 h-4" />
-                <span>Galeri Tangkapan Layar</span>
-              </h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {selectedProject.projectImages.map((img) => (
-                  <a
-                    key={img.id}
-                    href={img.imageUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="relative aspect-video rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 group">
-                    <img
-                      src={img.imageUrl}
-                      alt="Project gallery"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="pt-2">
             <button
               onClick={handleBack}
               className="bg-black text-white dark:bg-white dark:text-black font-semibold px-5 py-2.5 rounded-lg text-sm hover:opacity-80 transition shadow-sm">
               ← Kembali ke Daftar Proyek
             </button>
           </div>
-        </div>
+        ) : (
+          <div className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 lg:p-10 rounded-2xl text-gray-800 dark:text-gray-200 shadow-lg space-y-6">
+            <div className="relative w-full aspect-video max-h-[500px] rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800 flex items-center justify-center">
+              <img
+                src={selectedProject.image || selectedProject.bannerUrl || FALLBACK_IMAGE}
+                alt={selectedProject.title}
+                className="w-full h-full object-cover rounded-xl"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400 font-semibold mb-2">
+                <FolderGit2 className="w-4 h-4" />
+                <span>Case Study Proyek</span>
+                {selectedProject.updatedAt && (
+                  <span className="text-gray-400 font-normal">
+                    • Diperbarui {dayjs(selectedProject.updatedAt).format("MMM YYYY")}
+                  </span>
+                )}
+              </div>
+
+              <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
+                {selectedProject.title}
+              </h2>
+              <p className="mt-4 text-sm lg:text-base leading-relaxed text-gray-600 dark:text-gray-300 whitespace-pre-line">
+                {selectedProject.description || "Tidak ada deskripsi rinci untuk proyek ini."}
+              </p>
+            </div>
+
+            {/* Project Gallery if more than 1 image */}
+            {selectedProject.projectImages && selectedProject.projectImages.length > 1 && (
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-800">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-1.5">
+                  <ImageIcon className="w-4 h-4" />
+                  <span>Galeri Tangkapan Layar</span>
+                </h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {selectedProject.projectImages.map((img) => (
+                    <a
+                      key={img.id}
+                      href={img.imageUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="relative aspect-video rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800 group">
+                      <img
+                        src={img.imageUrl}
+                        alt="Project gallery"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="pt-2">
+              <button
+                onClick={handleBack}
+                className="bg-black text-white dark:bg-white dark:text-black font-semibold px-5 py-2.5 rounded-lg text-sm hover:opacity-80 transition shadow-sm">
+                ← Kembali ke Daftar Proyek
+              </button>
+            </div>
+          </div>
+        )
       ) : viewMode === "book" ? (
         <ProjectBook3D projects={projects} />
       ) : (

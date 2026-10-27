@@ -76,17 +76,21 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
     container.innerHTML = "";
     container.appendChild(renderer.domElement);
 
-    // 3. Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.3);
+    // 3. Lighting (balanced for open book)
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0xfff8e7, 2.0);
+    const dirLight = new THREE.DirectionalLight(0xfff8e7, 1.8);
     dirLight.position.set(3, 5, 4);
     dirLight.castShadow = true;
     scene.add(dirLight);
 
+    const leftFillLight = new THREE.DirectionalLight(0xffffff, 1.5);
+    leftFillLight.position.set(-3, 4, 3);
+    scene.add(leftFillLight);
+
     const fillLight = new THREE.DirectionalLight(0x90b0ff, 0.8);
-    fillLight.position.set(-3, 3, -2);
+    fillLight.position.set(0, 3, -2);
     scene.add(fillLight);
 
     // 4. Book Mesh Construction
@@ -124,20 +128,27 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
     spine.rotation.z = Math.PI / 2;
     bookGroup.add(spine);
 
-    // Left & Right Book Covers
+    // Left & Right Book Covers (inner face is clean paper)
     const coverWidth = 1.6;
     const coverHeight = 2.2;
     const coverDepth = 0.04;
 
-    const coverMat = new THREE.MeshStandardMaterial({
+    const coverOuterMat = new THREE.MeshStandardMaterial({
       color: 0x0f172a,
       roughness: 0.3,
       metalness: 0.1,
     });
+    const coverInnerMat = new THREE.MeshStandardMaterial({
+      color: 0xf8fafc,
+      roughness: 0.5,
+    });
+
+    const leftCoverMat = [coverOuterMat, coverOuterMat, coverInnerMat, coverOuterMat, coverOuterMat, coverOuterMat];
+    const rightCoverMat = [coverOuterMat, coverOuterMat, coverInnerMat, coverOuterMat, coverOuterMat, coverOuterMat];
 
     const leftCover = new THREE.Mesh(
       new THREE.BoxGeometry(coverWidth, coverDepth, coverHeight),
-      coverMat
+      leftCoverMat
     );
     leftCover.position.set(-coverWidth / 2 - 0.05, -coverDepth / 2, 0);
     leftCover.castShadow = true;
@@ -146,7 +157,7 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
 
     const rightCover = new THREE.Mesh(
       new THREE.BoxGeometry(coverWidth, coverDepth, coverHeight),
-      coverMat
+      rightCoverMat
     );
     rightCover.position.set(coverWidth / 2 + 0.05, -coverDepth / 2, 0);
     rightCover.castShadow = true;
@@ -261,11 +272,12 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
 
     // Front Cover
     const coverTex = createPageTexture("Cover", "", true);
+    const coverBackTex = createPageTexture("Daftar Karya", "Buku portofolio & kumpulan proyek terpilih.", false);
     const coverPageMat = [
       new THREE.MeshStandardMaterial({ color: 0x0f172a }),
       new THREE.MeshStandardMaterial({ color: 0x0f172a }),
       new THREE.MeshStandardMaterial({ map: coverTex, roughness: 0.3 }),
-      new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.4 }),
+      new THREE.MeshStandardMaterial({ map: coverBackTex, roughness: 0.5 }),
       new THREE.MeshStandardMaterial({ color: 0x0f172a }),
       new THREE.MeshStandardMaterial({ color: 0x0f172a }),
     ];
@@ -276,14 +288,18 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
     bookGroup.add(coverPageMesh);
     pagesList.push(coverPageMesh);
 
-    // Pages for projects (up to 15)
-    projects.slice(0, 15).forEach((proj, i) => {
+    // Pages for projects
+    projects.forEach((proj, i) => {
       const pageTex = createPageTexture(proj.title, proj.description || "");
+      const nextProj = projects[i + 1];
+      const backDesc = nextProj ? `Halaman Berikutnya: ${nextProj.title}` : "Akhir dari buku kenangan.";
+      const pageBackTex = createPageTexture(proj.title + " (Catatan)", proj.description || backDesc);
+
       const pageMat = [
         new THREE.MeshStandardMaterial({ color: 0xffffff }),
         new THREE.MeshStandardMaterial({ color: 0xffffff }),
         new THREE.MeshStandardMaterial({ map: pageTex, roughness: 0.5 }),
-        new THREE.MeshStandardMaterial({ color: 0xfdfdfd, roughness: 0.5 }),
+        new THREE.MeshStandardMaterial({ map: pageBackTex, roughness: 0.5 }),
         new THREE.MeshStandardMaterial({ color: 0xffffff }),
         new THREE.MeshStandardMaterial({ color: 0xffffff }),
       ];

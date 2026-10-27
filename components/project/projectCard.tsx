@@ -16,13 +16,18 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { ProjectBook3D } from "./project-book-3d";
+import { useProjectViewStore } from "@/store/project-store";
 
 const FALLBACK_IMAGE =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png";
 
 function ProjectCard() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<"grid" | "book">("grid"); // 'grid' | 'book'
+  const {
+    selectedProjectId: selectedId,
+    setSelectedProjectId: setSelectedId,
+    viewMode,
+    setViewMode,
+  } = useProjectViewStore();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["client-projects"],

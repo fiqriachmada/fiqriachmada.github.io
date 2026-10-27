@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import * as THREE from "three";
 import type { ProjectApiItem } from "@/types/api";
 import {
@@ -11,7 +11,6 @@ import {
   Hand,
   ZoomIn,
   ZoomOut,
-  RotateCcw,
 } from "lucide-react";
 
 interface ProjectDetailBook3DProps {
@@ -37,7 +36,7 @@ export function ProjectDetailBook3D({ project }: ProjectDetailBook3DProps) {
     });
   }, []);
 
-  const images = project.projectImages || [];
+  const images = useMemo(() => project.projectImages || [], [project.projectImages]);
   // Pages: 0 = Cover, 1 = Intro / Overview, 2..N = Project Photos
   const totalPages = Math.max(2 + images.length, 2);
 

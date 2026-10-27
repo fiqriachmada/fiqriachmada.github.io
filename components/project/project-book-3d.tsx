@@ -210,9 +210,11 @@ export function ProjectBook3D({ projects = [] }: { projects?: ProjectApiItem[] }
         ctx.fillText((title || "Project").substring(0, 26), 80, 220);
 
         ctx.fillStyle = "#f1f5f9";
-        ctx.roundRect
-          ? ctx.roundRect(80, 280, canvas.width - 160, 650, [20])
-          : ctx.fillRect(80, 280, canvas.width - 160, 650);
+        if (ctx.roundRect) {
+          ctx.roundRect(80, 280, canvas.width - 160, 650, [20]);
+        } else {
+          ctx.fillRect(80, 280, canvas.width - 160, 650);
+        }
         ctx.fill();
 
         ctx.fillStyle = "#64748b";

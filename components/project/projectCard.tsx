@@ -15,8 +15,6 @@ import {
   FolderGit2,
   Calendar,
   Image as ImageIcon,
-  ArrowRight,
-  ExternalLink,
 } from "lucide-react";
 import { ProjectBook3D } from "./project-book-3d";
 import { ProjectDetailBook3D } from "./project-detail-book-3d";

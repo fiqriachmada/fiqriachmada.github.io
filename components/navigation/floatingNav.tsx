@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import routes from "@/routes/routes";
 import type { Route } from "@/types/route";
@@ -84,10 +85,13 @@ const FloatingNav = () => {
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-2 group"
             >
-              <img
+              <Image
                 src="/icon.svg"
                 alt="fiqriachmada"
+                width={24}
+                height={24}
                 className="h-6 w-auto transition-transform group-hover:scale-110"
+                unoptimized
               />
               <span className="text-xs font-bold tracking-wide text-gray-800 dark:text-gray-100 group-hover:text-blue-500">
                 fiqriachmada

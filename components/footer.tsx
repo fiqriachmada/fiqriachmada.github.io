@@ -4,6 +4,7 @@ import { Transition } from "@headlessui/react";
 import { useEffect, useState } from "react";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import socialMediaItems from "../data/socialMediaItems";
 import routes from "@/routes/routes";
@@ -32,18 +33,24 @@ function Footer() {
     <div className="h-auto lg:h-40">
       <div className="flex justify-between ">
         <div className="sm:items-center mt-3 mb-3">
-          <img
+          <Image
             className="block h-8 w-auto lg:hidden"
             src="https://svgshare.com/i/tmn.svg"
             alt="fiqriachmada-logo"
+            width={32}
+            height={32}
+            unoptimized
             onClick={() => {
               handleClick();
             }}
           />
-          <img
+          <Image
             className="hidden h-8 w-auto lg:block"
             src="https://svgshare.com/i/tmn.svg"
             alt="fiqriachmada-logo"
+            width={32}
+            height={32}
+            unoptimized
             onClick={() => {
               handleClick();
             }}

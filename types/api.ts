@@ -28,6 +28,7 @@ export interface WorkItem {
 export interface ProjectImage {
   id: string;
   imageUrl: string;
+  isBanner?: boolean;
 }
 
 export interface ProjectApiItem {

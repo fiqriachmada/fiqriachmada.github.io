@@ -1,10 +1,12 @@
 "use client";
 import routes from "@/routes/routes";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import type { Route } from "@/types/route";
 import ThemeButton from "../button/themeButton";
+import GoogleAuthButton from "../button/googleAuthButton";
 
 function DesktopHeader() {
   const router = useRouter();
@@ -22,15 +24,21 @@ function DesktopHeader() {
       <div className="flex justify-between items-center px-4 py-0 lg:px-6 lg:py-4">
         <div className="" onClick={handleClick}>
           <Link href={"/"}>
-            <img
+            <Image
               className="block h-8 w-auto lg:hidden"
               src="/icon.svg"
               alt="fiqriachmada-logo"
+              width={32}
+              height={32}
+              unoptimized
             />
-            <img
+            <Image
               className="hidden h-8 w-auto lg:block"
               src="/icon.svg"
               alt="fiqriachmada-logo"
+              width={32}
+              height={32}
+              unoptimized
             />
           </Link>
         </div>
@@ -57,8 +65,9 @@ function DesktopHeader() {
           </div>
         </div>
 
-        <div>
+        <div className="flex items-center gap-2">
           <ThemeButton />
+          <GoogleAuthButton />
         </div>
       </div>
     </div>

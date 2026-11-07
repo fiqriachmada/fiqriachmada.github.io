@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import dayjs from "dayjs";
 import clsx from "clsx";
 import Loading from "@/app/loading";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBlogsData } from "@/lib/blogApi";
-import { BookOpen, Calendar, Clock, ArrowRight, User } from "lucide-react";
+import { BookOpen, Calendar, ArrowRight, User } from "lucide-react";
 import { BlogContentRenderer, extractBlogPlainText } from "./blogContentRenderer";
 
 const FALLBACK_COVER =
@@ -64,10 +65,13 @@ export default function BlogCard() {
         <article className="bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-6 lg:p-10 rounded-2xl text-gray-800 dark:text-gray-200 shadow-lg space-y-6">
           {selectedBlog.coverImage && (
             <div className="relative w-full aspect-video max-h-[460px] rounded-xl overflow-hidden bg-gray-200 dark:bg-gray-800">
-              <img
+              <Image
                 src={selectedBlog.coverImage}
                 alt={selectedBlog.title}
+                fill
+                sizes="(max-width: 1024px) 100vw, 80vw"
                 className="w-full h-full object-cover rounded-xl"
+                unoptimized
               />
             </div>
           )}
@@ -128,11 +132,13 @@ export default function BlogCard() {
               )}>
               <div>
                 <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 mb-4 flex items-center justify-center">
-                  <img
+                  <Image
                     src={blog.coverImage || FALLBACK_COVER}
                     alt={blog.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
+                    unoptimized
                   />
                 </div>
 

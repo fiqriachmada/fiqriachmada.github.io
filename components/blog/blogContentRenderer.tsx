@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import clsx from "clsx";
 
 // Text format bitmasks used by Lexical
@@ -175,11 +176,13 @@ function renderNode(node: LexicalNode, index: number) {
       return (
         <figure key={key} className="my-6 space-y-2 flex flex-col items-center">
           <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 shadow-md bg-gray-50 dark:bg-gray-800/40 max-w-full">
-            <img
+            <Image
               src={src}
               alt={node.altText || "Blog content image"}
+              width={800}
+              height={500}
               className="max-h-[500px] w-auto max-w-full object-contain mx-auto"
-              loading="lazy"
+              unoptimized
             />
           </div>
           {node.caption && (

@@ -7,7 +7,7 @@ name: Deploy Next.js site to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ["master"]
+    branches: ["main", "prod", "master"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -48,10 +48,13 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
+      - name: Load environment variables
+        run: |
+          cp .env.prod .env
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "26"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -72,9 +75,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+        run: npm install
       - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        env:
+          NODE_OPTIONS: "--trace-warnings --stack-trace-limit=100"
+          NEXT_TELEMETRY_DISABLED: "1"
+        run: npx next build --debug
       # - name: Static HTML export with Next.js
       #   run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: Upload artifact

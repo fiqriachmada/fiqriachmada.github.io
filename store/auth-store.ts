@@ -4,8 +4,13 @@ import { persist } from "zustand/middleware";
 export interface AuthUser {
   id: string;
   name: string;
+  firstName?: string | null;
+  lastName?: string | null;
+  username?: string | null;
   email: string;
-  image?: string;
+  image?: string | null;
+  role?: string;
+  roleName?: string;
   userType?: string;
   loginType?: string;
 }
@@ -28,4 +33,3 @@ export const useAuthStore = create<AuthState>()(
     }
   )
 );
-

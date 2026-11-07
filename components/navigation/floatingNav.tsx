@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import routes from "@/routes/routes";
 import type { Route } from "@/types/route";
 import ThemeButton from "@/components/button/themeButton";
+import GoogleAuthButton from "@/components/button/googleAuthButton";
 import { Transition } from "@headlessui/react";
 import clsx from "clsx";
 import {
@@ -144,12 +145,21 @@ const FloatingNav = () => {
             })}
           </nav>
 
-          {/* Theme Switcher section */}
-          <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
-            <div className="px-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-              Theme
+          {/* Actions: Theme & Auth */}
+          <div className="pt-2 border-t border-gray-100 dark:border-gray-800 space-y-2">
+            <div>
+              <div className="px-2 pb-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                Theme
+              </div>
+              <ThemeButton />
             </div>
-            <ThemeButton />
+
+            <div className="pt-2 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between px-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+                Account
+              </span>
+              <GoogleAuthButton />
+            </div>
           </div>
         </div>
       </Transition>

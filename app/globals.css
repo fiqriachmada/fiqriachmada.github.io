@@ -128,6 +128,8 @@ body {
 }
 
 /* Ensure cards in neo-dark mode are dark and text is bright white */
+:is(.neo-dark, [data-theme="neo-dark"]) .bg-white,
+:is(.neo-dark, [data-theme="neo-dark"]) .bg-white\/95,
 :is(.neo-dark, [data-theme="neo-dark"]) .bg-white\/90,
 :is(.neo-dark, [data-theme="neo-dark"]) .bg-white\/60,
 :is(.neo-dark, [data-theme="neo-dark"]) .bg-gray-100 {
@@ -148,6 +150,8 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
+  :is(.neo-system, [data-theme="neo-system"]) .bg-white,
+  :is(.neo-system, [data-theme="neo-system"]) .bg-white\/95,
   :is(.neo-system, [data-theme="neo-system"]) .bg-white\/90,
   :is(.neo-system, [data-theme="neo-system"]) .bg-white\/60,
   :is(.neo-system, [data-theme="neo-system"]) .bg-gray-100 {

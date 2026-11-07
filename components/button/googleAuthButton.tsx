@@ -61,7 +61,7 @@ export default function GoogleAuthButton() {
         </button>
 
         {dropdownOpen && (
-          <div className="absolute right-0 mt-2 w-56 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xl p-3 z-50">
+          <div className="absolute right-full bottom-0 mr-3 w-56 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-2xl p-3 z-50">
             <p className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">
               {user.name}
             </p>

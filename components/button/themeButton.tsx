@@ -127,7 +127,7 @@ export default function ThemeButton() {
         >
           <div
             ref={menuRef}
-            className="absolute right-full bottom-0 mr-3 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-800 z-50 p-2 origin-bottom-right rounded-2xl w-52 shadow-2xl space-y-1.5"
+            className="absolute right-full bottom-0 mr-3 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md text-gray-800 dark:text-gray-100 border border-gray-200 dark:border-gray-800 z-50 p-2 origin-bottom-right rounded-2xl w-52 shadow-2xl space-y-1.5"
           >
             {/* Standard Themes Group */}
             <div className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">

@@ -8,6 +8,7 @@ import { Transition } from "@headlessui/react";
 import React, { useEffect, useRef, useState } from "react";
 import type { Route } from "@/types/route";
 import ThemeButton from "../button/themeButton";
+import GoogleAuthButton from "../button/googleAuthButton";
 
 function MobileHeader() {
   const [isShowing, setIsShowing] = useState(false);
@@ -130,17 +131,18 @@ function MobileHeader() {
                 key={index}
                 href={route.link}
                 className={`
-                ${
-                  isActive(route) && "bg-gray-900 dark:text-darkText text-white"
-                }
-                 ${
-                   !isActive(route) &&
-                   "hover:bg-slate-500  dark:text-darkText text-lightText hover:text-darkText hover:font-bold"
-                 } text-lightText dark:text-darkText block rounded-md px-3 py-2 text-base font-bold capitalize`}>
+                ${isActive(route) && "bg-gray-900 dark:text-darkText text-white"
+                  }
+                 ${!isActive(route) &&
+                  "hover:bg-slate-500  dark:text-darkText text-lightText hover:text-darkText hover:font-bold"
+                  } text-lightText dark:text-darkText block rounded-md px-3 py-2 text-base font-bold capitalize`}>
                 {route.title}
               </Link>
             ))}
-            <ThemeButton />
+            <div className="flex items-center gap-3 pt-2">
+              <ThemeButton />
+              <GoogleAuthButton />
+            </div>
           </div>
         </Transition>
       </div>

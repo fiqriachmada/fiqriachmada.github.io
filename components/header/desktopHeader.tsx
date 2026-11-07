@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import type { Route } from "@/types/route";
 import ThemeButton from "../button/themeButton";
+import GoogleAuthButton from "../button/googleAuthButton";
 
 function DesktopHeader() {
   const router = useRouter();
@@ -64,8 +65,9 @@ function DesktopHeader() {
           </div>
         </div>
 
-        <div>
+        <div className="flex items-center gap-2">
           <ThemeButton />
+          <GoogleAuthButton />
         </div>
       </div>
     </div>

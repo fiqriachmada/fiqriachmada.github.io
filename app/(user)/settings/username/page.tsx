@@ -168,47 +168,14 @@ export default function UserUsernamePage() {
   const canChange = data ? data.canChange : true;
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto py-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-            Change Username
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Kelola username unik Anda sesuai interval yang diatur sistem.
-          </p>
-        </div>
-
-        <div className="inline-flex flex-wrap items-center rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-100/80 dark:bg-gray-900 p-1 w-fit">
-          <Link
-            href="/settings"
-            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-all"
-          >
-            <UserIcon className="w-3.5 h-3.5" />
-            <span>Profile</span>
-          </Link>
-          <Link
-            href="/settings/avatar"
-            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-all"
-          >
-            <Camera className="w-3.5 h-3.5" />
-            <span>Avatar</span>
-          </Link>
-          <Link
-            href="/settings/username"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 text-white dark:bg-white dark:text-gray-900 px-3 py-1.5 text-xs font-bold shadow-xs transition-all"
-          >
-            <AtSign className="w-3.5 h-3.5" />
-            <span>Username</span>
-          </Link>
-          <Link
-            href="/settings/password"
-            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-all"
-          >
-            <KeyRound className="w-3.5 h-3.5" />
-            <span>Password</span>
-          </Link>
-        </div>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+          Change Username
+        </h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Kelola username unik Anda sesuai interval yang diatur sistem.
+        </p>
       </div>
 
       <div className="rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden">

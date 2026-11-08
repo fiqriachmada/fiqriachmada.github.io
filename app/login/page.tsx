@@ -22,7 +22,11 @@ function LoginForm() {
   const callbackUrl = searchParams.get("callbackUrl") || "/settings";
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(
+    searchParams.get("error") === "blocked"
+      ? "Akun Anda telah dinonaktifkan / diblokir oleh Administrator."
+      : null
+  );
 
   useEffect(() => {
     if (user) {

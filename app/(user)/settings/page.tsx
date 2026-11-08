@@ -53,6 +53,11 @@ export default function UserSettingsPage() {
       fetch(`${API_BASE}/client/v1/user/settings?${query}`)
         .then((res) => res.json())
         .then((json) => {
+          if (json.status === 403 || json.error === "ACCOUNT_BLOCKED") {
+            logout();
+            router.replace("/login?error=blocked");
+            return;
+          }
           if (json.status === 200 && json.data) {
             const d = json.data;
             setFirstName(d.firstName || "");

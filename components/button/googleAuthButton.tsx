@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth-store";
-import { LogIn, LogOut, User as UserIcon, Settings, Shield } from "lucide-react";
+import { LogIn, LogOut, User as UserIcon, Settings, Shield, AtSign } from "lucide-react";
 
 export default function GoogleAuthButton() {
   const { user, logout } = useAuthStore();
@@ -77,6 +77,15 @@ export default function GoogleAuthButton() {
           >
             <Settings className="w-3.5 h-3.5" />
             <span>Account Settings</span>
+          </Link>
+
+          <Link
+            href="/settings/username"
+            onClick={() => setDropdownOpen(false)}
+            className="w-full flex items-center gap-2 px-2.5 py-2 text-xs font-semibold rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          >
+            <AtSign className="w-3.5 h-3.5" />
+            <span>Change Username</span>
           </Link>
 
           <button

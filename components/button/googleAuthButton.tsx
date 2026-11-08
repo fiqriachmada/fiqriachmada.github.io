@@ -2,11 +2,18 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 import { LogIn, LogOut, User as UserIcon, Settings, Shield, AtSign, KeyRound } from "lucide-react";
 
 export default function GoogleAuthButton() {
   const { user, logout } = useAuthStore();
+  const pathname = usePathname();
+  const router = useRouter();
+  const loginHref =
+    pathname && pathname !== "/login"
+      ? `/login?callbackUrl=${encodeURIComponent(pathname)}`
+      : "/login";
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
@@ -16,12 +23,13 @@ export default function GoogleAuthButton() {
       if (new Date(user.expiresAt!).getTime() <= Date.now()) {
         logout();
         setDropdownOpen(false);
+        router.replace(loginHref);
       }
     };
     checkExpiry();
     const timer = setInterval(checkExpiry, 60_000);
     return () => clearInterval(timer);
-  }, [user?.expiresAt, logout]);
+  }, [user?.expiresAt, logout, router, loginHref]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -38,7 +46,7 @@ export default function GoogleAuthButton() {
   if (!user) {
     return (
       <Link
-        href="/login"
+        href={loginHref}
         className="inline-flex items-center gap-1.5 px-3 py-1.5 h-8 text-xs font-semibold rounded-full border border-gray-300 dark:border-gray-700 bg-gray-900 text-white dark:bg-white dark:text-gray-900 hover:opacity-90 transition-all cursor-pointer"
       >
         <LogIn className="w-3.5 h-3.5" />
@@ -115,6 +123,7 @@ export default function GoogleAuthButton() {
             onClick={() => {
               logout();
               setDropdownOpen(false);
+              router.replace(loginHref);
             }}
             className="w-full flex items-center gap-2 px-2.5 py-2 text-xs font-semibold rounded-lg text-rose-500 hover:bg-rose-500/10 transition cursor-pointer"
           >

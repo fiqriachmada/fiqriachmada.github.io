@@ -250,7 +250,7 @@ export default function UserSettingsPage() {
             type="button"
             onClick={() => {
               logout();
-              router.replace("/");
+              router.replace("/login?callbackUrl=%2Fsettings");
             }}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition cursor-pointer self-start sm:self-center"
           >

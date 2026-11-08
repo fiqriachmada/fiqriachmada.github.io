@@ -20,7 +20,7 @@ const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "https://fiqriachmada-cms.vercel.app/api";
 
 export default function UserPasswordPage() {
-  const { user, setUser } = useAuthStore();
+  const { user, setUser, logout } = useAuthStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
@@ -65,6 +65,11 @@ export default function UserPasswordPage() {
   useEffect(() => {
     if (!mounted) return;
     if (!user) {
+      router.replace("/login?callbackUrl=/settings/password");
+      return;
+    }
+    if (user.expiresAt && new Date(user.expiresAt).getTime() <= Date.now()) {
+      logout();
       router.replace("/login?callbackUrl=/settings/password");
       return;
     }

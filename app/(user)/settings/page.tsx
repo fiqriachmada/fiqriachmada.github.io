@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   User as UserIcon,
   AtSign,
+  KeyRound,
 } from "lucide-react";
 
 const API_BASE =
@@ -42,6 +43,11 @@ export default function UserSettingsPage() {
       router.replace("/login?callbackUrl=/settings");
       return;
     }
+    if (user.expiresAt && new Date(user.expiresAt).getTime() <= Date.now()) {
+      logout();
+      router.replace("/login?callbackUrl=/settings");
+      return;
+    }
 
     setFirstName(user.firstName || user.name?.split(" ")[0] || "");
     setLastName(user.lastName || user.name?.split(" ").slice(1).join(" ") || "");
@@ -69,6 +75,16 @@ export default function UserSettingsPage() {
               [d.firstName, d.lastName].filter(Boolean).join(" ") ||
               d.username ||
               user.name;
+            const sessionDays = Number(d.sessionDays) || user.sessionDays || 30;
+            const loginTime = user.loginAt ? new Date(user.loginAt).getTime() : Date.now();
+            const computedExpiresAt = new Date(
+              loginTime + sessionDays * 24 * 60 * 60 * 1000
+            );
+            if (computedExpiresAt.getTime() <= Date.now()) {
+              logout();
+              router.replace("/login?callbackUrl=/settings");
+              return;
+            }
             setUser({
               ...user,
               id: d.id,
@@ -81,6 +97,9 @@ export default function UserSettingsPage() {
               roleName: d.roleName,
               userType: d.roleName || d.role,
               loginType: d.loginType,
+              sessionDays,
+              loginAt: user.loginAt || new Date(loginTime).toISOString(),
+              expiresAt: computedExpiresAt.toISOString(),
             });
           }
         })
@@ -173,6 +192,13 @@ export default function UserSettingsPage() {
           >
             <AtSign className="w-3.5 h-3.5" />
             <span>Username</span>
+          </Link>
+          <Link
+            href="/settings/password"
+            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-all"
+          >
+            <KeyRound className="w-3.5 h-3.5" />
+            <span>Password</span>
           </Link>
         </div>
       </div>

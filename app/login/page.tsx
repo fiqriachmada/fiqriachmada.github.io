@@ -53,6 +53,12 @@ function LoginForm() {
         const fullName =
           u.name || [u.firstName, u.lastName].filter(Boolean).join(" ") || u.username || "User";
 
+        const sessionDays = Number(u.sessionDays) || 30;
+        const loginAt = new Date().toISOString();
+        const expiresAt =
+          u.expiresAt ||
+          new Date(Date.now() + sessionDays * 24 * 60 * 60 * 1000).toISOString();
+
         setUser({
           id: u.id,
           name: fullName,
@@ -65,6 +71,9 @@ function LoginForm() {
           roleName: u.roleName || "Regular",
           userType: u.roleName || u.role || "Regular",
           loginType: u.loginType || "google",
+          loginAt,
+          expiresAt,
+          sessionDays,
         });
         router.replace(callbackUrl);
       } else {

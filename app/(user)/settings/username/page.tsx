@@ -7,6 +7,7 @@ import { useAuthStore } from "@/store/auth-store";
 import {
   User as UserIcon,
   AtSign,
+  KeyRound,
   Clock,
   History,
   Save,
@@ -52,7 +53,7 @@ function formatDateTime(iso: string | null) {
 }
 
 export default function UserUsernamePage() {
-  const { user, setUser } = useAuthStore();
+  const { user, setUser, logout } = useAuthStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
@@ -96,6 +97,11 @@ export default function UserUsernamePage() {
   useEffect(() => {
     if (!mounted) return;
     if (!user) {
+      router.replace("/login?callbackUrl=/settings/username");
+      return;
+    }
+    if (user.expiresAt && new Date(user.expiresAt).getTime() <= Date.now()) {
+      logout();
       router.replace("/login?callbackUrl=/settings/username");
       return;
     }
@@ -186,6 +192,13 @@ export default function UserUsernamePage() {
           >
             <AtSign className="w-3.5 h-3.5" />
             <span>Username</span>
+          </Link>
+          <Link
+            href="/settings/password"
+            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-all"
+          >
+            <KeyRound className="w-3.5 h-3.5" />
+            <span>Password</span>
           </Link>
         </div>
       </div>
@@ -319,3 +332,4 @@ export default function UserUsernamePage() {
     </div>
   );
 }
+

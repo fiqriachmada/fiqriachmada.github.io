@@ -13,6 +13,9 @@ export interface AuthUser {
   roleName?: string;
   userType?: string;
   loginType?: string;
+  loginAt?: string;
+  expiresAt?: string;
+  sessionDays?: number;
 }
 
 interface AuthState {

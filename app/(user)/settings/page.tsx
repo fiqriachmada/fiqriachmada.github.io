@@ -97,6 +97,8 @@ export default function UserSettingsPage() {
               roleName: d.roleName,
               userType: d.roleName || d.role,
               loginType: d.loginType,
+              loginTypeName: d.loginTypeName,
+              hasPassword: Boolean(d.hasPassword),
               sessionDays,
               loginAt: user.loginAt || new Date(loginTime).toISOString(),
               expiresAt: computedExpiresAt.toISOString(),
@@ -232,8 +234,14 @@ export default function UserSettingsPage() {
                 </span>
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
                   <Mail className="w-3 h-3" />
-                  {user.loginType || "Google"}
+                  {user.loginTypeName || user.loginType || "Google"}
                 </span>
+                {user.loginType !== "credentials" && user.hasPassword && (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                    <KeyRound className="w-3 h-3" />
+                    Password
+                  </span>
+                )}
               </div>
             </div>
           </div>

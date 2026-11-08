@@ -20,7 +20,7 @@ const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "https://fiqriachmada-cms.vercel.app/api";
 
 export default function UserPasswordPage() {
-  const { user } = useAuthStore();
+  const { user, setUser } = useAuthStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
@@ -127,6 +127,9 @@ export default function UserPasswordPage() {
       const json = await res.json();
       if (res.ok) {
         setHasPassword(true);
+        if (user) {
+          setUser({ ...user, hasPassword: true });
+        }
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");

@@ -13,6 +13,8 @@ export interface AuthUser {
   roleName?: string;
   userType?: string;
   loginType?: string;
+  loginTypeName?: string;
+  hasPassword?: boolean;
   loginAt?: string;
   expiresAt?: string;
   sessionDays?: number;

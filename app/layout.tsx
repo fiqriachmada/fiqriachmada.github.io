@@ -1,5 +1,5 @@
 import type React from "react";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "../components/providers/theme-provider";
 
 import FloatingNav from "../components/navigation/floatingNav";
 import AnalyticsTracker from "../components/analytics/analyticsTracker";

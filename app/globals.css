@@ -47,11 +47,15 @@ body {
    (neo-light, neo-dark, neo-system)
    ========================================================= */
 
-/* 2a. Neo Brutalism Light */
+/* 2a. Neo Brutalism Light & Neo System (Default Light) */
 .neo-light,
 [data-theme="neo-light"],
 .neo-brutalism,
-[data-theme="neo-brutalism"] {
+[data-theme="neo-brutalism"],
+.neo-system,
+[data-theme="neo-system"],
+.neo-brutalism-system,
+[data-theme="neo-brutalism-system"] {
   --bg-page: #fffdf5;
   --bg-card: #ffffff;
   --bg-header: #fffdf5;
@@ -81,39 +85,22 @@ body {
   --neo-shadow-sm: 2px 2px 0px 0px #e4e4e7;
 }
 
-/* 2c. Neo Brutalism System (Default Light) */
-.neo-system,
-[data-theme="neo-system"],
-.neo-brutalism-system,
-[data-theme="neo-brutalism-system"] {
-  --bg-page: #fffdf5;
-  --bg-card: #ffffff;
-  --bg-header: #fffdf5;
-  --text-main: #121212;
-  --text-muted: #4b5563;
-  --border-color: #121212;
-  --active-nav-bg: #ff5277;
-  --active-nav-text: #ffffff;
-  --neo-shadow: 4px 4px 0px 0px #121212;
-  --neo-shadow-sm: 2px 2px 0px 0px #121212;
-}
-
-/* Neo System when OS prefers dark */
+/* Neo System when OS prefers dark -> identical to Neo Dark */
 @media (prefers-color-scheme: dark) {
   .neo-system,
   [data-theme="neo-system"],
   .neo-brutalism-system,
   [data-theme="neo-brutalism-system"] {
-    --bg-page: #0f1115;
-    --bg-card: #16181d;
-    --bg-header: #16181d;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --border-color: #f8fafc;
+    --bg-page: #121214;
+    --bg-card: #1a1a1e;
+    --bg-header: #1a1a1e;
+    --text-main: #fafafa;
+    --text-muted: #a1a1aa;
+    --border-color: #e4e4e7;
     --active-nav-bg: #ff5277;
     --active-nav-text: #ffffff;
-    --neo-shadow: 4px 4px 0px 0px #f8fafc;
-    --neo-shadow-sm: 2px 2px 0px 0px #f8fafc;
+    --neo-shadow: 4px 4px 0px 0px #e4e4e7;
+    --neo-shadow-sm: 2px 2px 0px 0px #e4e4e7;
   }
 }
 

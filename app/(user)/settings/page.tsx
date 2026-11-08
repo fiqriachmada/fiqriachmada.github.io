@@ -13,6 +13,7 @@ import {
   User as UserIcon,
   AtSign,
   KeyRound,
+  Camera,
 } from "lucide-react";
 
 const API_BASE =
@@ -180,13 +181,20 @@ export default function UserSettingsPage() {
           </p>
         </div>
 
-        <div className="inline-flex items-center rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-100/80 dark:bg-gray-900 p-1 w-fit">
+        <div className="inline-flex flex-wrap items-center rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-100/80 dark:bg-gray-900 p-1 w-fit">
           <Link
             href="/settings"
             className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 text-white dark:bg-white dark:text-gray-900 px-3 py-1.5 text-xs font-bold shadow-xs transition-all"
           >
             <UserIcon className="w-3.5 h-3.5" />
             <span>Profile</span>
+          </Link>
+          <Link
+            href="/settings/avatar"
+            className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-all"
+          >
+            <Camera className="w-3.5 h-3.5" />
+            <span>Avatar</span>
           </Link>
           <Link
             href="/settings/username"

@@ -247,11 +247,10 @@ export default function UserAvatarPage() {
         <div className="p-6 space-y-4">
           {message && (
             <div
-              className={`p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${
-                message.type === "success"
+              className={`p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${message.type === "success"
                   ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
                   : "bg-rose-500/10 text-rose-500 border border-rose-500/20"
-              }`}
+                }`}
             >
               {message.type === "success" ? (
                 <CheckCircle2 className="w-4 h-4 shrink-0" />

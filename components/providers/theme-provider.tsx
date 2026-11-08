@@ -9,24 +9,28 @@ function NeoSystemListener() {
   React.useEffect(() => {
     const root = document.documentElement;
     if (theme !== "neo-system") {
-      root.classList.remove("neo-light");
+      if (theme !== "neo-light") root.classList.remove("neo-light");
       if (theme !== "neo-dark") root.classList.remove("neo-dark");
       return;
     }
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const updateClass = () => {
-      root.classList.remove("neo-light", "neo-dark", "light", "dark");
       if (media.matches) {
+        root.classList.remove("neo-light", "light");
         root.classList.add("neo-dark", "dark");
       } else {
+        root.classList.remove("neo-dark", "dark");
         root.classList.add("neo-light", "light");
       }
     };
 
-    updateClass();
+    const raf = requestAnimationFrame(updateClass);
     media.addEventListener("change", updateClass);
-    return () => media.removeEventListener("change", updateClass);
+    return () => {
+      cancelAnimationFrame(raf);
+      media.removeEventListener("change", updateClass);
+    };
   }, [theme]);
 
   return null;
@@ -43,3 +47,4 @@ export function ThemeProvider({
     </NextThemesProvider>
   );
 }
+

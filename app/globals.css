@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .neo-dark, [data-theme="dark"], [data-theme="neo-dark"]) *);
+@config "../tailwind.config.js";
 
 /* =========================================================
    BASE STYLES & TRANSITIONS

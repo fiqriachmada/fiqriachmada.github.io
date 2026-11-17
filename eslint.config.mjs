@@ -1,6 +1,17 @@
+import { createRequire } from "node:module";
 import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
+
+const require = createRequire(import.meta.url);
+const tsPath = require.resolve("typescript");
+require.cache[tsPath] = {
+  id: tsPath,
+  filename: tsPath,
+  loaded: true,
+  exports: require("@typescript/typescript6"),
+};
+
+const { default: nextVitals } = await import("eslint-config-next/core-web-vitals");
+const { default: nextTs } = await import("eslint-config-next/typescript");
 
 const eslintConfig = defineConfig([
   ...nextVitals,

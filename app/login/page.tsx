@@ -37,7 +37,22 @@ function LoginForm() {
     }
   }, [user, router, callbackUrl]);
 
-  const applyUserSession = (u: any) => {
+  const applyUserSession = (u: {
+    id: string;
+    email: string;
+    name?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    username?: string | null;
+    image?: string | null;
+    role?: string;
+    roleName?: string;
+    loginType?: string;
+    loginTypeName?: string;
+    hasPassword?: boolean;
+    sessionDays?: number;
+    expiresAt?: string;
+  }) => {
     const fullName =
       u.name || [u.firstName, u.lastName].filter(Boolean).join(" ") || u.username || "User";
 
@@ -99,7 +114,7 @@ function LoginForm() {
     }
   };
 
-  const handleGoogleSuccess = async (credentialResponse: any) => {
+  const handleGoogleSuccess = async (credentialResponse: { credential?: string }) => {
     if (!credentialResponse?.credential) return;
     setLoading(true);
     setError(null);
@@ -119,7 +134,7 @@ function LoginForm() {
       } else {
         setError(json.message || "Gagal login menggunakan Google.");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Google login error:", err);
       setError("Gagal terhubung ke server autentikasi.");
     } finally {

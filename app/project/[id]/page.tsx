@@ -1,34 +1,16 @@
 import React from "react";
-import projectItems from "../../../data/projectItems";
+import ProjectDetailClient from "@/components/project/detail/projectDetailClient";
+import { fetchProjectData } from "@/lib/projectApi";
 
-import DetailProjectPage from "../../../components/project/detail/detail";
-
-export function generateStaticParams() {
-  const id = projectItems;
-
-  return id;
+export async function generateStaticParams() {
+  try {
+    const res = await fetchProjectData({ limit: 100 });
+    return (res?.data || []).map((p) => ({ id: p.id }));
+  } catch {
+    return [];
+  }
 }
 
-const title = "project";
-export const metadata = {
-  title: "fiqriachmada | " + title,
-  description: "personal site",
-};
-
-async function Detail(props: { params: Promise<{ id: string }> }) {
-  const { id } = await props.params;
-
-  const detailItem = projectItems.find((item) => item.id.toString() === id);
-
-  return (
-    <div>
-      {detailItem ? (
-        <DetailProjectPage detailItem={detailItem} />
-      ) : (
-        <p>Item with ID {id} not found.</p>
-      )}
-    </div>
-  );
+export default function ProjectDetailPage() {
+  return <ProjectDetailClient />;
 }
-
-export default Detail;

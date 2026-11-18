@@ -74,6 +74,11 @@ export default function WorkDetailPage() {
             <h1 className="text-2xl lg:text-3xl font-extrabold text-gray-900 dark:text-white">
               {work.name}
             </h1>
+            {work.workStatus?.statusNameEn && (
+              <span className="inline-block rounded-full border border-gray-300 dark:border-gray-700 px-2.5 py-0.5 text-xs font-medium text-gray-700 dark:text-gray-300">
+                {work.workStatus.statusNameEn}
+              </span>
+            )}
             {work.position && (
               <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                 {work.position}

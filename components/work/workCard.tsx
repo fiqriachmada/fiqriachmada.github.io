@@ -44,7 +44,7 @@ function WorkCard() {
   const works = data?.data || [];
 
   const handleOnClick = (id: string) => {
-    setSelectedId(id);
+    window.location.href = `/work/${id}`;
   };
 
   const handleBack = () => {

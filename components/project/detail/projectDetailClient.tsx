@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "@/app/loading";
-import { fetchProjectDataById } from "@/lib/projectApi";
+import { fetchProjectById } from "@/lib/projectApi";
 import { ArrowLeft, Briefcase } from "lucide-react";
 
 export default function ProjectDetailClient() {
@@ -15,7 +15,7 @@ export default function ProjectDetailClient() {
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["client-project-detail", id],
-    queryFn: () => fetchProjectDataById(id),
+    queryFn: () => fetchProjectById(id),
     enabled: Boolean(id),
   });
 
